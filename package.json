@@ -1,0 +1,12 @@
+{
+  "name": "zcb",
+  "description": "宅车宝网页端",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.4.0",
+    "async": "0.9.x",
+    "underscore": "1.6.0",
+    "jade":"1.7.0"
+  }
+}
