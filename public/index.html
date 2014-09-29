@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>
-		TEST SMS
-	</title>
-	<script src="https://code.jquery.com/jquery-2.1.1.js">
-	</script>
-	<script src="https://cn.avoscloud.com/scripts/lib/av-0.4.1.min.js">
-	</script>
-</head>
-<body>
-	<script type='text/javascript'>
-        $(function(){
-            AV.initialize("eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa", "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
-        });
-        function sendSms(){
-            AV.Cloud.requestSmsCode('18651206017').then(function(){
-                alert('success');
-                //发送成功
-            }, function(err){
-                //发送失败
-                alert('fail');
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            TEST SMS
+        </title>
+        <script src="https://code.jquery.com/jquery-2.1.1.js">
+        </script>
+        <script src="https://cn.avoscloud.com/scripts/lib/av-0.4.1.min.js">
+        </script>
+    </head>
+    <body>
+        <script type='text/javascript'>
+            $(function(){
+                AV.initialize("eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa", "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
             });
-		}
-	</script>
-	<button onclick='sendSms()'>Send SMS</button>
-</body>
+            function sendSms(){
+                AV.Cloud.requestSmsCode('18651206017').then(function(){
+                    alert('success');
+                    //发送成功
+                }, function(err){
+                    //发送失败
+                    alert('fail');
+                });
+            }
+        </script>
+        <button onclick='sendSms()'>Send SMS</button>
+    </body>
 </html>
