@@ -8,7 +8,13 @@ AV.Cloud.define("hello", function(request, response) {
   var testObject = new TestObject();
   testObject.save({foo: "bar"}, {
     success: function(object) {
-      alert("AVOS Cloud works!");
+      console.log("AVOS Cloud works!");
     }
+  });
+
+  AV.Cloud.requestSmsCode('18651206017').then(function(){
+    console.log("sms works!");
+  }, function(err){
+    console.log("sms not works!");
   });
 });
