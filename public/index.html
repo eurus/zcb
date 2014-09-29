@@ -12,17 +12,17 @@
 </head>
 <body>
 	<script type='text/javascript'>
-		$(function(){
-			AV.initialize("eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa", "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
-		});
-		function sendSms(){
-			AV.Cloud.requestSmsCode('18651206017').then(function(){
-				alert('success');
-        //发送成功
-    }, function(err){
-        //发送失败
-        alert('fail');
-    });
+        $(function(){
+            AV.initialize("eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa", "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
+        });
+        function sendSms(){
+            AV.Cloud.requestSmsCode('18651206017').then(function(){
+                alert('success');
+                //发送成功
+            }, function(err){
+                //发送失败
+                alert('fail');
+            });
 		}
 	</script>
 	<button onclick='sendSms()'>Send SMS</button>
