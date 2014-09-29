@@ -11,7 +11,6 @@ AV.Cloud.define("hello", function(request, response) {
       console.log("AVOS Cloud works!");
     }
   });
-
   AV.Cloud.requestSmsCode('18651206017').then(function(){
     console.log("sms works!");
   }, function(err){
