@@ -22,14 +22,6 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-// app.get('/cs_login', function(req, res) {
-//   res.render('cs_login');
-// });
-
-// app.get('/admin_login', function(req, res) {
-//   res.render('hello');
-// });
-
 app.get('/dash', function(req, res) {
   res.render('dash');
 });
