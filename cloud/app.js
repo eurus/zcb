@@ -18,10 +18,21 @@ app.use(expressLayouts);
 
 
 // 使用 Express 路由 API 服务 /hello 的 HTTP GET 请求
-app.get('/hello', function(req, res) {
-  res.render('hello');
+app.get('/', function(req, res) {
+  res.render('index');
 });
 
+// app.get('/cs_login', function(req, res) {
+//   res.render('cs_login');
+// });
+
+// app.get('/admin_login', function(req, res) {
+//   res.render('hello');
+// });
+
+app.get('/dash', function(req, res) {
+  res.render('dash');
+});
 
 // 最后，必须有这行代码来使 express 响应 HTTP 请求
 app.listen();
