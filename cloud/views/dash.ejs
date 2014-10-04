@@ -9,7 +9,7 @@
       <div class="form-inline">
         <div class="form-group">
           <label for="">
-            peerId: <%-user.id %>
+            peerId: <%-user.username %>
           </label>
         </div>
         <div class="form-group">
@@ -211,7 +211,7 @@
     </div>
 
 <script>
-  var peerId = '<%-user.id%>';
+  var peerId = '<%-user.username%>';
   var toPeerId;
   // var watchingPeer = $('#watchingPeer').val().split(',');
   var chat;
@@ -237,7 +237,12 @@
     // --------------- chat 相关监听 ---------------
     chat.on('message', function(data) {
       $('#msgreceive').append(JSON.stringify(data));
-      $('#msgs').append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
+      AV.Cloud.run('findUserById', {id: data.fromPeerId}).then(function(user){
+	      $('#msgs').append('<p>'+user.username+' said: '+data.msg+'</p>');
+      }, function(error){
+      	alert(JSON.stringify(error));
+      		$('#msgs').append('<p>error processing</p>');
+      });
       $('#msgreceive').append('<br>');
       // console.log(data);
     });

@@ -35,23 +35,18 @@ app.get('/', function(req, res) {
 
 app.get('/dash', function(req, res) {
 	if (userCon.isLogin()){
-		res.render('dash', {user: AV.User.current()});
+		userCon.findUserById(AV.User.current().id).then(function(user){
+			console.log(user);
+			res.render('dash', {user: user});
+		}, function(){
+			res.redirect('/');
+		})
 	}else{
 		res.redirect('/');
 	}
 });
 
 app.post('/login', userCon.login);
-
-app.use('/api', function(req,res,next){
-	console.log('hey api!');
-	if (userCon.isLogin()){
-		next();
-	}else{
-		res.redirect('/');
-	}
-});
-app.get('/api/user/name/:name', userCon.findUserByName)
 
 // 最后，必须有这行代码来使 express 响应 HTTP 请求
 app.listen();
