@@ -41,7 +41,7 @@ function findUserById(id) {
   console.log('id = '+id);
   return findRawUserById(id).then(function (c) {
     if (c) {
-      c = transfromUser(c);
+      c = transformUser(c);
     }
     return AV.Promise.as(c);
   });
@@ -51,7 +51,7 @@ function findUserByEmail(email) {
   var p = new AV.Promise();
   findRawClientByEmail(email).then(function (user) {
     if (user) {
-      var user = transfromUser(user);
+      var user = transformUser(user);
       p.resolve(user);
     } else {
       p.resolve();
@@ -71,11 +71,11 @@ function updateCurUser(map) {
   return user.save();
 }
 
-function transfromUser(curUser) {
+function transformUser(curUser) {
   return {
     username:curUser.get('username'),
     id:curUser.id,
-    qq:curUser.get('qq'),
+    mobile:curUser.get('mobile'),
     email:curUser.get('email'),
     token:curUser.get('sessionToken'),
     emailVerified:curUser.get('emailVerified')
@@ -92,5 +92,5 @@ exports.login = login;
 exports.isLogin = isLogin;
 exports.findUserById = findUserById;
 exports.findUserByName = findUserByName;
-exports.transfromUser = transfromUser;
+exports.transformUser = transformUser;
 exports.findRawUserById = findRawUserById;
