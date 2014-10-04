@@ -7,9 +7,9 @@
                 <h4 class="modal-title" id="myModalLabel">客服登录</h4>
             </div>
             <div class="modal-body">
-                <form class="form-signin" role="form">
-                    <input type="email" class="form-control" placeholder="Email address" required autofocus>
-                    <input type="password" class="form-control" placeholder="Password" required>
+                <form class="form-signin" role="form" action='/login' method='post'>
+                    <input name='user[username]' type="text" class="form-control" placeholder="Email address" required autofocus>
+                    <input name='user[password]' type="password" class="form-control" placeholder="Password" required>
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" value="remember-me"> 记住我
