@@ -1,6 +1,6 @@
 <div class="container">
       <h2>
-        Message Test
+        peerId: <%-user.username %>
       </h2>
       <hr>
       <h4>
@@ -9,26 +9,11 @@
       <div class="form-inline">
         <div class="form-group">
           <label for="">
-            peerId: <%-user.username %>
-          </label>
-        </div>
-        <div class="form-group">
-          <label for="">
             watchingPeer:
           </label>
           <input type="text " id="watchingPeer" class="form-control">
         </div>
-        <button id="new" class="btn btn-default">
-          new Client
-        </button>
-        <div class="btn-group">
-          <button id="open" class="btn btn-default">
-            open
-          </button>
-          <button id="close" class="btn btn-default">
-            close
-          </button>
-        </div>
+
         <span id="connect-status" class="text-primary">
           not connected
         </span>
@@ -42,15 +27,9 @@
         </div>
       </div>
       <hr>
-      <h4>
-        Peer & Group
-      </h4>
       <ul class="nav nav-tabs" role="tablist">
         <li class="active">
           <a href="#peer-container" role="tab" data-toggle="tab">Peer</a>
-        </li>
-        <li>
-          <a href="#group-container" role="tab" data-toggle="tab">Group</a>
         </li>
       </ul>
       <div class="tab-content">
@@ -90,55 +69,7 @@
             </span>
           </div>
         </div>
-        <div id="group-container" class="tab-pane ">
-          <div class="row">
-            <div class="col-md-6">
-              <h5>
-                Groups
-              </h5>
-              <div id="allgroup" class="panel-group">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <h5>
-                Join or Create Group
-              </h5>
-              <div class="form-inline">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="groupid">
-                  <button class="btn btn-default" id="joingroup">
-                    join
-                  </button>
-                </div>
-              </div>
-              <h5>
-                Invite To Join Group
-              </h5>
-              <div class="form-inline">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="invitegrouptxt">
-                  <button class="btn btn-default" id="invitegroup">
-                    invite
-                  </button>
-                </div>
-              </div>
-              <h5>
-                Group Message
-              </h5>
-              <div class="form-inline">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="msggroup">
-                  <label>
-                    <input type="checkbox" id="room-msg-transient"> transient
-                  </label>
-                  <button class="btn btn-default" id="sendgroup">
-                    send
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
       <hr>
       <div class="row">
@@ -146,20 +77,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-7">
-          <h4>
-            Message Receive
-          </h4>
-          <div id="msgreceive" style="word-break:break-all">
-          </div>
-        </div>
-        <div class="col-md-5">
-          <h4>
-            Message Sent
-          </h4>
-          <div id="msgsent">
-          </div>
-        </div>
         <div class='col-md-12'>
         	<h4>Messages</h4>
         	<div id='msgs'>
@@ -175,50 +92,18 @@
         @peerId@
       </button>
     </div>
-    <div type="tpl" id="group-tpl">
-      <div class="panel panel-default group" id="group-container-@groupId@" data-group-id="@groupId@">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#allgroup" href="#group-body-@groupId@" onclick="setCurrentGroup('@groupId@')">
-         @groupId@
-       </a>
-            <button class="btn btn-default btn-sm leave">
-              leave
-            </button>
-          </h4>
-        </div>
-        <div id="group-body-@groupId@" class="panel-collapse collapse">
-          <div class="panel-body">
-            <div class="members">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div type="tpl" id="group-member-tpl">
-      <div class="btn-group group-member" id="group-member-@peerId@" data-group-member-id="@peerId@">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          @peerId@
-          <span class="caret">
-          </span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li>
-            <a class="kick">Kick</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    
 
 <script>
   var peerId = '<%-user.username%>';
+  var watching = [];
+
   var toPeerId;
   // var watchingPeer = $('#watchingPeer').val().split(',');
   var chat;
 
   // ---------------- 基本初始化 打开关闭 ----------------
   $(function() {
-    var watching = [];
     if($('#watchingPeer').val()!=""){
       watching = $('#watchingPeer').val().split(',');
     }
@@ -236,14 +121,10 @@
     });
     // --------------- chat 相关监听 ---------------
     chat.on('message', function(data) {
-      $('#msgreceive').append(JSON.stringify(data));
-      AV.Cloud.run('findUserById', {id: data.fromPeerId}).then(function(user){
-	      $('#msgs').append('<p>'+user.username+' said: '+data.msg+'</p>');
-      }, function(error){
-      	alert(JSON.stringify(error));
-      		$('#msgs').append('<p>error processing</p>');
-      });
-      $('#msgreceive').append('<br>');
+      //$('#msgreceive').append(JSON.stringify(data));
+      $('#msgs').append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
+      addWatch(data.fromPeerId);
+      //$('#msgreceive').append('<br>');
       // console.log(data);
     });
     chat.on('online', function(peers) {
@@ -258,61 +139,13 @@
         $('#peer-' + peers[i]).addClass('offline');
       }
     });
-
-
-    // --------------- group 相关监听 ---------------
-    chat.on('membersJoined', function(data) {
-      if (data.peerId == peerId) {
-
-      }
-      data.roomPeerIds.forEach(function(id) {
-        $('#group-container-' + data.roomId + ' .members').append($('#group-member-tpl').html().replace(/@peerId@/g, id));
-      });
-
-      // console.log(data)
-    });
-
-    chat.on('joined', function(data) {
-      if ($('#allgroup .group').length == 0) {
-        groupId = data.roomId;
-      }
-      var str = $('#group-tpl').html().replace(/@groupId@/g, data.roomId);
-      $('#allgroup').append(str);
-      //查询当前群组内的 成员
-      var AVOSRealtimeGroups = AV.Object.extend("AVOSRealtimeGroups");
-      var query = new AV.Query(AVOSRealtimeGroups);
-      query.get(data.roomId, {
-        success: function(obj) {
-          var members = obj.get('m');
-          members.forEach(function(id) {
-            if ($('#group-member-' + id).length < 1) {
-              $('#group-container-' + data.roomId + ' .members').append($('#group-member-tpl').html().replace(/@peerId@/g, id));
-            }
-          });
-        },
-        error: function(object, error) {
-          // The object was not retrieved successfully.
-          // error is a AV.Error with an error code and description.
-        }
-      });
-    });
-    chat.on('left', function(data) {
-      $('#group-container-' + data.roomId).remove();
-    });
-    chat.on('membersLeft', function(data) {
-      if (data.peerId == peerId) {
-
-      }
-      data.roomPeerIds.forEach(function(id) {
-        $('#group-member-' + id).remove();
-      });
-
-    })
+    openSocket();
   });
 
 // --------------- 基础 ---------------
-  $('#open').click(function() {
-    $('#allwatcher').empty();
+
+function openSocket(){
+	$('#allwatcher').empty();
 
     addWatchingPeer($('#watchingPeer').val().split(','));
     chat.open().then(function() {
@@ -323,16 +156,25 @@
       alert('open failure');
       console.log(err)
     });
-  });
-
-  $('#close').click(function() {
-    chat.close().then(function() {
-      $('#connect-status').text('not connected');
-      $('.online').removeClass('online').addClass('offline');
-    });
-  })
+}
+function closeSocket() {
+	chat.close().then(function() {
+		$('#connect-status').text('not connected');
+		$('.online').removeClass('online').addClass('offline');
+	});
+}
 
   //---------------- 1 v 1 聊天相关 ----------------
+  function addWatch(peerId){
+  	if (!_.contains(watching, data.fromPeerId)){
+  		addWatchingPeer(peerId.split(','));
+  		chat.watch(peerId.split(',')).then(function() {
+
+  		}, function() {
+  			alert('watch failure')
+  		});
+  	}
+  }
 
   $('#addwatch').click(function() {
     addWatchingPeer($('#watchingPeer').val().split(','));
@@ -378,12 +220,13 @@
 
   $('#sendbtn').click(function() {
     chat.send($('#msg').val(), toPeerId, false).then(function() {
-      $('#msgsent').append(JSON.stringify({
+      /*$('#msgsent').append(JSON.stringify({
         msg: $('#msg').val(),
         toPeerId: toPeerId
       }));
-      $('#msgs').append('<p>i said:'+$('#msg').val()+'</p>');
       $('#msgsent').append('<br>');
+	  */
+      $('#msgs').append('<p>i said:'+$('#msg').val()+'</p>');
       $('#msg').val('');
       // $('#status').append('Msg Sended');
       // $('#status').append('<br>');
@@ -437,23 +280,6 @@
       // $('#groupid').val(data.roomId);
       // alert('joined')
     })
-  });
-
-  $('#sendgroup').click(function() {
-    var transient = $('#room-msg-transient').is(':checked');
-    chat.sendToGroup($('#msggroup').val(), groupId, transient).then(function() {
-
-      $('#msgsent').append(JSON.stringify({
-        msg: $('#msggroup').val(),
-        groupId: groupId
-      }));
-      $('#msgsent').append('<br>');
-      $('#msggroup').val('');
-      // $('#status').append('Msg Sended');
-      // $('#status').append('<br>');
-    }, function() {
-      alert("send failure!!!")
-    });
   });
 
   $('#getstatus').click(function() {
