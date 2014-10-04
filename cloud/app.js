@@ -1,6 +1,7 @@
 // 在 Cloud code 里初始化 Express 框架
 var express = require('express');
 var userCon = require('cloud/user.js');
+var api = require('cloud/api.js');
 
 
 var app = express();
@@ -33,10 +34,24 @@ app.get('/', function(req, res) {
 });
 
 app.get('/dash', function(req, res) {
-  res.render('dash');
+	if (userCon.isLogin()){
+		res.render('dash', {user: AV.User.current()});
+	}else{
+		res.redirect('/');
+	}
 });
 
 app.post('/login', userCon.login);
+
+app.use('/api', function(req,res,next){
+	console.log('hey api!');
+	if (userCon.isLogin()){
+		next();
+	}else{
+		res.redirect('/');
+	}
+});
+app.get('/api/user/name/:name', userCon.findUserByName)
 
 // 最后，必须有这行代码来使 express 响应 HTTP 请求
 app.listen();

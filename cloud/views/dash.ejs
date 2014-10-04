@@ -1,1 +1,484 @@
-hello!
+<div class="container">
+      <h2>
+        Message Test
+      </h2>
+      <hr>
+      <h4>
+        Basic
+      </h4>
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="">
+            peerId: <%-user.id %>
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="">
+            watchingPeer:
+          </label>
+          <input type="text " id="watchingPeer" class="form-control">
+        </div>
+        <button id="new" class="btn btn-default">
+          new Client
+        </button>
+        <div class="btn-group">
+          <button id="open" class="btn btn-default">
+            open
+          </button>
+          <button id="close" class="btn btn-default">
+            close
+          </button>
+        </div>
+        <span id="connect-status" class="text-primary">
+          not connected
+        </span>
+        <div class="btn-group">
+          <button id="addwatch" class="btn btn-default">
+            watch
+          </button>
+          <button id="removewatch" class="btn btn-default">
+            unwatch
+          </button>
+        </div>
+      </div>
+      <hr>
+      <h4>
+        Peer & Group
+      </h4>
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+          <a href="#peer-container" role="tab" data-toggle="tab">Peer</a>
+        </li>
+        <li>
+          <a href="#group-container" role="tab" data-toggle="tab">Group</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div id="peer-container" class="tab-pane active">
+          <h5>
+            WatchingPeers
+          </h5>
+          <div id="allwatcher">
+          </div>
+          <h5>
+            Message to
+            <span class="text-primary" id="to-peer-id">
+            </span>
+          </h5>
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" class="form-control" id="msg">
+              <!--<label>
+                <input type="checkbox" id="msg-transient"> transient
+              </label>-->
+            </div>
+            <button class="btn btn-default" id="sendbtn">
+              send
+            </button>
+          </div>
+          <h5>
+            getPeerStatus
+          </h5>
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" class="form-control" id="querypeer">
+            </div>
+            <button class="btn btn-default" id="getstatus">
+              getStatus
+            </button>
+            <span id="peeronline">
+            </span>
+          </div>
+        </div>
+        <div id="group-container" class="tab-pane ">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>
+                Groups
+              </h5>
+              <div id="allgroup" class="panel-group">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h5>
+                Join or Create Group
+              </h5>
+              <div class="form-inline">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="groupid">
+                  <button class="btn btn-default" id="joingroup">
+                    join
+                  </button>
+                </div>
+              </div>
+              <h5>
+                Invite To Join Group
+              </h5>
+              <div class="form-inline">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="invitegrouptxt">
+                  <button class="btn btn-default" id="invitegroup">
+                    invite
+                  </button>
+                </div>
+              </div>
+              <h5>
+                Group Message
+              </h5>
+              <div class="form-inline">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="msggroup">
+                  <label>
+                    <input type="checkbox" id="room-msg-transient"> transient
+                  </label>
+                  <button class="btn btn-default" id="sendgroup">
+                    send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-6">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-7">
+          <h4>
+            Message Receive
+          </h4>
+          <div id="msgreceive" style="word-break:break-all">
+          </div>
+        </div>
+        <div class="col-md-5">
+          <h4>
+            Message Sent
+          </h4>
+          <div id="msgsent">
+          </div>
+        </div>
+        <div class='col-md-12'>
+        	<h4>Messages</h4>
+        	<div id='msgs'>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <style>
+      div[type='tpl']{ display:none; }
+    </style>
+    <div type="tpl" id="watcher-tpl">
+      <button type="button" class="btn btn-default" id="peer-@peerId@" onclick="setSendTo('@peerId@')">
+        @peerId@
+      </button>
+    </div>
+    <div type="tpl" id="group-tpl">
+      <div class="panel panel-default group" id="group-container-@groupId@" data-group-id="@groupId@">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#allgroup" href="#group-body-@groupId@" onclick="setCurrentGroup('@groupId@')">
+         @groupId@
+       </a>
+            <button class="btn btn-default btn-sm leave">
+              leave
+            </button>
+          </h4>
+        </div>
+        <div id="group-body-@groupId@" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="members">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div type="tpl" id="group-member-tpl">
+      <div class="btn-group group-member" id="group-member-@peerId@" data-group-member-id="@peerId@">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          @peerId@
+          <span class="caret">
+          </span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <a class="kick">Kick</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+<script>
+  var peerId = '<%-user.id%>';
+  var toPeerId;
+  // var watchingPeer = $('#watchingPeer').val().split(',');
+  var chat;
+
+  // ---------------- 基本初始化 打开关闭 ----------------
+  $(function() {
+    var watching = [];
+    if($('#watchingPeer').val()!=""){
+      watching = $('#watchingPeer').val().split(',');
+    }
+    chat = new AVChatClient({
+      appId: appid,
+      peerId: peerId,
+      watchingPeerIds: watching
+      // auth: auth
+    });
+
+    chat.on('close', function() {
+      alert('connection closed')
+      $('#connect-status').text('not connected');
+      $('.online').removeClass('online').addClass('offline');
+    });
+    // --------------- chat 相关监听 ---------------
+    chat.on('message', function(data) {
+      $('#msgreceive').append(JSON.stringify(data));
+      $('#msgs').append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
+      $('#msgreceive').append('<br>');
+      // console.log(data);
+    });
+    chat.on('online', function(peers) {
+      for (var i = 0; i < peers.length; i++) {
+        $('#peer-' + peers[i]).removeClass('offline');
+        $('#peer-' + peers[i]).addClass('online');
+      }
+    });
+    chat.on('offline', function(peers) {
+      for (var i = 0; i < peers.length; i++) {
+        $('#peer-' + peers[i]).removeClass('online');
+        $('#peer-' + peers[i]).addClass('offline');
+      }
+    });
+
+
+    // --------------- group 相关监听 ---------------
+    chat.on('membersJoined', function(data) {
+      if (data.peerId == peerId) {
+
+      }
+      data.roomPeerIds.forEach(function(id) {
+        $('#group-container-' + data.roomId + ' .members').append($('#group-member-tpl').html().replace(/@peerId@/g, id));
+      });
+
+      // console.log(data)
+    });
+
+    chat.on('joined', function(data) {
+      if ($('#allgroup .group').length == 0) {
+        groupId = data.roomId;
+      }
+      var str = $('#group-tpl').html().replace(/@groupId@/g, data.roomId);
+      $('#allgroup').append(str);
+      //查询当前群组内的 成员
+      var AVOSRealtimeGroups = AV.Object.extend("AVOSRealtimeGroups");
+      var query = new AV.Query(AVOSRealtimeGroups);
+      query.get(data.roomId, {
+        success: function(obj) {
+          var members = obj.get('m');
+          members.forEach(function(id) {
+            if ($('#group-member-' + id).length < 1) {
+              $('#group-container-' + data.roomId + ' .members').append($('#group-member-tpl').html().replace(/@peerId@/g, id));
+            }
+          });
+        },
+        error: function(object, error) {
+          // The object was not retrieved successfully.
+          // error is a AV.Error with an error code and description.
+        }
+      });
+    });
+    chat.on('left', function(data) {
+      $('#group-container-' + data.roomId).remove();
+    });
+    chat.on('membersLeft', function(data) {
+      if (data.peerId == peerId) {
+
+      }
+      data.roomPeerIds.forEach(function(id) {
+        $('#group-member-' + id).remove();
+      });
+
+    })
+  });
+
+// --------------- 基础 ---------------
+  $('#open').click(function() {
+    $('#allwatcher').empty();
+
+    addWatchingPeer($('#watchingPeer').val().split(','));
+    chat.open().then(function() {
+      $('#status').append('Opened');
+      $('#status').append('<br>');
+      $('#connect-status').text('connected')
+    }, function(err) {
+      alert('open failure');
+      console.log(err)
+    });
+  });
+
+  $('#close').click(function() {
+    chat.close().then(function() {
+      $('#connect-status').text('not connected');
+      $('.online').removeClass('online').addClass('offline');
+    });
+  })
+
+  //---------------- 1 v 1 聊天相关 ----------------
+
+  $('#addwatch').click(function() {
+    addWatchingPeer($('#watchingPeer').val().split(','));
+    chat.watch($('#watchingPeer').val().split(',')).then(function() {
+
+    }, function() {
+      alert('watch failure')
+    });
+  });
+
+  $('#removewatch').click(function() {
+    removeWatchingPeer($('#watchingPeer').val().split(','));
+    chat.unwatch($('#watchingPeer').val().split(','));
+  });
+
+  function setSendTo(peerId) {
+    toPeerId = peerId;
+    $('#to-peer-id').text(toPeerId);
+  }
+
+  function addWatchingPeer(peers) {
+    for (var i = 0; i < peers.length; i++) {
+      if (!peers[i]) {
+        return;
+      }
+      var str = $('#watcher-tpl').html().replace(/@peerId@/g, peers[i]);
+      if ($('#allwatcher button').length < 1) {
+        setSendTo(peers[i])
+      }
+      $('#allwatcher').append(str);
+    }
+  }
+
+  function removeWatchingPeer(peers) {
+    peers = [].concat(peers);
+    for (var i = 0; i < peers.length; i++) {
+      if (!peers[i]) {
+        return;
+      }
+      $('#peer-' + peers[i]).remove();
+    }
+  }
+
+  $('#sendbtn').click(function() {
+    chat.send($('#msg').val(), toPeerId, false).then(function() {
+      $('#msgsent').append(JSON.stringify({
+        msg: $('#msg').val(),
+        toPeerId: toPeerId
+      }));
+      $('#msgs').append('<p>i said:'+$('#msg').val()+'</p>');
+      $('#msgsent').append('<br>');
+      $('#msg').val('');
+      // $('#status').append('Msg Sended');
+      // $('#status').append('<br>');
+    }, function(err) {
+      console.log(err)
+      alert("send failure!!!")
+    });
+  });
+
+  //------------- group 相关 ----------------
+   //用于 Group 用户获取，chat本身不依赖 AV
+  AV.initialize(appid, 'ei9xtnhuh22yxfgigur6edc8b29ma19rwgajappxjgr9bj6d');
+  var groupId;
+
+  function setGroup(groupId) {
+    $('#groupid').val(groupId);
+  }
+
+  function setCurrentGroup(groupid) {
+    groupId = groupid;
+  }
+  $('#joingroup').click(function() {
+    chat.joinGroup($('#groupid').val()).then(function(data) {
+
+      // console.log(data)
+      // $('#groupid').val(data.roomId);
+      // alert('joined')
+    },function(err){
+      console.log(err)
+    })
+  });
+  $(document).on('click', '.leave', function() {
+    // var groupId = $(this).parents('.group').data('group-id');
+    chat.leaveGroup(groupId).then(function(data) {
+      console.log(data)
+
+      // alert('joined')
+    })
+  });
+  $('#invitegroup').click(function() {
+    chat.inviteToGroup(groupId, $('#invitegrouptxt').val().split(',')).then(function(data) {
+
+      // alert('joined')
+    })
+  });
+  $(document).on('click', '.kick', function() {
+    var groupId = $(this).parents('.group').data('group-id');
+    var targetId = $(this).parents('.group-member').data('group-member-id');
+    chat.kickFromGroup(groupId, targetId).then(function(data) {
+      console.log(data)
+      // $('#groupid').val(data.roomId);
+      // alert('joined')
+    })
+  });
+
+  $('#sendgroup').click(function() {
+    var transient = $('#room-msg-transient').is(':checked');
+    chat.sendToGroup($('#msggroup').val(), groupId, transient).then(function() {
+
+      $('#msgsent').append(JSON.stringify({
+        msg: $('#msggroup').val(),
+        groupId: groupId
+      }));
+      $('#msgsent').append('<br>');
+      $('#msggroup').val('');
+      // $('#status').append('Msg Sended');
+      // $('#status').append('<br>');
+    }, function() {
+      alert("send failure!!!")
+    });
+  });
+
+  $('#getstatus').click(function() {
+    chat.getStatus($('#querypeer').val().split(',')).then(function(data) {
+      console.log(data);
+      $('#peeronline').text(data.onlineSessionPeerIds.join(','));
+    })
+  });
+
+
+  //认证
+
+
+  function auth(peerId, watchingPeers) {
+    return new Promise(function(resolve, reject) {
+      $.post('http://localhost:8080/sign', {
+        self_id: peerId,
+        watch_ids: watchingPeers.join(':')
+      }).success(function(data) {
+        console.log(data.watch_ids)
+        resolve({
+          n: data.nonce,
+          t: data.timestamp,
+          s: data.signature,
+          watchingPeerIds: data.watch_ids.split(':')
+        });
+      }).error(function(err) {
+        reject(err);
+      })
+    })
+
+  }
+</script>
