@@ -5,6 +5,9 @@
 body {
     color: #333;
 }
+html, body{
+    height:100%;
+}
 
 
 
@@ -217,6 +220,7 @@ a {
     #users {
         position: fixed;
         margin-left: -10%;
+        top:50px;
         width:10%;
         height: 100%;
         border-right: 1px solid #ddd;
@@ -249,18 +253,18 @@ a {
 
 
     #chats .chat-content{
-        height:80%;
+        height:70%;
     }
 
     #chats .chat-reply{
-        height:20%;
         border-top:1px solid #ddd;
+        height:30%;
     }
 }
 
 
 .chat-reply .pure-form textarea{
     display:inline-block;
-    height:150px;
+    height:100px;
     width:100%;
 }
