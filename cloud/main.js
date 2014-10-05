@@ -1,6 +1,4 @@
-var express = require('express');
-// Use AV.Cloud.define to define as many cloud functions as you want.
-// For example:
+require("cloud/app.js");
 var userCon = require('cloud/user.js');
 var zutil = require('cloud/zutil.js');
 
@@ -32,7 +30,6 @@ AV.Cloud.define('findUserByName', function(req, res){
   });
 });
 
-
 AV.Cloud.define("hello", function(request, response) {
   response.success("Hello world!");
   var TestObject = AV.Object.extend("TestObject");
@@ -48,4 +45,3 @@ AV.Cloud.define("hello", function(request, response) {
     console.log("sms not works!");
   });
 });
-exports.auth = express.basicAuth(userCon.isLogin);

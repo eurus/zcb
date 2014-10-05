@@ -1,9 +1,8 @@
 // 在 Cloud code 里初始化 Express 框架
 var express = require('express');
+var app = express();
 var userCon = require('cloud/user.js');
 
-
-var app = express();
 var expressLayouts = require('express-ejs-layouts');
 var avosExpressCookieSession = require('avos-express-cookie-session');
  
