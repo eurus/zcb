@@ -1,4 +1,4 @@
-require("cloud/app.js");
+var express = require('express');
 // Use AV.Cloud.define to define as many cloud functions as you want.
 // For example:
 var userCon = require('cloud/user.js');

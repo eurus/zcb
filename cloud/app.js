@@ -1,7 +1,6 @@
 // 在 Cloud code 里初始化 Express 框架
 var express = require('express');
 var userCon = require('cloud/user.js');
-var api = require('cloud/api.js');
 
 
 var app = express();
