@@ -1,4 +1,43 @@
+ <div class="site-wrapper">
 
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand">宅车宝</h3>
+                        <ul class="nav masthead-nav">
+                            <li class="active"><a href="#">首页</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#csModal">客服登录</a></li>
+                            <!-- <li><a href="#">Contact</a></li> -->
+                        </ul>
+                    </div>
+                </div>
+
+
+                    <div class="container">
+                        <%- body %></%- %>
+                    </div>
+
+
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>Cook by <a href="http://banana.eurus.cn">banana</a> &amp; <a href='http://simon.eurus.cn'>simon</a>.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    ------ dash
 
 <h2>
     peerId: <%-user.username %>
