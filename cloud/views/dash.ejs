@@ -152,7 +152,7 @@
         }
         //---------------- 1 v 1 聊天相关 ----------------
         function addWatch(peerId){
-            if (!_.contains(watching, data.fromPeerId)){
+            if (!_.contains(watching, peerId)){
                 addWatchingPeer(peerId.split(','));
                 chat.watch(peerId.split(',')).then(function() {
                 }, function() {
