@@ -1,0 +1,234 @@
+
+
+<h2>
+    peerId: <%-user.username %>
+</h2>
+<hr>
+<div class="form-inline">
+    <div class="form-group">
+        <label for="">
+            watchingPeer:
+        </label>
+        <input type="text " id="watchingPeer" class="form-control">
+    </div>
+    <span id="connect-status" class="text-primary">
+        not connected
+    </span>
+    <div class="btn-group">
+        <button id="addwatch" class="btn btn-default">
+            watch
+        </button>
+        <button id="removewatch" class="btn btn-default">
+            unwatch
+        </button>
+    </div>
+</div>
+<hr>
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#peer-container" role="tab" data-toggle="tab">Peer</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="peer-container" class="tab-pane active">
+        <h5>
+            WatchingPeers
+        </h5>
+        <div id="allwatcher">
+        </div>
+        <h5>
+            Message to
+            <span class="text-primary" id="to-peer-id">
+            </span>
+        </h5>
+        <div class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" id="msg">
+                    <!--<label>
+<input type="checkbox" id="msg-transient"> transient
+</label>-->
+</div>
+<button class="btn btn-default" id="sendbtn">
+    send
+</button>
+</div>
+<h5>
+    getPeerStatus
+</h5>
+<div class="form-inline">
+    <div class="form-group">
+        <input type="text" class="form-control" id="querypeer">
+    </div>
+    <button class="btn btn-default" id="getstatus">
+        getStatus
+    </button>
+    <span id="peeronline">
+    </span>
+</div>
+</div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-6">
+    </div>
+</div>
+<div class="row">
+    <div class='col-md-12'>
+        <h4>Messages</h4>
+        <div id='msgs'>
+        </div>
+    </div>
+</div>
+<style>
+    div[type='tpl']{ display:none; }
+</style>
+<div type="tpl" id="watcher-tpl">
+    <button type="button" class="btn btn-default" id="peer-@peerId@" onclick="setSendTo('@peerId@')">
+        @peerId@
+    </button>
+</div>
+<script>
+    var peerId = '<%-user.username%>';
+    var watching = [];
+    var toPeerId;
+        // var watchingPeer = $('#watchingPeer').val().split(',');
+        var chat;
+        // ---------------- 基本初始化 打开关闭 ----------------
+        $(function() {
+            if($('#watchingPeer').val()!=""){
+                watching = $('#watchingPeer').val().split(',');
+            }
+            chat = new AVChatClient({
+                appId: appid,
+                peerId: peerId,
+                watchingPeerIds: watching
+                // auth: auth
+            });
+            chat.on('close', function() {
+                alert('connection closed')
+                $('#connect-status').text('not connected');
+                $('.online').removeClass('online').addClass('offline');
+            });
+            // --------------- chat 相关监听 ---------------
+            chat.on('message', function(data) {
+                //$('#msgreceive').append(JSON.stringify(data));
+                $('#msgs').append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
+                addWatch(data.fromPeerId);
+                //$('#msgreceive').append('<br>');
+                // console.log(data);
+            });
+            chat.on('online', function(peers) {
+                for (var i = 0; i < peers.length; i++) {
+                    $('#peer-' + peers[i]).removeClass('offline');
+                    $('#peer-' + peers[i]).addClass('online');
+                }
+            });
+            chat.on('offline', function(peers) {
+                for (var i = 0; i < peers.length; i++) {
+                    $('#peer-' + peers[i]).removeClass('online');
+                    $('#peer-' + peers[i]).addClass('offline');
+                }
+            });
+            openSocket();
+        });
+        // --------------- 基础 ---------------
+        function openSocket(){
+            $('#allwatcher').empty();
+            addWatchingPeer($('#watchingPeer').val().split(','));
+            chat.open().then(function() {
+                $('#status').append('Opened');
+                $('#status').append('<br>');
+                $('#connect-status').text('connected')
+            }, function(err) {
+                alert('open failure');
+                console.log(err)
+            });
+        }
+        function closeSocket() {
+            chat.close().then(function() {
+                $('#connect-status').text('not connected');
+                $('.online').removeClass('online').addClass('offline');
+            });
+        }
+        //---------------- 1 v 1 聊天相关 ----------------
+        function addWatch(peerId){
+            if (!_.contains(watching, peerId)){
+                addWatchingPeer(peerId.split(','));
+                chat.watch(peerId.split(',')).then(function() {
+                }, function() {
+                    alert('watch failure')
+                });
+            }
+        }
+        $('#addwatch').click(function() {
+            addWatchingPeer($('#watchingPeer').val().split(','));
+            chat.watch($('#watchingPeer').val().split(',')).then(function() {
+            }, function() {
+                alert('watch failure')
+            });
+        });
+        $('#removewatch').click(function() {
+            removeWatchingPeer($('#watchingPeer').val().split(','));
+            chat.unwatch($('#watchingPeer').val().split(','));
+        });
+        function setSendTo(peerId) {
+            toPeerId = peerId;
+            $('#to-peer-id').text(toPeerId);
+        }
+        function addWatchingPeer(peers) {
+            for (var i = 0; i < peers.length; i++) {
+                if (!peers[i]) {
+                    return;
+                }
+                var str = $('#watcher-tpl').html().replace(/@peerId@/g, peers[i]);
+                if ($('#allwatcher button').length < 1) {
+                    setSendTo(peers[i])
+                }
+                $('#allwatcher').append(str);
+            }
+        }
+        function removeWatchingPeer(peers) {
+            peers = [].concat(peers);
+            for (var i = 0; i < peers.length; i++) {
+                if (!peers[i]) {
+                    return;
+                }
+                $('#peer-' + peers[i]).remove();
+            }
+        }
+        $('#sendbtn').click(function() {
+            chat.send($('#msg').val(), toPeerId, false).then(function() {
+
+                $('#msgs').append('<p>i said:'+$('#msg').val()+'</p>');
+                $('#msg').val('');
+
+            }, function(err) {
+                console.log(err)
+                alert("send failure!!!")
+            });
+        });
+        $('#getstatus').click(function() {
+            chat.getStatus($('#querypeer').val().split(',')).then(function(data) {
+                $('#peeronline').text(data.onlineSessionPeerIds.join(','));
+            })
+        });
+        //认证
+        function auth(peerId, watchingPeers) {
+            return new Promise(function(resolve, reject) {
+                $.post('http://localhost:8080/sign', {
+                    self_id: peerId,
+                    watch_ids: watchingPeers.join(':')
+                }).success(function(data) {
+                    console.log(data.watch_ids)
+                    resolve({
+                        n: data.nonce,
+                        t: data.timestamp,
+                        s: data.signature,
+                        watchingPeerIds: data.watch_ids.split(':')
+                    });
+                }).error(function(err) {
+                    reject(err);
+                })
+            })
+        }
+    </script>
