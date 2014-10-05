@@ -1,0 +1,104 @@
+<script src="js/dash.js"></script>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">宅车宝</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">首页</a></li>
+				<li><a href="#about">关于</a></li>
+				<li><a href="#contact">联系</a></li>
+
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#"><%-user.username %></a></li>
+				<li><a href="/logout">退出</a></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+</nav>
+<div id="layout" class="content pure-g">
+	<div id="users" class="pure-u-1">
+		<div class="user-item user-item-selected pure-g">
+			<div class="item">
+				<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
+				<h5 class="name"><a href="#slide1">Tilo Mitra</a></h5>
+			</div>
+		</div>
+
+		<div class="user-item user-item-unread pure-g">
+			<div class="item">
+				<img class="avatar" alt="Eric Ferraiuolo&#x27;s avatar" height="64" width="64" src="img/common/ericf-avatar.png">
+				<h5 class="name"><a href="#slide2">Eric Ferraiuolo</a></h5>
+			</div>
+		</div>
+
+		<div class="user-item user-item-unread pure-g">
+			<div class="item">
+
+				<img class="avatar" alt="YUI&#x27;s avatar" height="64" width="64" src="img/common/yui-avatar.png">
+				<h5 class="name"><a href="#slide3">YUI LIB</a></h5>
+			</div>
+		</div>
+
+		<div class="user-item pure-g">
+			<div class="item">
+				<img class="avatar" alt="Reid Burke&#x27;s avatar" height="64" width="64" src="img/common/reid-avatar.png">
+				<h5 class="name"><a href="#slide4">Reid Burke</a></h5>
+			</div>
+		</div>
+
+		<div class="user-item pure-g">
+			<div class="item">
+				<img class="avatar" alt="Andrew Wooldridge&#x27;s avatar" height="64" width="64" src="img/common/andrew-avatar.png">
+				<h5 class="name"><a href="#slide4">Andrew Wooldridge</a></h5>
+			</div>
+		</div>
+
+	</div>
+
+	<div id="chats" class="pure-u-1">
+		<div class="chat-content">
+			<div class="chat-content-header pure-g">
+				<div class="pure-u-1-2">
+					<h1 class="chat-content-title">Chats with XXX</h1>
+				</div>
+
+			</div>
+
+			<div class="chat-content-body">
+
+
+
+			</div>
+		</div>
+		<div class="chat-reply">
+			<form class="pure-form">
+				<div class="" style='position:relative;'>
+					<textarea class='elastic-textarea'></textarea>
+					<span style='position:absolute;bottom:0px;right:0px; width:100px;'>
+						<button class='pure-button primary-button'>Reply</button>
+					</span>
+				</form>
+			</div>
+		</div>
+		
+	</div>
+	<div id='order' class='pure-u-1'>
+		Order
+		
+	</div>
+	<script src="js/jquery.cbpContentSlider.min.js"></script>
+	<script>
+		$(function() {
+			$( '#cbp-contentslider' ).cbpContentSlider();
+		});
+	</script>

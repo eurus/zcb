@@ -8,7 +8,7 @@ function login(req, res, next) {
         //登录成功，avosExpressCookieSession会自动将登录用户信息存储到cookie
         //跳转到profile页面。
         console.log('signed in successfully: %j', AV.User.current());
-        res.redirect('/dash');
+        res.redirect('/chat');
       },function(error) {
         //登录失败，跳转到登录页面
         res.redirect('/');

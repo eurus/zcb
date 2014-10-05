@@ -31,11 +31,11 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.get('/dash', function(req, res) {
+app.get('/chat', function(req, res) {
 	if (userCon.isLogin()){
 		userCon.findUserById(AV.User.current().id).then(function(user){
 			console.log(user);
-			res.render('dash', {user: user});
+			res.render('chat', {user: user});
 		}, function(){
 			res.redirect('/');
 		})
@@ -45,6 +45,10 @@ app.get('/dash', function(req, res) {
 });
 
 app.post('/login', userCon.login);
+app.get('/logout', function (req, res) {
+  AV.User.logOut();
+  res.redirect('/');
+});
 
 // 最后，必须有这行代码来使 express 响应 HTTP 请求
 app.listen();
