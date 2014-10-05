@@ -79,7 +79,24 @@ html, body, .container, .main { height: 100%;}
 	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
+.cbp-contentslider nav a span {
+	display: block;
+}
 
+.cbp-contentslider nav a:last-child {
+	border: none;
+	box-shadow: 1px 0 #47a3da; /* fills gap caused by rounding */
+}
+
+.cbp-contentslider nav a:hover {
+	background-color: #47a3da;
+	color: #fff;
+}
+
+.cbp-contentslider nav a.rc-active {
+	background-color: #47a3da;
+	color: #fff;
+}
 
 /* Iconfont for navigation and headings */
 .cbp-contentslider [class^="icon-"]:before, 
