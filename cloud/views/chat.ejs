@@ -59,18 +59,18 @@
 
 		</div>
 		<div class="chat-reply">
-			<form class="pure-form">
+			<div class="pure-form">
 				<div class="" style='position:relative;'>
-					<textarea class='elastic-textarea'></textarea>
+					<textarea class='elastic-textarea' id="msg"></textarea>
 					<span style='position:absolute;bottom:0px;right:0px; width:100px;'>
 						<button class='pure-button primary-button'  id="sendbtn">Reply</button>
 					</span>
-				</form>
+				</div>
 			</div>
 			<div class="form-inline">
 				<div class="form-group">
 					<label for="">
-						watchingPeer:
+						新建聊天
 					</label>
 					<input type="text " id="watchingPeer" class="form-control">
 				</div>
@@ -96,7 +96,7 @@
 	<div type="tpl" id="watcher-tpl">
 		<div class="item">
 			<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
-			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="$('#s1').click();setSendTo('@peerId@');">@peerId@</a></h5>
+			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');">@peerId@</a></h5>
 		</div>
 	</div>
 
