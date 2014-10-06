@@ -84,33 +84,33 @@
 	</div>
 
 	<div id='order' class='pure-u-1'>
-		<div id="msgs">
-			
-		</div>
-	</div>
-	
-	<div type="tpl" id="watcher-tpl">
-		<div class="item">
-			<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
-			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();addWatch('@peerId@');">@peerId@</a></h5>
-		</div>
-	</div>
+    <p>Order</p>
+  </div>
 
-	<div id="nav-tpl" type="tpl">
-		<a href="#@peerId@" id="slide-@peerId@">@peerId@</a>	
-	</div>
+  <div type="tpl" id="watcher-tpl">
+    <div class="item pure-u-1">
+      <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
+      <h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();addWatch('@peerId@');">@peerId@</a></h5>
+    </div>
+  </div>
 
-	<div id="msg-tpl" type="tpl">
-		<li id="@peerId@">						
-			
-		</li>					
-	</div>
+  <div id="nav-tpl" type="tpl">
+    <a href="#@peerId@" id="slide-@peerId@">@peerId@</a>	
+  </div>
 
-	<script src="js/jquery.cbpContentSlider.js"></script>
-	<script>
-		var peerId = '<%-user.username%>';
-		var watching = [];
-		var toPeerId;
+  <div id="msg-tpl" type="tpl">
+    <li id="@peerId@">						
+      <div>
+        
+      </div>
+    </li>					
+  </div>
+
+  <script src="js/jquery.cbpContentSlider.js"></script>
+  <script>
+    var peerId = '<%-user.username%>';
+    var watching = [];
+    var toPeerId;
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
         var chat;
@@ -124,7 +124,7 @@
         		peerId: peerId,
         		watchingPeerIds: watching
                 // auth: auth
-            });
+              });
         	chat.on('close', function() {
         		alert('connection closed')
         		$('#connect-status').text('not connected');
@@ -133,7 +133,7 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
             	addWatch(data.fromPeerId);
-                $('#'+data.fromPeerId).append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
+              $('#'+data.fromPeerId +'> div').append('<p>'+data.fromPeerId+'说: '+data.msg+'</p>');
             });
             chat.on('online', function(peers) {
             	for (var i = 0; i < peers.length; i++) {
@@ -148,7 +148,7 @@
             	}
             });
             openSocket();
-        });
+          });
         // --------------- 基础 ---------------
         function openSocket(){
         	$('#allwatcher').empty();
@@ -222,12 +222,12 @@
         $('#sendbtn').click(function() {
         	chat.send($('#msg').val(), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            $('#'+toPeerId).append('<p>i said:'+$('#msg').val()+'</p>');
+                            $('#'+toPeerId+'> div').append('<p>我说: '+$('#msg').val()+'</p>');
                             $('#msg').val('');
 
-                        }, function(err) {
-                          console.log(err)
-                          alert("send failure!!!")
-                      });
+                          }, function(err) {
+                            console.log(err)
+                            alert("send failure!!!")
+                          });
         });
-    </script>
+      </script>
