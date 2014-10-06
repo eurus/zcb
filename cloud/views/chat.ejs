@@ -42,17 +42,11 @@
 			</div>
 			<div class="main">
 				<div id="cbp-contentslider" class="cbp-contentslider">
-					<nav>
-						<a href="#slide1" id="s1">Wolf	</a>				
-					</nav>
-					<ul >
-						<li id="slide1">						
-							<div>
-								<div class="cbp-content"  id='msgs'>
+					<nav id='peer-nav'>
 
-								</div>
-							</div>
-						</li>					
+					</nav>
+					<ul id= 'peer-box'>
+								
 					</ul>
 				</div>
 			</div>
@@ -89,15 +83,30 @@
 		</div>
 		
 	</div>
+
 	<div id='order' class='pure-u-1'>
-		Order	
+		<div id="msgs">
+			
+		</div>
 	</div>
 	
 	<div type="tpl" id="watcher-tpl">
 		<div class="item">
 			<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
-			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');">@peerId@</a></h5>
+			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();">@peerId@</a></h5>
 		</div>
+	</div>
+
+	<div id="nav-tpl" type="tpl">
+		<a href="#@peerId@" id="slide-@peerId@">@peerId@</a>	
+	</div>
+
+	<div id="msg-tpl" type="tpl">
+		<li id="@peerId@">						
+			<div class="cbp-content" >
+				@peerId@
+			</div>
+		</li>					
 	</div>
 
 	<script src="js/jquery.cbpContentSlider.js"></script>
@@ -196,10 +205,16 @@
         			return;
         		}
         		var str = $('#watcher-tpl').html().replace(/@peerId@/g, peers[i]);
+        		var str2 = $('#nav-tpl').html().replace(/@peerId@/g, peers[i]);
+        		var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
         		if ($('#allwatcher button').length < 1) {
         			setSendTo(peers[i])
         		}
         		$('#allwatcher').append(str);
+        		$('#peer-nav').append(str2);
+        		$('#peer-box').append(str3);
+        		$( '#cbp-contentslider' ).cbpContentSlider();
+        		
         	}
         }
         function removeWatchingPeer(peers) {
@@ -209,6 +224,8 @@
         			return;
         		}
         		$('#peer-' + peers[i]).parent().parent().remove();
+        		$('#slide-' + peers[i]).remove();
+        		$(peers[i]).remove();
         	}
         }
         $('#sendbtn').click(function() {

@@ -271,3 +271,6 @@ a {
 div[type='tpl']{ 
     display:none;
 }
+#peer-nav{
+   display:none;
+}
