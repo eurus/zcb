@@ -92,7 +92,7 @@
 	<div type="tpl" id="watcher-tpl">
 		<div class="item">
 			<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
-			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();">@peerId@</a></h5>
+			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();addWatch('@peerId@');">@peerId@</a></h5>
 		</div>
 	</div>
 
@@ -124,7 +124,7 @@
         		peerId: peerId,
         		watchingPeerIds: watching
                 // auth: auth
-              });
+            });
         	chat.on('close', function() {
         		alert('connection closed')
         		$('#connect-status').text('not connected');
@@ -132,8 +132,8 @@
         	});
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
-            	$('#'+data.fromPeerId).append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
             	addWatch(data.fromPeerId);
+                $('#'+data.fromPeerId).append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
             });
             chat.on('online', function(peers) {
             	for (var i = 0; i < peers.length; i++) {
@@ -148,7 +148,7 @@
             	}
             });
             openSocket();
-          });
+        });
         // --------------- 基础 ---------------
         function openSocket(){
         	$('#allwatcher').empty();
@@ -216,18 +216,18 @@
         		}
         		$('#peer-' + peers[i]).parent().parent().remove();
         		$('#slide-' + peers[i]).remove();
-        		$(peers[i]).remove();
+        		$('#'+peers[i]).remove();
         	}
         }
         $('#sendbtn').click(function() {
         	chat.send($('#msg').val(), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-        		$('#'+toPeerId).append('<p>i said:'+$('#msg').val()+'</p>');
-        		$('#msg').val('');
+                            $('#'+toPeerId).append('<p>i said:'+$('#msg').val()+'</p>');
+                            $('#msg').val('');
 
-        	}, function(err) {
-        		console.log(err)
-        		alert("send failure!!!")
-        	});
+                        }, function(err) {
+                          console.log(err)
+                          alert("send failure!!!")
+                      });
         });
-      </script>
+    </script>
