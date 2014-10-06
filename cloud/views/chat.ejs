@@ -27,95 +27,33 @@
 </nav>
 <div id="layout" class="content pure-g">
 	<div id="users" class="pure-u-1">
-		<div class="user-item user-item-selected pure-g">
-			<div class="item">
-				<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
-				<h5 class="name"></h5>
-			</div>
-		</div>
-
-		<div class="user-item user-item-unread pure-g">
-			<div class="item">
-				<img class="avatar" alt="Eric Ferraiuolo&#x27;s avatar" height="64" width="64" src="img/common/ericf-avatar.png">
-				<h5 class="name"></h5>
-			</div>
-		</div>
-
-		<div class="user-item user-item-unread pure-g">
-			<div class="item">
-
-				<img class="avatar" alt="YUI&#x27;s avatar" height="64" width="64" src="img/common/yui-avatar.png">
-				<h5 class="name"></h5>
-			</div>
-		</div>
+		<div class="user-item user-item-selected pure-g" id="allwatcher">
+			
+		</div>	
 	</div>
 
 	<div id="chats" class="pure-u-1">
-
 		<div class="chat-content">
-
 			<div class="chat-content-header pure-g">
 				<div class="pure-u-1-2">
-					<h3 class="chat-content-title">XXX</h3>
+					<h3 class="chat-content-title"><span class="text-primary" id="to-peer-id">
+					</span></h3>
 				</div>
-
 			</div>
 			<div class="main">
 				<div id="cbp-contentslider" class="cbp-contentslider">
 					<nav>
-						<a href="#slide1" id="slide1">Wolf	</a>				
-						<a href="#slide2" id="slide2">Rabbit</a>
-						<a href="#slide3"id="slide3">Aligator</a>
-						<a href="#slide4" id="slide4">Turtle</a>
-						<a href="#slide5" id="slide5">Platypus</a>
+						<a href="#slide1" id="s1">Wolf	</a>				
 					</nav>
-					<ul>
-						<li id="slide1">
-							
+					<ul >
+						<li id="slide1">						
 							<div>
-								<div class="cbp-content">
-									<p>Veggies sunt bona vobis, proinde vos postulo esse magis desert raisin bush tomato soko salsify garbanzo horseradish cabbage burdock.</p>
-									<p>Daikon artichoke gumbo azuki bean bok choy avocado winter purslane gram earthnut pea broccoli salsify squash plantain wattle seed wakame broccoli rabe bamboo shoot. Zucchini lotus root azuki bean epazote dulse pumpkin rutabaga spinach. Endive mung bean gumbo maize plantain rock melon.</p>
-								</div>
-							</div>
-						</li>
-						<li id="slide2">
-							
-							<div>
-								<div class="cbp-content">
-									<p>Chicory collard greens tatsoi cress bamboo shoot broccoli rabe lotus root earthnut pea arugula okra welsh onion leek shallot courgette. Chard garlic fava bean pea sprouts gram spinach plantain tomatillo. Chicory garlic black-eyed pea gourd chickpea cucumber lotus root.</p>
-									<p>Daikon artichoke gumbo azuki bean bok choy avocado winter purslane gram earthnut pea broccoli salsify squash plantain wattle seed wakame broccoli rabe bamboo shoot. Zucchini lotus root azuki bean epazote dulse pumpkin rutabaga spinach. Endive mung bean gumbo maize plantain rock melon.</p>
-								</div>
-							</div>
-						</li>
-						<li id="slide3">
-							
-							<div>
-								<div class="cbp-content">
-									<p>Tomato shallot broccoli rabe aubergine melon fava bean soybean sorrel. Tomatillo plantain wattle seed pea ricebean sorrel fennel welsh onion kakadu plum celery. Arugula radicchio garlic welsh onion kale celtuce tomato fava bean beet greens soybean burdock groundnut lentil broccoli rabe.</p>
-								</div>
-							</div>
-						</li>
-						<li id="slide4">
-							
-							<div>
-								<div class="cbp-content">
-									<p>Yarrow bush tomato beetroot taro water chestnut komatsuna azuki bean. Parsnip artichoke water chestnut caulie carrot grape summer purslane brussels sprout fava bean tomatillo pea groundnut nori earthnut pea tigernut. Tigernut brussels sprout wakame tomatillo radicchio carrot maize swiss chard seakale melon grape broccoli pea sprouts kakadu plum plantain cauliflower. Gram salsify radicchio daikon courgette rock melon bunya nuts turnip greens. Cabbage black-eyed pea spinach asparagus plantain cress soybean spring onion salad artichoke pea garlic silver beet grape water spinach zucchini wakame summer purslane.</p>
-								</div>
-							</div>
-						</li>
-						<li id="slide5">
+								<div class="cbp-content"  id='msgs'>
 
-							<div>
-								<div class="cbp-content">
-									<p>Potato watercress burdock spinach quandong jícama chard pea sprouts garlic celery turnip daikon kale lotus root sorrel coriander rock melon cabbage. Epazote salsify lentil rock melon eggplant cauliflower zucchini caulie catsear broccoli rabe pumpkin lettuce okra green bean squash seakale onion water chestnut. Sweet pepper peanut corn soko celery winter purslane.</p>
-									<p>Daikon artichoke gumbo azuki bean bok choy avocado winter purslane gram earthnut pea broccoli salsify squash plantain wattle seed wakame broccoli rabe bamboo shoot. Zucchini lotus root azuki bean epazote dulse pumpkin rutabaga spinach. Endive mung bean gumbo maize plantain rock melon.</p>
 								</div>
 							</div>
-						</li>
+						</li>					
 					</ul>
-
-
 				</div>
 			</div>
 
@@ -125,37 +63,163 @@
 				<div class="" style='position:relative;'>
 					<textarea class='elastic-textarea'></textarea>
 					<span style='position:absolute;bottom:0px;right:0px; width:100px;'>
-						<button class='pure-button primary-button'>Reply</button>
+						<button class='pure-button primary-button'  id="sendbtn">Reply</button>
 					</span>
 				</form>
+			</div>
+			<div class="form-inline">
+				<div class="form-group">
+					<label for="">
+						watchingPeer:
+					</label>
+					<input type="text " id="watchingPeer" class="form-control">
+				</div>
+				<span id="connect-status" class="text-primary">
+					not connected
+				</span>
+				<div class="btn-group">
+					<button id="addwatch" class="btn btn-default">
+						watch
+					</button>
+					<button id="removewatch" class="btn btn-default">
+						unwatch
+					</button>
+				</div>
 			</div>
 		</div>
 		
 	</div>
 	<div id='order' class='pure-u-1'>
-		Order
-		
+		Order	
 	</div>
 	
+	<div type="tpl" id="watcher-tpl">
+		<div class="item">
+			<img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
+			<h5 class="name"><a href="#"  id="peer-@peerId@" onclick="$('#s1').click();setSendTo('@peerId@');">@peerId@</a></h5>
+		</div>
+	</div>
+
 	<script src="js/jquery.cbpContentSlider.js"></script>
 	<script>
 		$(function() {
-				/*
-				- how to call the plugin:
-				$( selector ).cbpContentSlider( [options] );
-				- options:
-				{
-					// default transition speed (ms)
-					speed : 500,
-					// default transition easing
-					easing : 'ease-in-out',
-					// current item's index
-					current : 0
-				}
-				- destroy:
-				$( selector ).cbpContentSlider( 'destroy' );
-				*/
-
-				$( '#cbp-contentslider' ).cbpContentSlider();
-			});
+			$( '#cbp-contentslider' ).cbpContentSlider();
+		});
 	</script>
+
+
+	<script>
+		var peerId = '<%-user.username%>';
+		var watching = [];
+		var toPeerId;
+        // var watchingPeer = $('#watchingPeer').val().split(',');
+        var chat;
+        // ---------------- 基本初始化 打开关闭 ----------------
+        $(function() {
+        	if($('#watchingPeer').val()!=""){
+        		watching = $('#watchingPeer').val().split(',');
+        	}
+        	chat = new AVChatClient({
+        		appId: appid,
+        		peerId: peerId,
+        		watchingPeerIds: watching
+                // auth: auth
+              });
+        	chat.on('close', function() {
+        		alert('connection closed')
+        		$('#connect-status').text('not connected');
+        		$('.online').removeClass('online').addClass('offline');
+        	});
+            // --------------- chat 相关监听 ---------------
+            chat.on('message', function(data) {
+            	$('#msgs').append('<p>'+data.fromPeerId+' said: '+data.msg+'</p>');
+            	addWatch(data.fromPeerId);
+            });
+            chat.on('online', function(peers) {
+            	for (var i = 0; i < peers.length; i++) {
+            		$('#peer-' + peers[i]).removeClass('offline');
+            		$('#peer-' + peers[i]).addClass('online');
+            	}
+            });
+            chat.on('offline', function(peers) {
+            	for (var i = 0; i < peers.length; i++) {
+            		$('#peer-' + peers[i]).removeClass('online');
+            		$('#peer-' + peers[i]).addClass('offline');
+            	}
+            });
+            openSocket();
+          });
+        // --------------- 基础 ---------------
+        function openSocket(){
+        	$('#allwatcher').empty();
+        	addWatchingPeer($('#watchingPeer').val().split(','));
+        	chat.open().then(function() {
+        		$('#status').append('Opened');
+        		$('#status').append('<br>');
+        		$('#connect-status').text('connected')
+        	}, function(err) {
+        		alert('open failure');
+        		console.log(err)
+        	});
+        }
+        function closeSocket() {
+        	chat.close().then(function() {
+        		$('#connect-status').text('not connected');
+        		$('.online').removeClass('online').addClass('offline');
+        	});
+        }
+        //---------------- 1 v 1 聊天相关 ----------------
+        function addWatch(peerId){
+        	if (!_.contains(watching, peerId)){
+        		addWatchingPeer(peerId.split(','));
+        		chat.watch(peerId.split(',')).then(function() {
+        		}, function() {
+        			alert('watch failure')
+        		});
+        	}
+        }
+        $('#addwatch').click(     	
+        	function() {
+        		addWatch($('#watchingPeer').val());
+        	});
+        $('#removewatch').click(function() {
+        	removeWatchingPeer($('#watchingPeer').val().split(','));
+        	chat.unwatch($('#watchingPeer').val().split(','));
+        });
+        function setSendTo(peerId) {
+        	toPeerId = peerId;
+        	$('#to-peer-id').text(toPeerId);
+        }
+        function addWatchingPeer(peers) {
+        	for (var i = 0; i < peers.length; i++) {
+        		if (!peers[i]) {
+        			return;
+        		}
+        		var str = $('#watcher-tpl').html().replace(/@peerId@/g, peers[i]);
+        		if ($('#allwatcher button').length < 1) {
+        			setSendTo(peers[i])
+        		}
+        		$('#allwatcher').append(str);
+        	}
+        }
+        function removeWatchingPeer(peers) {
+        	peers = [].concat(peers);
+        	for (var i = 0; i < peers.length; i++) {
+        		if (!peers[i]) {
+        			return;
+        		}
+        		$('#peer-' + peers[i]).parent().parent().remove();
+        	}
+        }
+        $('#sendbtn').click(function() {
+        	chat.send($('#msg').val(), toPeerId, false).then(function() {
+
+        		$('#msgs').append('<p>i said:'+$('#msg').val()+'</p>');
+        		$('#msg').val('');
+
+        	}, function(err) {
+        		console.log(err)
+        		alert("send failure!!!")
+        	});
+        });
+      </script>

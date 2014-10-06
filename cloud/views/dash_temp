@@ -1,43 +1,43 @@
  <div class="site-wrapper">
 
-        <div class="site-wrapper-inner">
+    <div class="site-wrapper-inner">
 
-            <div class="cover-container">
+        <div class="cover-container">
 
-                <div class="masthead clearfix">
-                    <div class="inner">
-                        <h3 class="masthead-brand">宅车宝</h3>
-                        <ul class="nav masthead-nav">
-                            <li class="active"><a href="#">首页</a></li>
-                            <li><a href="#" data-toggle="modal" data-target="#csModal">客服登录</a></li>
-                            <!-- <li><a href="#">Contact</a></li> -->
-                        </ul>
-                    </div>
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">宅车宝</h3>
+                    <ul class="nav masthead-nav">
+                        <li class="active"><a href="#">首页</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#csModal">客服登录</a></li>
+                        <!-- <li><a href="#">Contact</a></li> -->
+                    </ul>
                 </div>
+            </div>
 
 
-                    <div class="container">
-                        <%- body %></%- %>
-                    </div>
+            <div class="container">
+                <%- body %></%- %>
+            </div>
 
 
-                <div class="mastfoot">
-                    <div class="inner">
-                        <p>Cook by <a href="http://banana.eurus.cn">banana</a> &amp; <a href='http://simon.eurus.cn'>simon</a>.</p>
-                    </div>
+            <div class="mastfoot">
+                <div class="inner">
+                    <p>Cook by <a href="http://banana.eurus.cn">banana</a> &amp; <a href='http://simon.eurus.cn'>simon</a>.</p>
                 </div>
-
             </div>
 
         </div>
 
     </div>
 
+</div>
 
 
 
 
-    ------ dash
+
+------ dash
 
 <h2>
     peerId: <%-user.username %>
@@ -83,9 +83,6 @@
         <div class="form-inline">
             <div class="form-group">
                 <input type="text" class="form-control" id="msg">
-                    <!--<label>
-<input type="checkbox" id="msg-transient"> transient
-</label>-->
 </div>
 <button class="btn btn-default" id="sendbtn">
     send
@@ -271,3 +268,61 @@
             })
         }
     </script>
+
+
+
+    <div class="user-item user-item-unread pure-g">
+        <div class="item">
+            <img class="avatar" alt="Eric Ferraiuolo&#x27;s avatar" height="64" width="64" src="img/common/ericf-avatar.png">
+            <h5 class="name"><a href="#" onclick="$('#s2').click()">SHe</a></h5>
+        </div>
+    </div>
+
+    <div class="user-item user-item-unread pure-g">
+        <div class="item">
+
+            <img class="avatar" alt="YUI&#x27;s avatar" height="64" width="64" src="img/common/yui-avatar.png">
+            <h5 class="name"><a href="#" onclick="$('#s3').click()">We</a></h5>
+        </div>
+    </div>
+
+                        <a href="#slide2" id="s2">Rabbit</a>
+                        <a href="#slide3"id="s3">Aligator</a>
+                        <a href="#slide4" id="s4">Turtle</a>
+                        <a href="#slide5" id="s5">Platypus</a>
+
+
+    <li id="slide2">
+                            
+                            <div>
+                                <div class="cbp-content">
+                                    <p>Chicory collard greens tatsoi cress bamboo shoot broccoli rabe lotus root earthnut pea arugula okra welsh onion leek shallot courgette. Chard garlic fava bean pea sprouts gram spinach plantain tomatillo. Chicory garlic black-eyed pea gourd chickpea cucumber lotus root.</p>
+                                    <p>Daikon artichoke gumbo azuki bean bok choy avocado winter purslane gram earthnut pea broccoli salsify squash plantain wattle seed wakame broccoli rabe bamboo shoot. Zucchini lotus root azuki bean epazote dulse pumpkin rutabaga spinach. Endive mung bean gumbo maize plantain rock melon.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li id="slide3">
+                            
+                            <div>
+                                <div class="cbp-content">
+                                    <p>Tomato shallot broccoli rabe aubergine melon fava bean soybean sorrel. Tomatillo plantain wattle seed pea ricebean sorrel fennel welsh onion kakadu plum celery. Arugula radicchio garlic welsh onion kale celtuce tomato fava bean beet greens soybean burdock groundnut lentil broccoli rabe.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li id="slide4">
+                            
+                            <div>
+                                <div class="cbp-content">
+                                    <p>Yarrow bush tomato beetroot taro water chestnut komatsuna azuki bean. Parsnip artichoke water chestnut caulie carrot grape summer purslane brussels sprout fava bean tomatillo pea groundnut nori earthnut pea tigernut. Tigernut brussels sprout wakame tomatillo radicchio carrot maize swiss chard seakale melon grape broccoli pea sprouts kakadu plum plantain cauliflower. Gram salsify radicchio daikon courgette rock melon bunya nuts turnip greens. Cabbage black-eyed pea spinach asparagus plantain cress soybean spring onion salad artichoke pea garlic silver beet grape water spinach zucchini wakame summer purslane.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li id="slide5">
+
+                            <div>
+                                <div class="cbp-content">
+                                    <p>Potato watercress burdock spinach quandong jícama chard pea sprouts garlic celery turnip daikon kale lotus root sorrel coriander rock melon cabbage. Epazote salsify lentil rock melon eggplant cauliflower zucchini caulie catsear broccoli rabe pumpkin lettuce okra green bean squash seakale onion water chestnut. Sweet pepper peanut corn soko celery winter purslane.</p>
+                                    <p>Daikon artichoke gumbo azuki bean bok choy avocado winter purslane gram earthnut pea broccoli salsify squash plantain wattle seed wakame broccoli rabe bamboo shoot. Zucchini lotus root azuki bean epazote dulse pumpkin rutabaga spinach. Endive mung bean gumbo maize plantain rock melon.</p>
+                                </div>
+                            </div>
+                        </li>
