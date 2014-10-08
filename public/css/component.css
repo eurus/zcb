@@ -15,7 +15,8 @@
 /* main wrapper */
 .cbp-contentslider {
 	width: 100%;
-	height: 70%;
+	padding-bottom: 150px;
+	height: 100%;
 	margin: 1em auto;
 	position: relative;
 }

@@ -1,112 +1,131 @@
-<!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-	<div class="container">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="/">宅车宝</a>
-		</div>
-		<div id="navbar" class="navbar-collapse collapse">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="/">首页</a></li>
-				<li><a href="#about">关于</a></li>
-				<li><a href="#contact">联系</a></li>
+    <div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">宅车宝</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">首页</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#contact">联系</a></li>
 
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#"><%-user.username %></a></li>
-				<li><a href="/logout">退出</a></li>
-			</ul>
-		</div><!--/.nav-collapse -->
-	</div>
-</nav>
-<div id="layout" class="content pure-g">
-	<div id="users" class="pure-u-1">
-		<div class="user-item user-item-selected pure-g" id="allwatcher">
-			
-		</div>	
-	</div>
-
-	<div id="chats" class="pure-u-1">
-		<div class="chat-content">
-			<div class="chat-content-header pure-g">
-				<div class="pure-u-1-2">
-					<h3 class="chat-content-title"><span class="text-primary" id="to-peer-id">
-					</span></h3>
-				</div>
-			</div>
-			<div class="main">
-				<div id="cbp-contentslider" class="cbp-contentslider">
-					<nav id='peer-nav'>
-
-					</nav>
-					<ul id= 'peer-box'>
-
-					</ul>
-				</div>
-			</div>
-
-		</div>
-		<div class="chat-reply">
-			<div class="pure-form">
-				<div class="" style='position:relative;'>
-					<textarea class='elastic-textarea' id="msg"></textarea>
-					<span style='position:absolute;bottom:0px;right:0px; width:100px;'>
-						<button class='pure-button primary-button'  id="sendbtn">Reply</button>
-					</span>
-				</div>
-			</div>
-			<div class="form-inline">
-				<div class="form-group">
-					<label for="">
-						新建聊天
-					</label>
-					<input type="text " id="watchingPeer" class="form-control">
-				</div>
-				<span id="connect-status" class="text-primary">
-					not connected
-				</span>
-				<div class="btn-group">
-					<button id="addwatch" class="btn btn-default">
-						watch
-					</button>
-					<button id="removewatch" class="btn btn-default">
-						unwatch
-					</button>
-				</div>
-			</div>
-		</div>
-		
-	</div>
-
-	<div id='order' class='pure-u-1'>
-    <p>Order</p>
-  </div>
-
-  <div type="tpl" id="watcher-tpl">
-    <div class="item pure-u-1">
-      <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
-      <h5 class="name"><a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();addWatch('@peerId@');">@peerId@</a></h5>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><%-user.username %></a></li>
+                <li><a href="/logout">退出</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
-  </div>
+</nav>
+<!-- Fixed navbar -->
 
-  <div id="nav-tpl" type="tpl">
-    <a href="#@peerId@" id="slide-@peerId@">@peerId@</a>	
-  </div>
+<div id='layout' >
+    <div class='col-md-2 full-height'>
+        <div class='full-height full-width'>
+            <div class='title'>
+                联系人
+            </div>
+            <div id='user-list' class='scrollable' >
+            </div>
+        </div>
+    </div>   
 
-  <div id="msg-tpl" type="tpl">
-    <li id="@peerId@">						
-      <div>
-        
+    <div class='col-md-5 full-height'>
+        <div class='full-height full-width'>
+            <div id='to-peer-id' class='title'>
+                
+            </div>
+            <div class='scrollable' >
+                    <div id="cbp-contentslider" class="cbp-contentslider">
+                        <nav id='peer-nav' class='hide'>
+
+                        </nav>
+                        <ul id='peer-box'>
+
+                        </ul>
+                    </div>
+
+            </div>
+
+            <div class='footer form'>
+                    <div class="pure-form" style='position:relative;'>
+                        <textarea id="msg" class='chat-reply'></textarea>
+                        <span style='position:absolute;bottom:0px;right:0px; width:100px;'>
+                            <button class='pure-button primary-button'  id="sendbtn">回复</button>
+                        </span>
+                </div>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="">
+                            新建聊天
+                        </label>
+                        <input type="text " id="watchingPeer" class="form-control">
+                    </div>
+                    <span id="connect-status" class="text-primary">
+                        not connected
+                    </span>
+                    <div class="btn-group">
+                        <button id="addwatch" class="btn btn-default">
+                            watch
+                        </button>
+                        <button id="removewatch" class="btn btn-default">
+                            unwatch
+                        </button>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+
+
+    <div class='col-md-5 full-height'>
+        <div class='full-height full-width'>
+            <div class='title'>
+                订单信息
+            </div>
+            <div id='order' class='scrollable' >
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Template -->
+
+<div class="hide">
+    <div id="user-tpl">
+      <div class='user-item @class@ pure-g'>
+        <div class="item pure-u-1">
+          <a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();addWatch('@peerId@');">
+              <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
+              <span class='name'>@peerId@</span>
+          </a>
       </div>
-    </li>					
   </div>
+</div>
 
-  <script src="js/jquery.cbpContentSlider.js"></script>
+<div id="nav-tpl">
+    <a href="#@peerId@" id="slide-@peerId@">@peerId@</a>    
+</div>
+
+<div id="msg-tpl">
+    <li id="@peerId@">                      
+      <div>
+
+      </div>
+  </li>                   
+</div>
+</div>
+<script src="js/jquery.cbpContentSlider.js"></script>
+<script type='text/template'>
+</script>
+
   <script>
     var peerId = '<%-user.username%>';
     var watching = [];
@@ -116,111 +135,111 @@
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
-        	if($('#watchingPeer').val()!=""){
-        		watching = $('#watchingPeer').val().split(',');
-        	}
-        	chat = new AVChatClient({
-        		appId: appid,
-        		peerId: peerId,
-        		watchingPeerIds: watching
+            if($('#watchingPeer').val()!=""){
+                watching = $('#watchingPeer').val().split(',');
+            }
+            chat = new AVChatClient({
+                appId: appid,
+                peerId: peerId,
+                watchingPeerIds: watching
                 // auth: auth
               });
-        	chat.on('close', function() {
-        		alert('connection closed')
-        		$('#connect-status').text('not connected');
-        		$('.online').removeClass('online').addClass('offline');
-        	});
+            chat.on('close', function() {
+                alert('connection closed')
+                $('#connect-status').text('not connected');
+                $('.online').removeClass('online').addClass('offline');
+            });
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
-            	addWatch(data.fromPeerId);
+                addWatch(data.fromPeerId);
               $('#'+data.fromPeerId +'> div').append('<p>'+data.fromPeerId+'说: '+data.msg+'</p>');
             });
             chat.on('online', function(peers) {
-            	for (var i = 0; i < peers.length; i++) {
-            		$('#peer-' + peers[i]).removeClass('offline');
-            		$('#peer-' + peers[i]).addClass('online');
-            	}
+                for (var i = 0; i < peers.length; i++) {
+                    $('#peer-' + peers[i]).removeClass('offline');
+                    $('#peer-' + peers[i]).addClass('online');
+                }
             });
             chat.on('offline', function(peers) {
-            	for (var i = 0; i < peers.length; i++) {
-            		$('#peer-' + peers[i]).removeClass('online');
-            		$('#peer-' + peers[i]).addClass('offline');
-            	}
+                for (var i = 0; i < peers.length; i++) {
+                    $('#peer-' + peers[i]).removeClass('online');
+                    $('#peer-' + peers[i]).addClass('offline');
+                }
             });
             openSocket();
           });
         // --------------- 基础 ---------------
         function openSocket(){
-        	$('#allwatcher').empty();
-        	addWatchingPeer($('#watchingPeer').val().split(','));
-        	chat.open().then(function() {
-        		$('#status').append('Opened');
-        		$('#status').append('<br>');
-        		$('#connect-status').text('connected')
-        	}, function(err) {
-        		alert('open failure');
-        		console.log(err)
-        	});
+            $('#user-list').empty();
+            addWatchingPeer($('#watchingPeer').val().split(','));
+            chat.open().then(function() {
+                $('#status').append('Opened');
+                $('#status').append('<br>');
+                $('#connect-status').text('connected')
+            }, function(err) {
+                alert('open failure');
+                console.log(err)
+            });
         }
         function closeSocket() {
-        	chat.close().then(function() {
-        		$('#connect-status').text('not connected');
-        		$('.online').removeClass('online').addClass('offline');
-        	});
+            chat.close().then(function() {
+                $('#connect-status').text('not connected');
+                $('.online').removeClass('online').addClass('offline');
+            });
         }
         //---------------- 1 v 1 聊天相关 ----------------
         function addWatch(peerId){
-        	if (!_.contains(watching, peerId)){
-        		addWatchingPeer(peerId.split(','));
-        		chat.watch(peerId.split(',')).then(function() {
-        		}, function() {
-        			alert('watch failure')
-        		});
-        	}
+            if (!_.contains(watching, peerId)){
+                addWatchingPeer(peerId.split(','));
+                chat.watch(peerId.split(',')).then(function() {
+                }, function() {
+                    alert('watch failure')
+                });
+            }
         }
-        $('#addwatch').click(     	
-        	function() {
-        		addWatch($('#watchingPeer').val());
-        	});
+        $('#addwatch').click(       
+            function() {
+                addWatch($('#watchingPeer').val());
+            });
         $('#removewatch').click(function() {
-        	removeWatchingPeer($('#watchingPeer').val().split(','));
-        	chat.unwatch($('#watchingPeer').val().split(','));
+            removeWatchingPeer($('#watchingPeer').val().split(','));
+            chat.unwatch($('#watchingPeer').val().split(','));
         });
         function setSendTo(peerId) {
-        	toPeerId = peerId;
-        	$('#to-peer-id').text(toPeerId);
+            toPeerId = peerId;
+            $('#to-peer-id').text(toPeerId);
         }
         function addWatchingPeer(peers) {
-        	for (var i = 0; i < peers.length; i++) {
-        		if (!peers[i]) {
-        			return;
-        		}
-        		var str = $('#watcher-tpl').html().replace(/@peerId@/g, peers[i]);
-        		var str2 = $('#nav-tpl').html().replace(/@peerId@/g, peers[i]);
-        		var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-        		if ($('#allwatcher button').length < 1) {
-        			setSendTo(peers[i])
-        		}
-        		$('#allwatcher').append(str);
-        		$('#peer-nav').append(str2);
-        		$('#peer-box').append(str3);
-        		$( '#cbp-contentslider' ).cbpContentSlider();
-        		
-        	}
+            for (var i = 0; i < peers.length; i++) {
+                if (!peers[i]) {
+                    return;
+                }
+                var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
+                var str2 = $('#nav-tpl').html().replace(/@peerId@/g, peers[i]);
+                var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
+                if ($('#users button').length < 1) {
+                    setSendTo(peers[i])
+                }
+                $('#user-list').append(str);
+                $('#peer-nav').append(str2);
+                $('#peer-box').append(str3);
+                $( '#cbp-contentslider' ).cbpContentSlider();
+                
+            }
         }
         function removeWatchingPeer(peers) {
-        	peers = [].concat(peers);
-        	for (var i = 0; i < peers.length; i++) {
-        		if (!peers[i]) {
-        			return;
-        		}
-        		$('#peer-' + peers[i]).parent().parent().remove();
-        		$('#slide-' + peers[i]).remove();
-        		$('#'+peers[i]).remove();
-        	}
+            peers = [].concat(peers);
+            for (var i = 0; i < peers.length; i++) {
+                if (!peers[i]) {
+                    return;
+                }
+                $('#peer-' + peers[i]).parent().parent().remove();
+                $('#slide-' + peers[i]).remove();
+                $('#'+peers[i]).remove();
+            }
         }
         $('#sendbtn').click(function() {
-        	chat.send($('#msg').val(), toPeerId, false).then(function() {
+            chat.send($('#msg').val(), toPeerId, false).then(function() {
                             // 这里是发送的消息append
                             $('#'+toPeerId+'> div').append('<p>我说: '+$('#msg').val()+'</p>');
                             $('#msg').val('');

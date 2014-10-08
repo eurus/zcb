@@ -1,21 +1,55 @@
-/*
- * -- BASE STYLES --
- * Most of these are inherited from Base, but I want to change a few.
- */
- body {
-    color: #333;
-}
-html, body{
+body, html {
+    margin: 0;
+    overflow: hidden;
     height:100%;
 }
 
-
-
-a {
-    text-decoration: none;
-    color: #1b98f8;
+#layout{
+    margin-left:3%;
+    width:85%;
+    margin-top:5%;
+    height:90%;
 }
 
+.full-height{
+    height:100%;
+}
+
+.full-width{
+    position: relative;
+    width:100%;
+}
+
+.scrollable {
+    overflow-y: auto; 
+    padding-top:40px;
+    border:1px solid #ddd;
+    border-radius:4px;
+    height:100%;
+    text-align: center;
+}
+.title{
+    position: absolute;
+    top:0;
+    height:40px;
+    width:100%;
+    padding:10px;
+    font-weight: bold;
+    text-align: center;
+    background: #f8f8f8;
+    border:1px solid #ddd;
+    border-radius:4px 4px 0 0;
+}
+.full-width .footer.form{
+    position: absolute;
+    bottom:0;
+    width:100%;
+}
+textarea.chat-reply{
+    display:inline-block;
+    height:100px;
+    width:100%;
+}
 
 /*
  * -- HELPER STYLES --
@@ -41,236 +75,60 @@ a {
     font-size: 80%;
 }
 
-/*
- * -- LAYOUT STYLES --
- * This layout consists of three main elements, `#nav` (navigation bar), `#list` (email list), and `#chats` (email content). All 3 elements are within `#layout`
- */
- #layout, #nav, #list, #chats {
-    margin: 0;
-    padding: 0;
+/* User Item Styles */
+.user-title{
+   background:; 
 }
-
-/* Make the navigation 100% width on phones */
-#nav {
-    width: 100%;
-    height: 40px;
+.user-profile{
     position: relative;
-    background: rgb(37, 42, 58);
     text-align: center;
+    border-bottom: 1px solid #ddd;
+    height:48px;
+    box-shadow: 0 1px 0 solid #333;
+
+    color:#eee;
+    letter-spacing: 1px;
+        border-bottom: 1px solid #cc5a18;
 }
-/* Show the "Menu" button on phones */
-#nav .nav-menu-button {
-    display: block;
-    top: 0.5em;
-    right: 0.5em;
+.user-profile .avatar{
     position: absolute;
+    top:4px;
+    width:40px;
+    height:40px;
+    margin-left:15px;
+    z-index:99;
+    border:2px solid #eee;
 }
-
-/* When "Menu" is clicked, the navbar should be 80% height */
-#nav.active {
-    height: 80%;
-}
-/* Don't show the navigation items... */
-.nav-inner {
-    display: none;
-}
-
-/* ...until the "Menu" button is clicked */
-#nav.active .nav-inner {
-    display: block;
-    padding: 2em 0;
-}
-
-
-/*
- * -- NAV BAR STYLES --
- * Styling the default .pure-menu to look a little more unique.
- */
- #nav .pure-menu.pure-menu-open {
-    background: transparent;
-    border: none;
-    text-align: left;
-}
-#nav .pure-menu a:hover,
-#nav .pure-menu a:focus {
-    background: rgb(55, 60, 90);
-}
-#nav .pure-menu a {
-    color: #fff;
-    margin-left: 0.5em;
-}
-#nav .pure-menu-heading {
-    border-bottom: none;
-    font-size:110%;
-    color: rgb(75, 113, 151);
-}
-
-
-/*
- * -- EMAIL STYLES --
- * Styles relevant to the email messages, labels, counts, and more.
- */
- .email-count {
-    color: rgb(75, 113, 151);
-}
-
-.email-label-personal,
-.email-label-work,
-.email-label-travel {
-    width: 15px;
-    height: 15px;
+.user-profile .name{
+    margin-left:45px;
+    margin-top:15px;
     display: inline-block;
-    margin-right: 0.5em;
-    border-radius: 3px;
+    font-size:14px;
 }
-.email-label-personal {
-    background: #ffc94c;
-}
-.email-label-work {
-    background: #41ccb4;
-}
-.email-label-travel {
-    background: #40c365;
-}
-
-
-/* Email Item Styles */
 .user-item {
-    padding: 0.9em 1em;
+    padding: 8px;
     border-bottom: 1px solid #ddd;
     border-left: 6px solid transparent;
 }
-
-.item{
-    text-align: center;
+.user-item .item{
     margin:0 auto;
 }
-.avatar {
+.user-item .avatar {
     margin:0 auto;
     border-radius: 3px;
 }
-.name,
-.email-subject {
+.user-item .name {
     margin: 0;
-}
-.name {
-    text-transform: uppercase;
     margin-top:8px;
+    margin-left:8px;
     letter-spacing: normal;
     text-align: center;
     color: #999;
 }
-.email-desc {
-    font-size: 80%;
-    margin: 0.4em 0;
-}
-
-.user-item-selected {
+.user-item .user-item-selected {
     background: #eee;
 }
-.user-item-unread {
+.user-item .user-item-unread {
     border-left: 6px solid #1b98f8;
 }
 
-/* Email Content Styles */
-.chat-content-header, .chat-content-body, .chat-content-footer {
-    padding: 1em 2em;
-}
-.chat-content-header {
-    border-bottom: 1px solid #ddd;
-}
-
-.chat-content-title {
-    margin: 0.5em 0 0;
-}
-.chat-content-subtitle {
-    font-size: 1em;
-    margin: 0;
-    font-weight: normal;
-}
-.chat-content-subtitle span {
-    color: #999;
-}
-.chat-content-controls {
-    margin-top: 2em;
-    text-align: right;
-}
-.chat-content-controls .secondary-button {
-    margin-bottom: 0.3em;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-}
-
-/*
- * -- DESKTOP (AND UP) MEDIA QUERIES --
- * On desktops and other large-sized devices, we want to customize some
- * of the mobile styles.
- */
- @media (min-width: 60em) {
-
-    /* Move the layout over so we can fit the nav + list in on the left */
-    #layout {
-        padding-left:10%; /* "left col (nav + list)" width */
-        position: relative;
-    }
-    /* This will take up the entire height, and be a little thinner */
-    #users {
-        position: fixed;
-        margin-left: -10%;
-        top:50px;
-        width:10%;
-        height: 100%;
-        border-right: 1px solid #ddd;
-        overflow: auto;
-    }
-
-    /* This will now take up it's own column, so don't need position: fixed; */
-    #chats {
-        position: fixed;
-        margin: 0;
-        width:50%;
-        height:100%;
-        overflow:auto;
-        padding: 0;
-        top: 50px;
-        bottom: 0;
-        overflow: auto;
-        border-right:1px solid #ddd;
-    }
-
-    #order{
-        position: static;
-        width:auto;
-        margin-left:56%;
-        letter-spacing: normal;
-    }
-    #order .order-form{
-        padding: 1em 2em;
-    }
-
-
-    #chats .chat-content{
-        height:70%;
-    }
-
-    #chats .chat-reply{
-        border-top:1px solid #ddd;
-        height:30%;
-    }
-}
-
-
-.chat-reply .pure-form textarea{
-    display:inline-block;
-    height:100px;
-    width:100%;
-}
-div[type='tpl']{ 
-    display:none;
-}
-#peer-nav{
-   display:none;
-}
