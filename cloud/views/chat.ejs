@@ -140,8 +140,11 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
                 addWatch(data.fromPeerId);
-              $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+data.msg+'</li>');
-              switchChatTo($('#to-peer-id').text());
+                if ($('to-peer-id').text() == ''){
+                    $('to-peer-id').text(data.fromPeerId);
+                }
+                $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+data.msg+'</li>');
+                switchChatTo($('#to-peer-id').text());
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
@@ -195,12 +198,10 @@
             chat.unwatch($('#watchingPeer').val().split(','));
         });
         function setSendTo(peerId) {
-            alert('sp:'+peerId);
             toPeerId = peerId;
             $('#to-peer-id').text(toPeerId);
         }
         function switchChatTo(peerId){
-            alert('sc:'+peerId);
             if (peerId && peerId != ''){
                 $('#peer-box > ul').each(function(){
                     $(this).addClass('hide');
