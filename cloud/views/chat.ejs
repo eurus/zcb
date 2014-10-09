@@ -41,16 +41,7 @@
             <div id='to-peer-id' class='title'>
                 
             </div>
-            <div class='scrollable' >
-                    <div id="cbp-contentslider" class="cbp-contentslider">
-                        <nav id='peer-nav' class='hide'>
-
-                        </nav>
-                        <ul id='peer-box'>
-
-                        </ul>
-                    </div>
-
+            <div id='peer-box' class='scrollable' >
             </div>
 
             <div class='footer form'>
@@ -101,9 +92,9 @@
 <div class="hide">
     <div id="user-tpl">
       <div class='user-item @class@ pure-g'>
-        <div class="item pure-u-1">
-          <a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');$('#slide-@peerId@').click();addWatch('@peerId@');">
-              <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="64" width="64" src="img/common/tilo-avatar.png">
+        <div class="item">
+          <a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');switchChatTo('@peerId@');addWatch('@peerId@');">
+              <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src="img/common/tilo-avatar.png">
               <span class='name'>@peerId@</span>
           </a>
       </div>
@@ -115,11 +106,8 @@
 </div>
 
 <div id="msg-tpl">
-    <li id="@peerId@">                      
-      <div>
-
-      </div>
-  </li>                   
+    <ul id='@peerId@'>                      
+    </ul>   
 </div>
 </div>
 <script src="js/jquery.cbpContentSlider.js"></script>
@@ -152,7 +140,8 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
                 addWatch(data.fromPeerId);
-              $('#'+data.fromPeerId +'> div').append('<p>'+data.fromPeerId+'说: '+data.msg+'</p>');
+              $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+data.msg+'</li>');
+              switchChatTo($('#to-peer-id').text());
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
@@ -206,8 +195,18 @@
             chat.unwatch($('#watchingPeer').val().split(','));
         });
         function setSendTo(peerId) {
+            alert('sp:'+peerId);
             toPeerId = peerId;
             $('#to-peer-id').text(toPeerId);
+        }
+        function switchChatTo(peerId){
+            alert('sc:'+peerId);
+            if (peerId && peerId != ''){
+                $('#peer-box > ul').each(function(){
+                    $(this).addClass('hide');
+                })
+                $('#'+peerId).removeClass('hide');
+            }
         }
         function addWatchingPeer(peers) {
             for (var i = 0; i < peers.length; i++) {
@@ -223,7 +222,7 @@
                 $('#user-list').append(str);
                 $('#peer-nav').append(str2);
                 $('#peer-box').append(str3);
-                $( '#cbp-contentslider' ).cbpContentSlider();
+                //$( '#cbp-contentslider' ).cbpContentSlider();
                 
             }
         }
@@ -241,12 +240,12 @@
         $('#sendbtn').click(function() {
             chat.send($('#msg').val(), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            $('#'+toPeerId+'> div').append('<p>我说: '+$('#msg').val()+'</p>');
+                            $('#'+toPeerId).append('<li class="me">我说: '+$('#msg').val()+'</li>');
                             $('#msg').val('');
 
-                          }, function(err) {
+                        }, function(err) {
                             console.log(err)
                             alert("send failure!!!")
-                          });
+                        });
         });
-      </script>
+    </script>

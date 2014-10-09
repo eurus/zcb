@@ -72,7 +72,7 @@ function updateCurUser(map) {
 }
 
 function transformUser(curUser) {
-  return {
+  var result = {
     username:curUser.get('username'),
     id:curUser.id,
     mobile:curUser.get('mobile'),
@@ -80,11 +80,24 @@ function transformUser(curUser) {
     token:curUser.get('sessionToken'),
     emailVerified:curUser.get('emailVerified')
   };
+
+  if (curUser.get('avatar')){
+    result.avatarUrl = curUser.get('avatar').thumbnailURL(64, 64);
+  }else{
+    result.avatarUrl = 'xxx';
+  }
+
+  return result;
 }
 
 function findUserByName(name){
   return findUser(function(q){
     q.equalTo('username',name)
+  }).then(function (c) {
+    if (c) {
+      c = transformUser(c);
+    }
+    return AV.Promise.as(c);
   });
 }
 
