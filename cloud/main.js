@@ -8,6 +8,15 @@ function forceLogin(res){
   }
 }
 
+function getCSnameList () {
+  var role = AV.Object.extend("_Role");
+  var query = new AV.Query(role);
+  query.equalTo('name', 'operator');
+  return query.first().then(function(obj){
+    return obj.relation('users').query().find();
+  });
+}
+
 AV.Cloud.define('findUserById', function(req, res){
   forceLogin(res);
   var id = req.params.uid || '';
@@ -62,21 +71,31 @@ AV.Cloud.define("getCustomerService", function(req, res) {
   // cspid = 
   if(temp == "n") {
   //return customer servece peerid only 
-    result = {
-      cspid: "lala"
-    }
-    res.success(result);
-  } else {
-  //return customer servece peerid and customer peerid
-    n = (new Date()).getTime();
-    str1 = n + "";
-    str2 = Math.random().toString(36).substring(7);
-
-    result = {
-      cspid: "lala",
-      cpid: str1 + str2
-    }
-    res.success(result);
+  result = {
+    cspid: "lala"
   }
+  res.success(result);
+} else {
+  //return customer servece peerid and customer peerid
+  n = (new Date()).getTime();
+  str1 = n + "";
+  str2 = Math.random().toString(36).substring(7);
 
+  result = {
+    cspid: "lala",
+    cpid: str1 + str2
+  }
+  res.success(result);
+}
+
+});
+
+AV.Cloud.define("getOnlineCustomerService", function(req, res) {
+  getCSnameList().then(function(list){
+    var namelist =[];
+    for (var i = list.length - 1; i >= 0; i--) {
+      namelist.push(list[i].get("username"));
+    };
+    res.success(namelist);
+  })
 });
