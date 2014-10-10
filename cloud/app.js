@@ -27,6 +27,10 @@ app.use(express.cookieParser('zhai che bao bei'));
 app.use(avosExpressCookieSession({ cookie: { maxAge: 3600000 }}));
 
 // 使用 Express 路由 API 服务 /hello 的 HTTP GET 请求
+app.get('/operator', function(req, res) {
+  res.render('operator');
+});
+
 app.get('/', function(req, res) {
   res.render('index');
 });

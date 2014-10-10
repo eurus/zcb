@@ -1,0 +1,66 @@
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">宅车宝</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">首页</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#contact">联系</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" data-toggle="modal" data-target="#csModal">客服登录</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<div class="mastfoot">
+    <div class="inner">
+        <p>Cook by <a href="http://banana.eurus.cn">banana</a> &amp; <a href='http://simon.eurus.cn'>simon</a>.</p>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal" id="csModal" tabindex="-1" role="dialog" aria-labelledby="csModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">客服登录</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-signin" role="form" action='/login' method='post'>
+                    <input name='user[username]' type="text" class="form-control" placeholder="Email address" required autofocus>
+                    <input name='user[password]' type="password" class="form-control" placeholder="Password" required>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="remember-me"> 记住我
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <h1>Navbar example</h1>
+  <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+  <p>To see the difference between static and fixed top navbars, just scroll.</p>
+  <p>
+    <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+</p>
+</div>
+
