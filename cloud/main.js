@@ -72,14 +72,14 @@ AV.Cloud.define("getOrderList", function(req, res) {
 });
 
 AV.Cloud.define("getCustomerService", function(req, res) {
-  console.log(req.params.temp);
-  temp = req.params.temp
-
-  // cspid = 
-  if(temp == "n") {
+  temp = req.params.temp;
+  getCSnames(function(namelist){
+    name = namelist[Math.floor(Math.random()*namelist.length)]
+    console.log(name);
+    if(temp == "n") {
   //return customer servece peerid only 
   result = {
-    cspid: "lala"
+    cspid: name
   }
   res.success(result);
 } else {
@@ -89,18 +89,12 @@ AV.Cloud.define("getCustomerService", function(req, res) {
   str2 = Math.random().toString(36).substring(7);
 
   result = {
-    cspid: "lala",
+    cspid: name,
     cpid: str1 + str2
   }
   res.success(result);
 }
-
-});
-
-AV.Cloud.define("getOnlineCustomerService", function(req, res) {
-  getCSnames(function(namelist){
-    console.log(namelist);
-  })
+})
 });
 
 
