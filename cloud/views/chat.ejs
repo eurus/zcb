@@ -91,9 +91,9 @@
 
 <div class="hide">
     <div id="user-tpl">
-      <div class='user-item @class@ pure-g'>
+      <div id='user-@peerId@' class='user-item pure-g'>
         <div class="item">
-          <a href="#"  id="peer-@peerId@" onclick="setSendTo('@peerId@');switchChatTo('@peerId@');addWatch('@peerId@');">
+          <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
               <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src="img/common/tilo-avatar.png">
               <span class='name'>@peerId@</span>
           </a>
@@ -144,6 +144,7 @@
                     $('to-peer-id').text(data.fromPeerId);
                 }
                 $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+data.msg+'</li>');
+                
                 switchChatTo($('#to-peer-id').text());
             });
             chat.on('online', function(peers) {
@@ -200,6 +201,11 @@
         function setSendTo(peerId) {
             toPeerId = peerId;
             $('#to-peer-id').text(toPeerId);
+            // 重新设定选择对话人
+            alert('setting '+peerId);
+            $('.user-item-selected').removeClass('user-item-selected');
+            alert('#user-'+peerId);
+            $('#user-'+peerId).addClass('user-item-selected');
         }
         function switchChatTo(peerId){
             if (peerId && peerId != ''){
@@ -217,12 +223,11 @@
                 var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
                 var str2 = $('#nav-tpl').html().replace(/@peerId@/g, peers[i]);
                 var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-                if ($('#users button').length < 1) {
+                $('#user-list').append(str);
+                $('#peer-box').append(str3);
+                if ($('#user-list .user-item').length <= 1) {
                     setSendTo(peers[i])
                 }
-                $('#user-list').append(str);
-                $('#peer-nav').append(str2);
-                $('#peer-box').append(str3);
                 //$( '#cbp-contentslider' ).cbpContentSlider();
                 
             }

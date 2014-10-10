@@ -142,10 +142,10 @@ textarea.chat-reply{
     letter-spacing: normal;
     color: #999;
 }
-.user-item .user-item-selected {
+.user-item.user-item-selected {
     background: #eee;
 }
-.user-item .user-item-unread {
+.user-item.user-item-unread {
     border-left: 6px solid #1b98f8;
 }
 
