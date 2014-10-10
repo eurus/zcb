@@ -8,21 +8,23 @@ function forceLogin(res){
   }
 }
 
-function getCSnames (handleFunc) {
+function getCSnames () {
   var role = AV.Object.extend("_Role");
   var query = new AV.Query(role);
   query.equalTo('name', 'operator');
-  query.first().then(function (obj) {
-    obj.relation('users').query().find().then(function(list){
-      var namelist =[];
-      for (var i = list.length - 1; i >= 0; i--) {
-        namelist.push(list[i].get("username"));
-      }; 
-      handleFunc(namelist) 
-    });
+  return query.first().then(function (obj) {
+    return obj.relation('users').query().find();
+  }).then(function(list){
+    var namelist =[];
+    for (var i = list.length - 1; i >= 0; i--) {
+      namelist.push(list[i].get("username"));
+    }; 
+    var p = new AV.Promise();
+    console.log(namelist);
+    p.resolve(namelist);
+    return p;
   });
 }
-
 
 AV.Cloud.define('findUserById', function(req, res){
   forceLogin(res);
@@ -98,8 +100,8 @@ AV.Cloud.define("getCustomerService", function(req, res) {
 });
 
 AV.Cloud.define("getOnlineCustomerService", function(req, res) {
-  getCSnames(function(namelist){
-    console.log(namelist);
+  getCSnames().then(function(cs){
+    res.success(cs);
   })
 });
 
