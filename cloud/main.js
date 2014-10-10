@@ -8,14 +8,21 @@ function forceLogin(res){
   }
 }
 
-function getCSnameList () {
+function getCSnames (handleFunc) {
   var role = AV.Object.extend("_Role");
   var query = new AV.Query(role);
   query.equalTo('name', 'operator');
-  return query.first().then(function(obj){
-    return obj.relation('users').query().find();
+  query.first().then(function (obj) {
+    obj.relation('users').query().find().then(function(list){
+      var namelist =[];
+      for (var i = list.length - 1; i >= 0; i--) {
+        namelist.push(list[i].get("username"));
+      }; 
+      handleFunc(namelist) 
+    });
   });
 }
+
 
 AV.Cloud.define('findUserById', function(req, res){
   forceLogin(res);
@@ -67,7 +74,7 @@ AV.Cloud.define("getOrderList", function(req, res) {
 AV.Cloud.define("getCustomerService", function(req, res) {
   console.log(req.params.temp);
   temp = req.params.temp
-  console.log(typeof(temp));
+
   // cspid = 
   if(temp == "n") {
   //return customer servece peerid only 
@@ -91,11 +98,10 @@ AV.Cloud.define("getCustomerService", function(req, res) {
 });
 
 AV.Cloud.define("getOnlineCustomerService", function(req, res) {
-  getCSnameList().then(function(list){
-    var namelist =[];
-    for (var i = list.length - 1; i >= 0; i--) {
-      namelist.push(list[i].get("username"));
-    };
-    res.success(namelist);
+  getCSnames(function(namelist){
+    console.log(namelist);
   })
 });
+
+
+
