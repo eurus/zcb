@@ -16,7 +16,7 @@ h5{
 	font-size:20px;
 }
 #bar{
-	margin-top:3%;
+	margin-top:6%;
 }
 #btns{
 	margin-top:2%;
@@ -31,7 +31,12 @@ h5{
 	margin:0 30px 0 30px;
 	padding:5px 30px 5px 30px;
 	border-radius:50px;
-	border:10px solid rgba(255, 255, 255, 0.1);
+	border:10px solid rgba(100,100,100,0.3);
+     -webkit-background-clip: padding-box; /* for Safari */
+    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+}
+.btn:hover{
+    color:#999;
 }
 
 .btn b, .btn i{
@@ -43,11 +48,15 @@ h5{
 	font-size:50px;
 	margin-right:20px;
 }
-
+.btn.active:hover{
+    color:#544343;
+}
 .btn.active{
 	background:#fff100;
 	color:#1c1311;
-	border:10px solid rgba(0,0,0,0.2);
+	border:10px solid rgba(100,100,100,0.3);
+     -webkit-background-clip: padding-box; /* for Safari */
+    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 }
 
 .center{
