@@ -39,17 +39,17 @@
     <div class='col-md-5 full-height'>
         <div class='full-height full-width'>
             <div id='to-peer-id' class='title'>
-                
+
             </div>
             <div id='peer-box' class='scrollable' >
             </div>
 
             <div class='footer form'>
-                    <div class="pure-form" style='position:relative;'>
-                        <textarea id="msg" class='chat-reply'></textarea>
-                        <span style='position:absolute;bottom:0px;right:0px; width:100px;'>
-                            <button class='pure-button primary-button'  id="sendbtn">回复</button>
-                        </span>
+                <div class="pure-form" style='position:relative;'>
+                    <textarea id="msg" class='chat-reply'></textarea>
+                    <span style='position:absolute;bottom:0px;right:0px; width:100px;'>
+                        <button class='pure-button primary-button'  id="sendbtn">回复</button>
+                    </span>
                 </div>
                 <div class="form-inline">
                     <div class="form-group">
@@ -70,7 +70,7 @@
                         </button>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -81,10 +81,41 @@
                 订单信息
             </div>
             <div id='order' class='scrollable' >
-                
-            </div>
+             <div class="pure-form pure-form-aligned">
+                <fieldset>
+                    <div class="pure-control-group">
+                        <label for="name">Username</label>
+                        <input id="name" type="text" placeholder="Username">
+                    </div>
+
+                    <div class="pure-control-group">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="Password">
+                    </div>
+
+                    <div class="pure-control-group">
+                        <label for="email">Email Address</label>
+                        <input id="email" type="email" placeholder="Email Address">
+                    </div>
+
+                    <div class="pure-control-group">
+                        <label for="state">State</label>
+                        <select id="state">
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
+
+                    <div class="pure-controls">
+                        <button class="pure-button button-update"><i class="fa fa-pencil"> 更新</i></button>
+                        <button class="pure-button button-delete"><i class="fa fa-trash-o"> 删除</i></button>
+                    </div>
+                </fieldset>
+            </div>                
         </div>
     </div>
+</div>
 </div>
 
 <!-- Template -->
@@ -114,7 +145,7 @@
 <script type='text/template'>
 </script>
 
-  <script>
+<script>
     var peerId = '<%-user.username%>';
     var watching = [];
     var toPeerId;
@@ -131,7 +162,7 @@
                 peerId: peerId,
                 watchingPeerIds: watching
                 // auth: auth
-              });
+            });
             chat.on('close', function() {
                 alert('connection closed')
                 $('#connect-status').text('not connected');
@@ -160,7 +191,7 @@
                 }
             });
             openSocket();
-          });
+        });
         // --------------- 基础 ---------------
         function openSocket(){
             $('#user-list').empty();
