@@ -14,6 +14,7 @@ else
   app.set('views', 'cloud/views');
 
 app.set('view engine', 'ejs');    // 设置template引擎
+
 app.use(express.bodyParser());    // 读取请求body的中间件
 app.use(expressLayouts);
 app.use(function(req, res, next){

@@ -1,34 +1,8 @@
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div>
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">宅车宝</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/">首页</a></li>
-                <li><a href="#about">关于</a></li>
-                <li><a href="#contact">联系</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><%-user.username %></a></li>
-                <li><a href="/logout">退出</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</nav>
-<!-- Fixed navbar -->
-
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            <div class='title'>
+            <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src="img/common/tilo-avatar.png">
+            <div id='user-title' class='title'>
                 联系人
             </div>
             <div id='user-list' class='scrollable' >
@@ -46,29 +20,10 @@
 
             <div class='footer form'>
                     <div class="pure-form" style='position:relative;'>
-                        <textarea id="msg" class='chat-reply'></textarea>
-                        <span style='position:absolute;bottom:0px;right:0px; width:100px;'>
-                            <button class='pure-button primary-button'  id="sendbtn">回复</button>
+                        <input id="msg" class='chat-reply'></input>
+                        <span class='chat-reply-btn'>
+                            <button class='btn btn-secondary'  id="sendbtn">回复</button>
                         </span>
-                </div>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label for="">
-                            新建聊天
-                        </label>
-                        <input type="text " id="watchingPeer" class="form-control">
-                    </div>
-                    <span id="connect-status" class="text-primary">
-                        not connected
-                    </span>
-                    <div class="btn-group">
-                        <button id="addwatch" class="btn btn-default">
-                            watch
-                        </button>
-                        <button id="removewatch" class="btn btn-default">
-                            unwatch
-                        </button>
-                    </div>
                 </div>
                 </div>
         </div>
@@ -86,7 +41,29 @@
         </div>
     </div>
 </div>
+<div class="clearfix"></div>
+    <div id="test">
+    <div class="form-inline">
+            <div class="form-group">
+                <label for="">
+                    新建聊天
+                </label>
+                <input type="text " id="watchingPeer" class="form-control">
+            </div>
+            <span id="connect-status" class="text-primary">
+                not connected
+            </span>
+            <div class="btn-group">
+                <button id="addwatch" class="btn btn-default">
+                    watch
+                </button>
+                <button id="removewatch" class="btn btn-default">
+                    unwatch
+                </button>
+            </div>
+        </div>
 
+    </div>
 <!-- Template -->
 
 <div class="hide">
@@ -94,7 +71,7 @@
       <div id='user-@peerId@' class='user-item pure-g'>
         <div class="item">
           <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
-              <img class="avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src="img/common/tilo-avatar.png">
+              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src="img/common/tilo-avatar.png">
               <span class='name'>@peerId@</span>
           </a>
       </div>
@@ -255,3 +232,4 @@
                         });
         });
     </script>
+    

@@ -1,66 +1,65 @@
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">宅车宝</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/">首页</a></li>
-                <li><a href="#about">关于</a></li>
-                <li><a href="#contact">联系</a></li>
 
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" data-toggle="modal" data-target="#csModal">客服登录</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</nav>
-<div class="mastfoot">
-    <div class="inner">
-        <p>Cook by <a href="http://banana.eurus.cn">banana</a> &amp; <a href='http://simon.eurus.cn'>simon</a>.</p>
-    </div>
+<style>
+i,b{
+    color:#544343;
+}
+#admin-logo{
+    margin-top:35%;
+}
+#login-form{
+    margin-top:12%;
+}
+
+.input-group{
+    margin-top:15px;
+}
+#controls, #submit-btn{
+    margin-top:20px;
+}
+</style>
+<div id='container' class='center pure-u-19-24 pure-u-md-9-24 pure-u-lg-6-24'>
+<div id="admin-logo" class='pure-u-1 center'>
+    <img src="img/logo.png" class='pure-image pure-u-1'>
 </div>
+
 <!-- Modal -->
-<div class="modal" id="csModal" tabindex="-1" role="dialog" aria-labelledby="csModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">客服登录</h4>
+<div id='login-form' class='pure-u-1 center'>
+        
+    <form class='zform' role="form" action='/login' method='post'>
+        <p class='form-title mb-10'>后台管理系统登录</p>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">
+                    <i class="fa fa-user"></i>
+                </span>
+                <input name='user[username]' type="text" placeholder="输入账户名" required class='form-control' autofocus>
             </div>
-            <div class="modal-body">
-                <form class="form-signin" role="form" action='/login' method='post'>
-                    <input name='user[username]' type="text" class="form-control" placeholder="Email address" required autofocus>
-                    <input name='user[password]' type="password" class="form-control" placeholder="Password" required>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" value="remember-me"> 记住我
-                        </label>
-                    </div>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-                </form>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">
+                    <i class="fa fa-unlock-alt"></i>
+                </span>
+                <input name='user[password]' type="password" class='form-control' placeholder="输入密码" required>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <div id='controls'>
+            <div class="checkbox pull-left">
+                <label class='white'>
+                    <input type="checkbox" value="remember-me">记住我
+                </label>
             </div>
-        </div>
-    </div>
+            <div class='mt-10 pull-right'>
+                <a href="#" class='yellow'>忘记密码</a>
+            </div>
+            <div class="clearfix"></div>
+            </div>
+            <div id='submit-btn'>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
+            </div>
+    </form>
 </div>
 
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron">
-  <h1>Navbar example</h1>
-  <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-  <p>To see the difference between static and fixed top navbars, just scroll.</p>
-  <p>
-    <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-</p>
 </div>
+<footer class="mastfoot">
+    <div class="inner">
+        <p>Cooked by <a href="http://banana.eurus.cn">banana</a> &amp; <a href='http://simon.eurus.cn'>simon</a>.</p>
+    </div>
+</footer>
 

@@ -1,0 +1,151 @@
+html,body{
+	height:100%;
+	width:100%;
+    margin: 0;
+    overflow: hidden;
+	background-image: url('../img/bg.jpg');
+	background-repeat: repeat;
+
+}
+body,div,p,input,textarea,select,a,h1,h2,h3,h4,h5,h6,span,b,i{
+	color:#1c1311;
+	font-family: "微软雅黑", "Microsoft YaHei", sans-serif, serif;
+	letter-spacing: 1px;
+}
+body{
+    padding-bottom: 50px;
+}
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot');
+	src:url('../fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/icomoon.svg#icomoon') format('svg'),
+		url('../fonts/icomoon.woff') format('woff'),
+		url('../fonts/icomoon.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/*----------------------------------------------------
+ * 					PURE OVERRIDES
+ *----------------------------------------------------*/
+ /* Over-riding some of the .pure-button styles to make my buttons look unique*/
+
+ .btn-secondary {
+    background: #493c39;
+    color: white;
+    padding: 6px 20px;
+    border-radius:20px;
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #554845, #3c2f2c);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #554845, #3c2f2c);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #554845, #3c2f2c);
+    border-top:1px solid #6c625f;
+}
+.btn-secondary:hover{
+	color:#adacac;
+
+	    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #322624, #322624);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #322624, #443836);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #322624, #443836);
+}
+
+/*----------------------------------------------------
+ * 					GLOBALS
+ *----------------------------------------------------*/
+ footer{
+ 	width:100%;
+ 	text-align: center;
+ }
+
+ .center{
+	margin:0 auto;
+	text-align: center;
+	img,div{
+		margin:0 auto;
+	}
+}
+
+/*----------------------------------------------------
+ * 					  FORMS
+ *----------------------------------------------------*/
+.zform .form-title{
+	color:#fff100;
+	font-size:18px;
+	letter-spacing: 2px;
+	margin-bottom: 20px;
+}
+.input-group-addon{
+	background-color:white;
+}
+.input-group-addon i{
+	color:#bcbcbc;
+	font-size:20px;
+}
+.btn-primary{
+	background: #fff100;
+	color:#1c1311;
+	font-size:18px;
+	letter-spacing: 2px;
+	font-family: "微软雅黑", "Microsoft YaHei", sans-serif, serif;
+	border:1px solid #fff100;
+	border-top:1px solid #fffb90;
+}
+.btn.btn-primary:hover{
+	border:1px solid #1c1311;
+	box-shadow: 0 0 8px rgba(198,190,28,1);
+	-webkit-box-shadow: 0 0 8px rgba(198,190,28,1);
+	-moz-box-shadow: 0 0 8px rgba(198,190,28,1);
+	background: #decc00;
+	color:#1c1311;
+}
+
+input.form-control:focus{
+	border:1px solid #fff100;
+	box-shadow: 0 0 8px rgba(198,190,28,1);
+	-webkit-box-shadow: 0 0 8px rgba(198,190,28,1);
+	-moz-box-shadow: 0 0 8px rgba(198,190,28,1);
+
+}
+
+.input-group-lg>.form-control{
+	font-size:16px;
+}
+/*----------------------------------------------------
+ * 					  COLORS
+ *----------------------------------------------------*/
+
+.white{
+	color:white;
+}
+
+.yellow{
+	color:#fff100;
+}
+
+.light-yellow{
+	color:#fffb90;
+}
+.grey{
+	color:#bcbcbc;
+}
+
+.light-dark{
+	color:#443836;
+}
+.dark{
+	color:#342926;
+}
+
+.mt-10{
+	margin-top: 10px;
+}
+.mb-10{
+	margin-bottom: 10px;
+}
+

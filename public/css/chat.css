@@ -1,15 +1,16 @@
-body, html {
-    margin: 0;
-    overflow: hidden;
-    height:100%;
-}
-
 #layout{
     margin-left:3%;
     width:85%;
     margin-top:5%;
-    height:90%;
+    height:80%;
 }
+
+#test{
+    margin-top:5%;
+    width:100%;
+    height:10%;
+}
+
 
 .full-height{
     height:100%;
@@ -22,57 +23,62 @@ body, html {
 
 .scrollable {
     overflow-y: auto; 
-    padding-top:40px;
     border:1px solid #ddd;
-    border-radius:4px;
+    border-radius:0 0 4px 4px;
     height:100%;
     text-align: center;
+    background:white;
 }
 .title{
-    position: absolute;
+    position: relative;
     top:0;
     height:40px;
     width:100%;
     padding:10px;
     font-weight: bold;
+    color:white;
     text-align: center;
     background: #f8f8f8;
-    border:1px solid #ddd;
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #453936, #322624);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #453936, #322624);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #453936, #322624);
+    border-top:1px solid #6c625f;
     border-radius:4px 4px 0 0;
+    overflow: auto;
+}
+.own-avatar{
+    position: absolute;
+    top:-20px;
+    left:10px;
+    z-index:999;
+    border:2px solid white;
+
 }
 .full-width .footer.form{
     position: absolute;
-    bottom:0;
+    bottom:-40px;
+    height:55px;
+    left:0;
     width:100%;
-}
-textarea.chat-reply{
-    display:inline-block;
-    height:100px;
-    width:100%;
+    border-top:1px solid #a3a09f;
+    padding:10px;
 }
 
-/*
- * -- HELPER STYLES --
- * Over-riding some of the .pure-button styles to make my buttons look unique
- */
- .primary-button,
- .secondary-button {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    border-radius: 20px;
+.pure-form input.chat-reply{
+    display:inline-block;
+    height:34px;
+    border-radius:20px;
+    width:80%;
+    padding:2px;
 }
-.primary-button {
-    color: #fff;
-    background: #1b98f8;
-    margin: 1em 0;
-}
-.secondary-button {
-    background: #fff;
-    border: 1px solid #ddd;
-    color: #666;
-    padding: 0.5em 2em;
-    font-size: 80%;
+
+.chat-reply-btn{
+    width:20%;
+    padding-left:10px;
+
 }
 
 /* User Item Styles */
@@ -116,12 +122,15 @@ textarea.chat-reply{
 .user-item .item{
 
 }
-
+#peer-box{
+    background:#f6f6f6;
+}
 #peer-box ul{
     width:100%;
     height:100%;
     padding:10px 15px 0 15px;
     list-style: none;
+
 }
 #peer-box ul li{
 }
@@ -131,9 +140,14 @@ textarea.chat-reply{
 #peer-box ul li.other{
     text-align: left;
 }
+
+#user-title{
+    padding-left:25px;
+}
 .user-item .avatar {
     margin:0 auto;
-    border-radius: 3px;
+    border:1px solid white;
+
 }
 .user-item .name {
     margin: 0;
@@ -143,7 +157,11 @@ textarea.chat-reply{
     color: #999;
 }
 .user-item.user-item-selected {
-    background: #eee;
+    background: #9e9896;
+
+}
+.user-item.user-item-selected div, .user-item.user-item-selected a, .user-item.user-item-selected span{
+    color:white;
 }
 .user-item.user-item-unread {
     border-left: 6px solid #1b98f8;
