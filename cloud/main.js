@@ -1,4 +1,5 @@
 require("cloud/app.js");
+var avchat = require('lean-cloud-chat');
 var userCon = require('cloud/user.js');
 var zutil = require('cloud/zutil.js');
 
@@ -20,14 +21,14 @@ function getCSnames () {
       namelist.push(list[i].get("username"));
     }; 
     var p = new AV.Promise();
-    console.log(namelist);
     p.resolve(namelist);
     return p;
   });
 }
 
+
 AV.Cloud.define('findUserById', function(req, res){
-  forceLogin(res);
+  // forceLogin(res);
   var id = req.params.uid || '';
   userCon.findUserById(id).then(function(user){
     res.success(user);
@@ -37,7 +38,7 @@ AV.Cloud.define('findUserById', function(req, res){
 });
 
 AV.Cloud.define('findUserByName', function(req, res){
-  forceLogin(res);
+  // forceLogin(res);
   var name = req.params.username || '';
   userCon.findUserByName(name).then(function(user){
     res.success(user);
@@ -76,27 +77,37 @@ AV.Cloud.define("getOrderList", function(req, res) {
 AV.Cloud.define("getOnlineCustomerService", function(req, res) {
   temp = req.params.temp;
   getCSnames().then(function(namelist){
-   name = namelist[Math.floor(Math.random()*namelist.length)]
-   console.log(name);
-   if(temp == "n") {
-  //return customer servece peerid only 
-  result = {
-    cspid: name
-  }
-  res.success(result);
-} else {
-  //return customer servece peerid and customer peerid
-  n = (new Date()).getTime();
-  str1 = n + "";
-  str2 = Math.random().toString(36).substring(7);
+   appId="eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa";
+   chat = new avchat({
+    appId: appId,
+    peerId:'backend-chat-server'
+  });
 
-  result = {
-    operatorPeerId: name,
-    tempPeerId: str1 + str2
-  }
-  res.success(result);
-}
-});
+   chat.open().then(function(data){
+    chat.getStatus(namelist.toString().split(',')).then(function(data) {
+      name =data.onlineSessionPeerIds[Math.floor(Math.random()*data.onlineSessionPeerIds.length)]
+      console.log(name);
+      if(temp == "n") {
+        result = {
+          cspid: name
+        }
+        res.success(result);
+      } else {
+        n = (new Date()).getTime();
+        str1 = n + "";
+        str2 = Math.random().toString(36).substring(7);
+
+        result = {
+          operatorPeerId: name,
+          tempPeerId: str1 + str2
+        }
+        res.success(result);
+      }
+    });
+  },function(data){
+    console.log('open rejected',data);
+  });    
+ });
 });
 
 

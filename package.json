@@ -10,7 +10,8 @@
     "jade":"1.7.0",
     "ejs": "*",
     "express-ejs-layouts":"*",
-    "express-partials":"*"
+    "express-partials":"*",
+    "lean-cloud-chat": "*"
 
   }
 }

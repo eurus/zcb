@@ -1,7 +1,8 @@
+<!-- <script src="js/chat.js"></script> -->
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src="img/common/tilo-avatar.png">
+            <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
             <div id='user-title' class='title'>
                 联系人
             </div>
@@ -19,13 +20,13 @@
             </div>
 
             <div class='footer form'>
-                    <div class="pure-form" style='position:relative;'>
-                        <input id="msg" class='chat-reply'></input>
-                        <span class='chat-reply-btn'>
-                            <button class='btn btn-secondary'  id="sendbtn">回复</button>
-                        </span>
+                <div class="pure-form" style='position:relative;'>
+                    <input id="msg" class='chat-reply'></input>
+                    <span class='chat-reply-btn'>
+                        <button class='btn btn-secondary'  id="sendbtn">回复</button>
+                    </span>
                 </div>
-                </div>
+            </div>
 
         </div>
     </div>
@@ -93,8 +94,9 @@
                 </button>
             </div>
         </div>
-
     </div>
+
+</div>
 <!-- Template -->
 
 <div class="hide">
@@ -102,7 +104,7 @@
       <div id='user-@peerId@' class='user-item pure-g' data-peer-id='@peerId@'>
         <div class="item">
           <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
-              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src="img/common/tilo-avatar.png">
+              <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
               <span class='name'>@peerId@</span>
           </a>
           <a class='removewatch' href='#' data-peer-id='@peerId@' onclick='removeWatch(this)'><i class='fa fa-remove'></i></a>
@@ -126,14 +128,30 @@
 </script>
 
 <script>
-    var peerId = '<%-user.username%>';
-    var watching = [];
-    var toPeerId;
+    AV.$ = jQuery;
+    AV.initialize( "eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
+        "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
+    
+  //   AV.Cloud.run("findUserByName", {username: 'banana'}, {
+  //     success: function(data){
+  //         //调用成功，得到成功的应答data
+  //         console.log('yo');
+  //         console.log(data.username);
+  //     },
+  //     error: function(err){
+  //         //处理调用失败
+  //         console.log('oops');
+  //     }
+  // });
+var peerId = '<%-user.username%>';
+var watching = [];
+var toPeerId;
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
+
             if($('#watchingPeer').val()!=""){
                 watching = $('#watchingPeer').val().split(',');
             }
@@ -154,8 +172,32 @@
                 if ($('to-peer-id').text() == ''){
                     $('to-peer-id').text(data.fromPeerId);
                 }
-                $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+data.msg+'</li>');
-                
+                console.log(JSON.parse(data.msg));
+                receive_msg = JSON.parse(data.msg);
+                switch(receive_msg.InfoType) {
+                    case "IMAGE":
+                    console.log('<li class="other">'
+                            +data.fromPeerId
+                            +'说: '
+                            +"<img src='"
+                            +receive_msg.Content
+                            +"'>"
+                            +'</li>');
+                        $('#'+data.fromPeerId).append('<li class="other">'
+                            +data.fromPeerId
+                            +'说: '
+                            +"<img src='"
+                            +receive_msg.Content
+                            +"'>"
+                            +'</li>');
+                        break;
+                    case "VOICE":
+                        $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+receive_msg.Content+'</li>');
+                        break;
+                    case "TEXT":
+                        $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+receive_msg.Content+'</li>');
+                        break;
+                }             
                 switchChatTo($('#to-peer-id').text());
             });
             chat.on('online', function(peers) {
@@ -177,8 +219,6 @@
             $('#user-list').empty();
             addWatchingPeer($('#watchingPeer').val().split(','));
             chat.open().then(function() {
-                $('#status').append('Opened');
-                $('#status').append('<br>');
                 $('#connect-status').text('connected')
             }, function(err) {
                 alert('open failure');
@@ -239,14 +279,24 @@
                     return;
                 }
                 var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
-                var str2 = $('#nav-tpl').html().replace(/@peerId@/g, peers[i]);
                 var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-                $('#user-list').append(str);
+
+                // $('#user-list').append(str);
+                AV.Cloud.run("findUserByName", {username: peers[i]}, {
+                    success: function(data){
+                        $('#user-list').append(str);
+                        if(data.hasOwnProperty('username')){
+                            $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl);
+                        }
+                    },
+                    error: function(err){
+                        console.log('oops, there is something wrong.');
+                    }
+                });
                 $('#peer-box').append(str3);
                 if ($('#user-list .user-item').length <= 1) {
                     setSendTo(peers[i])
                 }
-                //$( '#cbp-contentslider' ).cbpContentSlider();
                 
             }
         }
@@ -262,9 +312,16 @@
             }
         }
         $('#sendbtn').click(function() {
-            chat.send($('#msg').val(), toPeerId, false).then(function() {
+            origin_msg = $('#msg').val();
+            send_msg = {
+                "Content":origin_msg,
+                "InfoType":"TEXT"
+            }
+
+            console.log(JSON.stringify(send_msg));
+            chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            $('#'+toPeerId).append('<li class="me">我说: '+$('#msg').val()+'</li>');
+                            $('#'+toPeerId).append('<li class="me">我说: '+origin_msg+'</li>');
                             $('#msg').val('');
 
                         }, function(err) {
