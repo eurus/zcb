@@ -178,22 +178,21 @@
                     case "IMAGE":
                     str = $('#image-tpl').html().replace(/@peerId@/g, data.fromPeerId);
                     str2 = str.replace(/@content@/g, receive_msg.Content);
-                    $('#'+data.fromPeerId).append(str2);
+                    
                     break;
 
                     case "VOICE":
                     str = $('#voice-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
                     str2 = str.replace(/@content@/g, receive_msg.Content);
-                    $('#'+data.fromPeerId).append(str2);
+                    
                     break;
 
                     case "TEXT":
                     str = $('#text-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    str2 = str.replace(/@content@/g, receive_msg.Content);
-                    console.log(str2);
-                    $('#'+data.fromPeerId).append(str2);
+                    str2 = str.replace(/@content@/g, receive_msg.Content);                    
                     break;
                 }             
+                $('#'+data.fromPeerId).append(str2);
                 switchChatTo($('#to-peer-id').text());
             });
 chat.on('online', function(peers) {
