@@ -1,3 +1,4 @@
+<!-- <script src="js/chat.js"></script> -->
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
@@ -103,7 +104,7 @@
       <div id='user-@peerId@' class='user-item pure-g'>
         <div class="item">
           <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
-              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src='"img/common/tilo-avatar.png"'>
+              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src='img/user1.png'>
               <span class='name'>@peerId@</span>
           </a>
       </div>
@@ -124,6 +125,20 @@
 </script>
 
 <script>
+    AV.$ = jQuery;
+    AV.initialize( "eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
+        "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
+    AV.Cloud.run("findUserByName", {username: 'banana'}, {
+      success: function(data){
+          //调用成功，得到成功的应答data
+          alert('yo');
+      },
+      error: function(err){
+          //处理调用失败
+          alert('oops');
+      }
+    });
+    
     var peerId = '<%-user.username%>';
     var watching = [];
     var toPeerId;
@@ -175,8 +190,6 @@
             $('#user-list').empty();
             addWatchingPeer($('#watchingPeer').val().split(','));
             chat.open().then(function() {
-                $('#status').append('Opened');
-                $('#status').append('<br>');
                 $('#connect-status').text('connected')
             }, function(err) {
                 alert('open failure');
