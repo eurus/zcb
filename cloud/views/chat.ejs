@@ -1,7 +1,7 @@
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src="img/common/tilo-avatar.png">
+            <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
             <div id='user-title' class='title'>
                 联系人
             </div>
@@ -124,6 +124,9 @@
 </script>
 
 <script>
+console.log( '<%-user.username%>');
+console.log( '<%-user.avatarUrl%>');
+
     var peerId = '<%-user.username%>';
     var watching = [];
     var toPeerId;
