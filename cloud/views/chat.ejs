@@ -140,9 +140,9 @@
   //         console.log('oops');
   //     }
   // });
-    var peerId = '<%-user.username%>';
-    var watching = [];
-    var toPeerId;
+var peerId = '<%-user.username%>';
+var watching = [];
+var toPeerId;
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
         var chat;
@@ -248,10 +248,12 @@
                 AV.Cloud.run("findUserByName", {username: peers[i]}, {
                     success: function(data){
                         $('#user-list').append(str);
-                        $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl);
+                        if(data.hasOwnProperty('username')){
+                            $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl);
+                        }
                     },
                     error: function(err){
-                        console.log('oops, there is something wrong with the username.');
+                        console.log('oops, there is something wrong.');
                     }
                 });
                 $('#peer-box').append(str3);
