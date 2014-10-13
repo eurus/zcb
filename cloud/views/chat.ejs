@@ -169,8 +169,32 @@ var toPeerId;
                 if ($('to-peer-id').text() == ''){
                     $('to-peer-id').text(data.fromPeerId);
                 }
-                $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+data.msg+'</li>');
-                
+                console.log(JSON.parse(data.msg));
+                receive_msg = JSON.parse(data.msg);
+                switch(receive_msg.InfoType) {
+                    case "IMAGE":
+                    console.log('<li class="other">'
+                            +data.fromPeerId
+                            +'说: '
+                            +"<img src='"
+                            +receive_msg.Content
+                            +"'>"
+                            +'</li>');
+                        $('#'+data.fromPeerId).append('<li class="other">'
+                            +data.fromPeerId
+                            +'说: '
+                            +"<img src='"
+                            +receive_msg.Content
+                            +"'>"
+                            +'</li>');
+                        break;
+                    case "VOICE":
+                        $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+receive_msg.Content+'</li>');
+                        break;
+                    case "TEXT":
+                        $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+receive_msg.Content+'</li>');
+                        break;
+                }             
                 switchChatTo($('#to-peer-id').text());
             });
             chat.on('online', function(peers) {
@@ -275,9 +299,16 @@ var toPeerId;
             }
         }
         $('#sendbtn').click(function() {
-            chat.send($('#msg').val(), toPeerId, false).then(function() {
+            origin_msg = $('#msg').val();
+            send_msg = {
+                "Content":origin_msg,
+                "InfoType":"TEXT"
+            }
+
+            console.log(JSON.stringify(send_msg));
+            chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            $('#'+toPeerId).append('<li class="me">我说: '+$('#msg').val()+'</li>');
+                            $('#'+toPeerId).append('<li class="me">我说: '+origin_msg+'</li>');
                             $('#msg').val('');
 
                         }, function(err) {
