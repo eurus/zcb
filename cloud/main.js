@@ -27,7 +27,7 @@ function getCSnames () {
 }
 
 AV.Cloud.define('findUserById', function(req, res){
-  forceLogin(res);
+  // forceLogin(res);
   var id = req.params.uid || '';
   userCon.findUserById(id).then(function(user){
     res.success(user);
@@ -37,7 +37,7 @@ AV.Cloud.define('findUserById', function(req, res){
 });
 
 AV.Cloud.define('findUserByName', function(req, res){
-  forceLogin(res);
+  // forceLogin(res);
   var name = req.params.username || '';
   userCon.findUserByName(name).then(function(user){
     res.success(user);

@@ -73,15 +73,13 @@ function transformUser(curUser) {
     username:curUser.get('username'),
     id:curUser.id,
     mobile:curUser.get('mobile'),
-    email:curUser.get('email'),
-    token:curUser.get('sessionToken'),
-    emailVerified:curUser.get('emailVerified')
+    email:curUser.get('email')
   };
 
   if (curUser.get('avatar')){
     result.avatarUrl = curUser.get('avatar').thumbnailURL(64, 64);
   }else{
-    result.avatarUrl = 'xxx';
+    result.avatarUrl = 'img/user1.jpg ';
   }
 
   return result;
