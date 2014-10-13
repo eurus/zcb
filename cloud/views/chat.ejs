@@ -248,7 +248,6 @@
                 AV.Cloud.run("findUserByName", {username: peers[i]}, {
                     success: function(data){
                         $('#user-list').append(str);
-                        console.log(data.avatarUrl);
                         $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl);
                     },
                     error: function(err){
