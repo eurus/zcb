@@ -1,5 +1,5 @@
 #layout{
-    margin-left:3%;
+    margin:0 auto;
     width:85%;
     margin-top:5%;
     height:80%;
@@ -34,10 +34,12 @@
     top:0;
     height:40px;
     width:100%;
+    font-size:14px;
     padding:10px;
     font-weight: bold;
     color:white;
     text-align: center;
+    vertical-align: middle;
     background: #f8f8f8;
     /* Firefox 3.6+ */
     background: -moz-linear-gradient(top, #453936, #322624);
@@ -113,6 +115,8 @@
 }
 .user-item {
     padding: 8px;
+    padding-right:0;
+    padding-left:0;
     border-bottom: 1px solid #ddd;
     border-left: 6px solid transparent;
 }
@@ -120,7 +124,16 @@
     text-decoration: none;
 }
 .user-item .item{
-
+    position: relative;
+    padding-right:12px;
+    width:100%;
+    text-align: left;
+}
+.user-item .item .removewatch{
+    position: absolute;
+    top:14px;
+    right:4px;
+    font-size:13px;
 }
 #peer-box{
     background:#f6f6f6;
@@ -130,7 +143,6 @@
     height:100%;
     padding:10px 15px 0 15px;
     list-style: none;
-
 }
 #peer-box ul li{
 }

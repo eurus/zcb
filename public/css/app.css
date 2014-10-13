@@ -10,6 +10,7 @@ html,body{
 body,div,p,input,textarea,select,a,h1,h2,h3,h4,h5,h6,span,b,i{
 	color:#1c1311;
 	font-family: "微软雅黑", "Microsoft YaHei", sans-serif, serif;
+	font-size:12px;
 	letter-spacing: 1px;
 }
 body{
@@ -36,6 +37,7 @@ body{
     color: white;
     padding: 6px 20px;
     border-radius:20px;
+
     /* Firefox 3.6+ */
     background: -moz-linear-gradient(top, #554845, #3c2f2c);
     /* Safari 5.1+, Chrome 10+ */
@@ -46,14 +48,36 @@ body{
 }
 .btn-secondary:hover{
 	color:#adacac;
-
-	    /* Firefox 3.6+ */
+	background:#322624;
+    /* Firefox 3.6+ */
     background: -moz-linear-gradient(top, #322624, #322624);
     /* Safari 5.1+, Chrome 10+ */
     background: -webkit-linear-gradient(top, #322624, #443836);
     /* Opera 11.10+ */
     background: -o-linear-gradient(top, #322624, #443836);
 }
+/* form */
+.pure-form fieldset {
+	padding:0;
+}
+.pure-form-aligned .pure-control-group {
+	margin-bottom: 0;
+	padding:6px;
+	border-bottom:1px solid #d4d3d3;
+}
+.pure-form fieldset{
+	text-align: left;
+}
+.pure-form-aligned .pure-control-group label{
+	width:10em;
+}
+.pure-form-aligned .pure-control-group label:after{
+	content: ":";
+}
+.pure-form-aligned .pure-control-group input, .pure-form-aligned .pure-control-group select{
+	width:60%;
+}
+
 
 /*----------------------------------------------------
  * 					GLOBALS
@@ -105,7 +129,7 @@ body{
 	color:#1c1311;
 }
 
-input.form-control:focus{
+input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[type=password]:focus, .pure-form input[type=email]:focus, select:focus{
 	border:1px solid #fff100;
 	box-shadow: 0 0 8px rgba(198,190,28,1);
 	-webkit-box-shadow: 0 0 8px rgba(198,190,28,1);
@@ -149,3 +173,119 @@ input.form-control:focus{
 	margin-bottom: 10px;
 }
 
+/*----------------------------------------------------
+ * 					  ORDER
+ *----------------------------------------------------*/
+
+.scrollable .banner{
+	width:100%;
+	padding:6px;	
+	background:#efefef;
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #efefef, #e4e3e2);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #efefef, #e4e3e2);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #efefef, #e4e3e2);
+    font-size:16px;
+    font-weight: normal;
+   	border-bottom: 1px solid #d4d3d3; 
+}
+
+.scrollable .banner:hover{
+	text-decoration: none;
+	a{
+		text-decoration: none;
+	}
+}
+
+.scrollable .dark-banner{
+	width:100%;
+	padding:6px;
+	color:white;
+	background:#9b9593;
+	font-size:16px;
+    font-weight: normal;
+
+    box-shadow: 0px 0px -5px #8e8684;
+    border-top:1px solid #89817f;
+    border-bottom:1px solid #89817f;
+}
+
+
+/*-----------------------------------------------------
+ 				 THE SPEECH BUBBLE
+------------------------------------------------------- */
+
+.triangle-isosceles {
+  position:relative;
+  padding:15px;
+  margin:1em 0 3em;
+  color:#000;
+  border-radius:5px;
+  background:#f3961c; /* default background for browsers without gradient support */
+  /* css3 */
+  background:-webkit-gradient(linear, 0 0, 0 100%, from(#fff9b2), to(#f7e902));
+  background:-moz-linear-gradient(#fff9b2, #f7e902);
+  background:-o-linear-gradient(#fff9b2, #f7e902);
+  background:linear-gradient(#fff9b2, #f7e902);
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+/* Variant : for left/right positioned triangle
+------------------------------------------ */
+
+.triangle-isosceles.left {
+  margin-left:50px;
+}
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.triangle-isosceles.right {
+  margin-right:50px;
+}
+
+/* THE TRIANGLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+/* creates triangle */
+.triangle-isosceles:after {
+  content:"";
+  position:absolute;
+  bottom:-15px; /* value = - border-top-width - border-bottom-width */
+  left:50px; /* controls horizontal position */
+  border-width:15px 15px 0; /* vary these values to change the angle of the vertex */
+  border-style:solid;
+  border-color:#f3961c transparent;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+
+
+
+/* Variant : left
+------------------------------------------ */
+
+.triangle-isosceles.left:after {
+  top:16px; /* controls vertical position */
+  left:-50px; /* value = - border-left-width - border-right-width */
+  bottom:auto;
+  border-width:10px 50px 10px 0;
+  border-color:transparent #f3961c;
+}
+
+/* Variant : right
+------------------------------------------ */
+
+.triangle-isosceles.right:after {
+  top:16px; /* controls vertical position */
+  right:-20px; /* value = - border-left-width - border-right-width */
+  bottom:auto;
+  left:auto;
+  border-width:10px 0 10px 20px;
+  border-color:transparent #f3961c;
+}
