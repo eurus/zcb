@@ -103,7 +103,7 @@
       <div id='user-@peerId@' class='user-item pure-g'>
         <div class="item">
           <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
-              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src="img/common/tilo-avatar.png">
+              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src='"img/common/tilo-avatar.png"'>
               <span class='name'>@peerId@</span>
           </a>
       </div>
@@ -124,9 +124,6 @@
 </script>
 
 <script>
-console.log( '<%-user.username%>');
-console.log( '<%-user.avatarUrl%>');
-
     var peerId = '<%-user.username%>';
     var watching = [];
     var toPeerId;
