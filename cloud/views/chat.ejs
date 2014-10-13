@@ -121,31 +121,32 @@
     </ul>   
 </div>
 
-
+<div id="text-tpl">
+    <li>
+        @peerId@说: @content@
+    </li>
+    
 </div>
-<script src="js/jquery.cbpContentSlider.js"></script>
-<script type='text/template'>
-</script>
+<div id="image-tpl">
+    <li>
+        @peerId@说: <img src="@content@" alt="@peerId@" size='100'>
+    </li>
+</div>
+<div id="voice-tpl">
+    <li>
+        @peerId@说: <video controls="" autoplay="" name="media">
+        <source src="@content@" type="audio/mpeg"></video>   
+        </li>
+    </div>
+</div>
 
 <script>
     AV.$ = jQuery;
     AV.initialize( "eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
         "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
-    
-  //   AV.Cloud.run("findUserByName", {username: 'banana'}, {
-  //     success: function(data){
-  //         //调用成功，得到成功的应答data
-  //         console.log('yo');
-  //         console.log(data.username);
-  //     },
-  //     error: function(err){
-  //         //处理调用失败
-  //         console.log('oops');
-  //     }
-  // });
-var peerId = '<%-user.username%>';
-var watching = [];
-var toPeerId;
+    var peerId = '<%-user.username%>';
+    var watching = [];
+    var toPeerId;
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
         var chat;
@@ -176,44 +177,39 @@ var toPeerId;
                 receive_msg = JSON.parse(data.msg);
                 switch(receive_msg.InfoType) {
                     case "IMAGE":
-                    console.log('<li class="other">'
-                            +data.fromPeerId
-                            +'说: '
-                            +"<img src='"
-                            +receive_msg.Content
-                            +"'>"
-                            +'</li>');
-                        $('#'+data.fromPeerId).append('<li class="other">'
-                            +data.fromPeerId
-                            +'说: '
-                            +"<img src='"
-                            +receive_msg.Content
-                            +"'>"
-                            +'</li>');
-                        break;
+                    str = $('#image-tpl').html().replace(/@peerId@/g, data.fromPeerId);
+                    str2 = str.replace(/@content@/g, receive_msg.Content);
+                    
+                    break;
+
                     case "VOICE":
-                        $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+receive_msg.Content+'</li>');
-                        break;
+                    str = $('#voice-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
+                    str2 = str.replace(/@content@/g, receive_msg.Content);
+                    
+                    break;
+
                     case "TEXT":
-                        $('#'+data.fromPeerId).append('<li class="other">'+data.fromPeerId+'说: '+receive_msg.Content+'</li>');
-                        break;
+                    str = $('#text-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
+                    str2 = str.replace(/@content@/g, receive_msg.Content);                    
+                    break;
                 }             
+                $('#'+data.fromPeerId).append(str2);
                 switchChatTo($('#to-peer-id').text());
             });
-            chat.on('online', function(peers) {
-                for (var i = 0; i < peers.length; i++) {
-                    $('#peer-' + peers[i]).removeClass('offline');
-                    $('#peer-' + peers[i]).addClass('online');
-                }
-            });
-            chat.on('offline', function(peers) {
-                for (var i = 0; i < peers.length; i++) {
-                    $('#peer-' + peers[i]).removeClass('online');
-                    $('#peer-' + peers[i]).addClass('offline');
-                }
-            });
-            openSocket();
-        });
+chat.on('online', function(peers) {
+    for (var i = 0; i < peers.length; i++) {
+        $('#peer-' + peers[i]).removeClass('offline');
+        $('#peer-' + peers[i]).addClass('online');
+    }
+});
+chat.on('offline', function(peers) {
+    for (var i = 0; i < peers.length; i++) {
+        $('#peer-' + peers[i]).removeClass('online');
+        $('#peer-' + peers[i]).addClass('offline');
+    }
+});
+openSocket();
+});
         // --------------- 基础 ---------------
         function openSocket(){
             $('#user-list').empty();
@@ -314,14 +310,17 @@ var toPeerId;
         $('#sendbtn').click(function() {
             origin_msg = $('#msg').val();
             send_msg = {
-                "Content":origin_msg,
+                "Content": origin_msg,
                 "InfoType":"TEXT"
             }
 
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            $('#'+toPeerId).append('<li class="me">我说: '+origin_msg+'</li>');
+                            str = $('#text-tpl').html();
+                            console.log(str);
+                            str2 = str.replace(/@content@/g,origin_msg);
+                            $('#'+toPeerId).append(str2);
                             $('#msg').val('');
 
                         }, function(err) {
