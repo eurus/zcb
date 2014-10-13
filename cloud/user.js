@@ -79,7 +79,7 @@ function transformUser(curUser) {
   if (curUser.get('avatar')){
     result.avatarUrl = curUser.get('avatar').thumbnailURL(64, 64);
   }else{
-    result.avatarUrl = 'img/user1.jpg ';
+    result.avatarUrl = 'img/user1.png ';
   }
 
   return result;

@@ -20,13 +20,13 @@
             </div>
 
             <div class='footer form'>
-                    <div class="pure-form" style='position:relative;'>
-                        <input id="msg" class='chat-reply'></input>
-                        <span class='chat-reply-btn'>
-                            <button class='btn btn-secondary'  id="sendbtn">回复</button>
-                        </span>
+                <div class="pure-form" style='position:relative;'>
+                    <input id="msg" class='chat-reply'></input>
+                    <span class='chat-reply-btn'>
+                        <button class='btn btn-secondary'  id="sendbtn">回复</button>
+                    </span>
                 </div>
-                </div>
+            </div>
 
         </div>
     </div>
@@ -38,7 +38,7 @@
                 订单信息
             </div>
             <div id='order' class='scrollable' >
-             <div class="pure-form pure-form-aligned">
+               <div class="pure-form pure-form-aligned">
                 <fieldset>
                     <div class="pure-control-group">
                         <label for="name">Username</label>
@@ -75,28 +75,28 @@
 </div>
 </div>
 <div class="clearfix"></div>
-    <div id="test">
+<div id="test">
     <div class="form-inline">
-            <div class="form-group">
-                <label for="">
-                    新建聊天
-                </label>
-                <input type="text " id="watchingPeer" class="form-control">
-            </div>
-            <span id="connect-status" class="text-primary">
-                not connected
-            </span>
-            <div class="btn-group">
-                <button id="addwatch" class="btn btn-default">
-                    watch
-                </button>
-                <button id="removewatch" class="btn btn-default">
-                    unwatch
-                </button>
-            </div>
+        <div class="form-group">
+            <label for="">
+                新建聊天
+            </label>
+            <input type="text " id="watchingPeer" class="form-control">
         </div>
-
+        <span id="connect-status" class="text-primary">
+            not connected
+        </span>
+        <div class="btn-group">
+            <button id="addwatch" class="btn btn-default">
+                watch
+            </button>
+            <button id="removewatch" class="btn btn-default">
+                unwatch
+            </button>
+        </div>
     </div>
+
+</div>
 <!-- Template -->
 
 <div class="hide">
@@ -104,7 +104,7 @@
       <div id='user-@peerId@' class='user-item pure-g'>
         <div class="item">
           <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
-              <img class="img-circle avatar" alt="Tilo Mitra&#x27;s avatar" height="40" width="40" src='img/user1.png'>
+              <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
               <span class='name'>@peerId@</span>
           </a>
       </div>
@@ -128,17 +128,18 @@
     AV.$ = jQuery;
     AV.initialize( "eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
         "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
-    AV.Cloud.run("findUserByName", {username: 'banana'}, {
-      success: function(data){
-          //调用成功，得到成功的应答data
-          alert('yo');
-      },
-      error: function(err){
-          //处理调用失败
-          alert('oops');
-      }
-    });
     
+  //   AV.Cloud.run("findUserByName", {username: 'banana'}, {
+  //     success: function(data){
+  //         //调用成功，得到成功的应答data
+  //         console.log('yo');
+  //         console.log(data.username);
+  //     },
+  //     error: function(err){
+  //         //处理调用失败
+  //         console.log('oops');
+  //     }
+  // });
     var peerId = '<%-user.username%>';
     var watching = [];
     var toPeerId;
@@ -147,6 +148,7 @@
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
+
             if($('#watchingPeer').val()!=""){
                 watching = $('#watchingPeer').val().split(',');
             }
@@ -223,10 +225,7 @@
         function setSendTo(peerId) {
             toPeerId = peerId;
             $('#to-peer-id').text(toPeerId);
-            // 重新设定选择对话人
-            alert('setting '+peerId);
             $('.user-item-selected').removeClass('user-item-selected');
-            alert('#user-'+peerId);
             $('#user-'+peerId).addClass('user-item-selected');
         }
         function switchChatTo(peerId){
@@ -243,14 +242,23 @@
                     return;
                 }
                 var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
-                var str2 = $('#nav-tpl').html().replace(/@peerId@/g, peers[i]);
                 var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-                $('#user-list').append(str);
+
+                // $('#user-list').append(str);
+                AV.Cloud.run("findUserByName", {username: peers[i]}, {
+                    success: function(data){
+                        $('#user-list').append(str);
+                        console.log(data.avatarUrl);
+                        $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl);
+                    },
+                    error: function(err){
+                        console.log('oops, there is something wrong with the username.');
+                    }
+                });
                 $('#peer-box').append(str3);
                 if ($('#user-list .user-item').length <= 1) {
                     setSendTo(peers[i])
                 }
-                //$( '#cbp-contentslider' ).cbpContentSlider();
                 
             }
         }
