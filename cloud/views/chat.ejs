@@ -294,8 +294,11 @@ openSocket();
             }
         }
         function removeWatch(target){
-            var peerId = $(target).data('peer-id');
-            peerId = [peerId];
+            var opeerId = $(target).data('peer-id');
+            peerId = [opeerId];
+            list  = JSON.parse(localStorage["watching"]);
+            nlist = _.without(list,opeerId);
+            localStorage["watching"] = JSON.stringify(nlist);
             removeWatchingPeer(peerId);
             chat.unwatch(peerId);
             $('#user-'+peerId).remove();
