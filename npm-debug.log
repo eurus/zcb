@@ -1,0 +1,92 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/lib/node_modules/cnpm/node_modules/.bin/npm',
+1 verbose cli   '--userconfig=/Users/hanz/.cnpmrc',
+1 verbose cli   '--disturl=https://npm.taobao.org/dist',
+1 verbose cli   '--cache=/Users/hanz/.npm/.cache_cnpm',
+1 verbose cli   '--registry=https://registry.npm.taobao.org',
+1 verbose cli   'install' ]
+2 info using npm@2.0.0
+3 info using node@v0.10.24
+4 verbose node symlink /usr/local/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/Users/hanz/workspace/zcb',
+6 verbose install   [ 'express',
+6 verbose install     'async',
+6 verbose install     'underscore',
+6 verbose install     'jade',
+6 verbose install     'ejs',
+6 verbose install     'express-ejs-layouts',
+6 verbose install     'express-partials',
+6 verbose install     'lean-cloud-chat',
+6 verbose install     'unirest' ] ]
+7 info preinstall zcb@0.0.1
+8 verbose readDependencies using package.json deps
+9 verbose already installed skipping ejs@* /Users/hanz/workspace/zcb
+10 verbose already installed skipping jade@1.7.0 /Users/hanz/workspace/zcb
+11 verbose already installed skipping express-ejs-layouts@* /Users/hanz/workspace/zcb
+12 verbose already installed skipping express-partials@* /Users/hanz/workspace/zcb
+13 verbose already installed skipping lean-cloud-chat@* /Users/hanz/workspace/zcb
+14 verbose already installed skipping unirest@* /Users/hanz/workspace/zcb
+15 verbose already installed skipping underscore@1.6.0 /Users/hanz/workspace/zcb
+16 verbose already installed skipping express@3.4.0 /Users/hanz/workspace/zcb
+17 verbose already installed skipping async@0.9.x /Users/hanz/workspace/zcb
+18 silly resolved []
+19 info build /Users/hanz/workspace/zcb
+20 verbose linkStuff [ false, false, false, '/Users/hanz/workspace' ]
+21 info linkStuff zcb@0.0.1
+22 verbose linkBins zcb@0.0.1
+23 verbose linkMans zcb@0.0.1
+24 verbose rebuildBundles zcb@0.0.1
+25 verbose rebuildBundles [ '.bin',
+25 verbose rebuildBundles   'async',
+25 verbose rebuildBundles   'ejs',
+25 verbose rebuildBundles   'express',
+25 verbose rebuildBundles   'express-ejs-layouts',
+25 verbose rebuildBundles   'express-partials',
+25 verbose rebuildBundles   'jade',
+25 verbose rebuildBundles   'lean-cloud-chat',
+25 verbose rebuildBundles   'node-sass',
+25 verbose rebuildBundles   'underscore',
+25 verbose rebuildBundles   'unirest' ]
+26 verbose rebuild bundle /Users/hanz/workspace/zcb/node_modules/node-sass
+27 info build /Users/hanz/workspace/zcb/node_modules/node-sass
+28 info preinstall node-sass@0.9.6
+29 verbose linkStuff [ false, false, false, '/Users/hanz/workspace/zcb/node_modules' ]
+30 info linkStuff node-sass@0.9.6
+31 verbose linkBins node-sass@0.9.6
+32 verbose link bins [ { 'node-sass': 'bin/node-sass' },
+32 verbose link bins   '/Users/hanz/workspace/zcb/node_modules/.bin',
+32 verbose link bins   false ]
+33 verbose linkMans node-sass@0.9.6
+34 verbose rebuildBundles node-sass@0.9.6
+35 verbose gentlyRm vacuuming /Users/hanz/workspace/zcb/node_modules/.bin/node-sass
+36 silly gentlyRm purging /Users/hanz/workspace/zcb/node_modules/.bin/node-sass
+37 silly gentlyRm quitting because other entries in /Users/hanz/workspace/zcb/node_modules/.bin
+38 info install node-sass@0.9.6
+39 verbose unsafe-perm in lifecycle true
+40 info node-sass@0.9.6 Failed to exec install script
+41 verbose stack Error: node-sass@0.9.6 install: `node build.js`
+41 verbose stack Exit status 8
+41 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/cnpm/node_modules/npm/lib/utils/lifecycle.js:212:16)
+41 verbose stack     at ChildProcess.EventEmitter.emit (events.js:98:17)
+41 verbose stack     at maybeClose (child_process.js:735:16)
+41 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:802:5)
+42 verbose pkgid node-sass@0.9.6
+43 verbose cwd /Users/hanz/workspace/zcb
+44 error Darwin 13.4.0
+45 error argv "node" "/usr/local/lib/node_modules/cnpm/node_modules/.bin/npm" "--userconfig=/Users/hanz/.cnpmrc" "--disturl=https://npm.taobao.org/dist" "--cache=/Users/hanz/.npm/.cache_cnpm" "--registry=https://registry.npm.taobao.org" "install"
+46 error node v0.10.24
+47 error npm  v2.0.0
+48 error code ELIFECYCLE
+49 error node-sass@0.9.6 install: `node build.js`
+49 error Exit status 8
+50 error Failed at the node-sass@0.9.6 install script.
+50 error This is most likely a problem with the node-sass package,
+50 error not with npm itself.
+50 error Tell the author that this fails on your system:
+50 error     node build.js
+50 error You can get their info via:
+50 error     npm owner ls node-sass
+50 error There is likely additional logging output above.
+51 verbose exit [ 1, true ]

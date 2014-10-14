@@ -61,6 +61,7 @@
         </div>
     </div>
 </div>
+
 </div>
 <!-- Template -->
 
@@ -351,8 +352,7 @@ openSocket();
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            str = $('#text-tpl').html();
-                            console.log(str);
+                            str = $('#text-tpl').html().replace(/@peerId@/g, peerId);
                             str2 = str.replace(/@content@/g,origin_msg);
                             $('#'+toPeerId).append(str2);
                             $('#msg').val('');
