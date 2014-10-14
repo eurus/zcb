@@ -38,63 +38,63 @@
                 订单信息
             </div>
             <div id='order' class='scrollable' >
-            <b class='banner pure-u-1'>基本信息</b>
-             <div class="pure-form pure-form-aligned zform">
-                <fieldset>
-                    <div class="pure-control-group">
-                        <label for="name">Username</label>
-                        <input id="name" type="text" placeholder="Username">
-                    </div>
+                <b class='banner pure-u-1'>基本信息</b>
+                <div class="pure-form pure-form-aligned zform">
+                    <fieldset>
+                        <div class="pure-control-group">
+                            <label for="name">Username</label>
+                            <input id="name" type="text" placeholder="Username">
+                        </div>
 
-                    <div class="pure-control-group">
-                        <label for="password">Password</label>
-                        <input id="password" type="password" placeholder="Password">
-                    </div>
+                        <div class="pure-control-group">
+                            <label for="password">Password</label>
+                            <input id="password" type="password" placeholder="Password">
+                        </div>
 
-                    <div class="pure-control-group">
-                        <label for="email">Email Address</label>
-                        <input id="email" type="email" placeholder="Email Address">
-                    </div>
+                        <div class="pure-control-group">
+                            <label for="email">Email Address</label>
+                            <input id="email" type="email" placeholder="Email Address">
+                        </div>
 
-                    <div class="pure-control-group">
-                        <label for="state">State</label>
-                        <select id="state">
-                            <option>AL</option>
-                            <option>CA</option>
-                            <option>IL</option>
-                        </select>
-                    </div>
+                        <div class="pure-control-group">
+                            <label for="state">State</label>
+                            <select id="state">
+                                <option>AL</option>
+                                <option>CA</option>
+                                <option>IL</option>
+                            </select>
+                        </div>
 
-                    <div class="pure-controls">
-                        <button class="pure-button button-update"><i class="fa fa-pencil"> 更新</i></button>
-                        <button class="pure-button button-delete"><i class="fa fa-trash-o"> 删除</i></button>
-                    </div>
-                </fieldset>
+                        <div class="pure-controls">
+                            <button class="pure-button button-update"><i class="fa fa-pencil"> 更新</i></button>
+                            <button class="pure-button button-delete"><i class="fa fa-trash-o"> 删除</i></button>
+                        </div>
+                    </fieldset>
+                </div>
+                <b class='dark-banner pure-u-1'>选中</b>
             </div>
-            <b class='dark-banner pure-u-1'>选中</b>
         </div>
     </div>
-</div>
 </div>
 <div class="clearfix"></div>
-    <div id="test" class='center'>
+<div id="test" class='center'>
     <div class="form-inline">
-            <div class="form-group">
-                <label for="">
-                    新建聊天
-                </label>
-                <input type="text " id="watchingPeer" class="form-control">
-            </div>
-            <span id="connect-status" class="text-primary">
-                not connected
-            </span>
-            <div class="btn-group">
-                <button id="addwatch" class="btn btn-default">
-                    watch
-                </button>
-            </div>
+        <div class="form-group">
+            <label for="">
+                新建聊天
+            </label>
+            <input type="text " id="watchingPeer" class="form-control">
+        </div>
+        <span id="connect-status" class="text-primary">
+            not connected
+        </span>
+        <div class="btn-group">
+            <button id="addwatch" class="btn btn-default">
+                watch
+            </button>
         </div>
     </div>
+</div>
 
 </div>
 <!-- Template -->
@@ -317,8 +317,7 @@ openSocket();
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            str = $('#text-tpl').html();
-                            console.log(str);
+                            str = $('#text-tpl').html().replace(/@peerId@/g, peerId);
                             str2 = str.replace(/@content@/g,origin_msg);
                             $('#'+toPeerId).append(str2);
                             $('#msg').val('');
