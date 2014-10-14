@@ -80,6 +80,15 @@ $(function() {
 			serviceTime: ''
 		}
 	});
+
+var Address = AV.Object.extend("Address", {
+	defaults:{
+		contact:'',
+		detail:'',
+		mobile:'',
+	}
+})
+
  var CarView = AV.View.extend({
  	template:_.template($('#car-tpl').html()),
  	events:{
@@ -93,8 +102,9 @@ $(function() {
 
  		this.cars = new CarList;
  		if (customer!= null){
- 			console.log('customer = '+customer);
- 			this.cars.query = customer.relation('cars').query();
+ 			this.cars.query = new AV.Query(Car);//customer.relation('cars').query();
+ 			this.cars.query.equalTo('user', customer);
+
  		}else{
  			console.log(customer)
  		}
@@ -140,12 +150,20 @@ $(function() {
  	},
 
  	save:function(val){
+ 		var self = this;
  		var car = $('#car-form').serializeObject();
-			// alert(JSON.stringify(car));
-			car.year = parseInt(car.year)|| 0;
-			this.cars.create(car);
-			this.render();
-		}
+ 		car.year = parseInt(car.year)|| 0;
+ 		car.user = customer;
+ 		//this.cars.create(car);
+ 		var carObj = new Car();
+ 		carObj.save(car, {
+ 			success:function(car){
+		 		self.render();
+ 			}
+ 		});
+
+ 	}
+
 	});
 
  var OrderView = AV.View.extend({
@@ -216,4 +234,10 @@ $(function() {
  orderRouter = new OrderRouter();
  AV.history.start();
 });
+
+
+/*-------------------------------------------------------------
+						ADDRESS
+-------------------------------------------------------------*/
+
 

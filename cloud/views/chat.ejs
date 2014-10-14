@@ -1,7 +1,5 @@
 <script src="js/chat.js"></script>
 <div id='layout' >
-<a href="#order-home" id="order-home" class="menu-link">HOME</a>
-<a href="#order-list" id="order-list" class="menu-link">LIST</a>
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
             <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
@@ -29,7 +27,6 @@
                     </span>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -40,117 +37,71 @@
                 订单信息
             </div>
             <div id='order' class='scrollable' >
-            <!--
-            <b class='banner pure-u-1'>车辆信息</b>
-             <div class="pure-form pure-form-aligned zform">
-                <fieldset>
-                    <div class="pure-control-group">
-                        <label for="name">车辆</label>
-                       <select id="car-ids">
-                            <option>其他</option>
-                        </select> 
-                    </div> 
-
-                    <div class="pure-control-group">
-                        <label for="name">Username</label>
-                        <input id="name" type="text" placeholder="Username">
-                    </div>
-
-                    <div class="pure-control-group">
-                        <label for="password">Password</label>
-                        <input id="password" type="password" placeholder="Password">
-                    </div>
-
-                    <div class="pure-control-group">
-                        <label for="email">Email Address</label>
-                        <input id="email" type="email" placeholder="Email Address">
-                    </div>
-
-                    <div class="pure-control-group">
-                        <label for="state">State</label>
-                        <select id="state">
-                            <option>AL</option>
-                            <option>CA</option>
-                            <option>IL</option>
-                        </select>
-                    </div>
-
-                    <div class="pure-controls">
-                        <button class="pure-button button-update"><i class="fa fa-pencil"> 更新</i></button>
-                        <button class="pure-button button-delete"><i class="fa fa-trash-o"> 删除</i></button>
-                    </div>
-                </fieldset>
             </div>
-            <b class='dark-banner pure-u-1'>选中</b>
-            -->
         </div>
     </div>
 </div>
-</div>
+
 <div class="clearfix"></div>
-    <div id="test" class='center'>
+<div id="test" class='center'>
     <div class="form-inline">
-            <div class="form-group">
-                <label for="">
-                    新建聊天
-                </label>
-                <input type="text " id="watchingPeer" class="form-control">
-            </div>
-            <span id="connect-status" class="text-primary">
-                not connected
-            </span>
-            <div class="btn-group">
-                <button id="addwatch" class="btn btn-default">
-                    watch
-                </button>
-            </div>
+        <div class="form-group">
+            <label for="">
+                新建聊天
+            </label>
+            <input type="text " id="watchingPeer" class="form-control">
+        </div>
+        <span id="connect-status" class="text-primary">
+            not connected
+        </span>
+        <div class="btn-group">
+            <button id="addwatch" class="btn btn-default">
+                watch
+            </button>
         </div>
     </div>
-
+</div>
 </div>
 <!-- Template -->
 
-    <div class="hide">
-        <div id="user-tpl">
-          <div id='user-@peerId@' class='user-item pure-g' data-peer-id='@peerId@'>
-            <div class="item">
-              <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
-                  <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
-                  <span class='name'>@peerId@</span>
-              </a>
-              <a class='removewatch' href='#' data-peer-id='@peerId@' onclick='removeWatch(this)'><i class='fa fa-remove'></i></a>
-          </div>
+<div class="hide">
+    <div id="user-tpl">
+      <div id='user-@peerId@' class='user-item pure-g' data-peer-id='@peerId@'>
+        <div class="item">
+          <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
+              <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
+              <span class='name'>@peerId@</span>
+          </a>
+          <a class='removewatch' href='#' data-peer-id='@peerId@' onclick='removeWatch(this)'><i class='fa fa-remove'></i></a>
       </div>
-    </div>
+  </div>
+</div>
 
-    <div id="nav-tpl">
-        <a href="#@peerId@" id="slide-@peerId@">@peerId@</a>    
-    </div>
+<div id="nav-tpl">
+    <a href="#@peerId@" id="slide-@peerId@">@peerId@</a>    
+</div>
 
-    <div id="msg-tpl">
-        <ul id='@peerId@'>                      
-        </ul>   
-    </div>
+<div id="msg-tpl">
+    <ul id='@peerId@'>                      
+    </ul>   
+</div>
 
-    <div id="text-tpl">
-        <li>
-            @peerId@说: @content@
+<div id="text-tpl">
+    <li> @peerId@说: @content@ </li>
+</div>
+
+<div id="image-tpl">
+    <li>
+        @peerId@说: <img src="@content@" alt="@peerId@" size='100'>
+    </li>
+</div>
+
+<div id="voice-tpl">
+    <li>
+        @peerId@说: <video controls="" autoplay="" name="media">
+        <source src="@content@" type="audio/mpeg"></video>   
         </li>
-        
     </div>
-
-    <div id="image-tpl">
-        <li>
-            @peerId@说: <img src="@content@" alt="@peerId@" size='100'>
-        </li>
-    </div>
-
-    <div id="voice-tpl">
-        <li>
-            @peerId@说: <video controls="" autoplay="" name="media">
-            <source src="@content@" type="audio/mpeg"></video>   
-            </li>
-        </div>
 
     <div id='car-info-tpl'>
         <div class="pure-control-group">
@@ -164,53 +115,68 @@
     </div>
 
     <div id="car-tpl">
-        <b class='banner pure-u-1'>车辆信息</b>
         <div class="pure-form pure-form-aligned zform">
-            <fieldset>
-                <div class="pure-control-group">
-                    <label>车辆</label>
-                    <select id="car-ids">
-                        <option value=''>新增车辆…</option>
-                    </select> 
-                </div>
-            </fieldset>
+            <!-- cars -->
+            <b class='banner pure-u-1'>车辆信息</b>
+            <div class="pure-control-group">
+                <label>车辆</label>
+                <select id="car-ids">
+                    <option value=''>新增车辆…</option>
+                </select> 
+            </div>
             <div id='car-info'>
             </div>
+            
+
         </div>
     </div>
 
     <div id="car-form-tpl">
-    <form id='car-form'>
-        <div class="pure-control-group">
-            <label>厂商</label>
-            <input name='make' type="text">
-        </div>
-        <div class="pure-control-group">
-        <label>车系</label>
-            <input name='series' type="text">
-        </div>
-        <div class="pure-control-group">
-            <label>型号</label>
-            <input name='model' type="text">
-        </div>
-        <div class="pure-control-group">
-            <label>排量</label>
-            <input name='volume' type="text">
-        </div>
+        <form id='car-form'>
+            <div class="pure-control-group">
+                <label>厂商</label>
+                <input name='make' type="text">
+            </div>
+            <div class="pure-control-group">
+                <label>车系</label>
+                <input name='series' type="text">
+            </div>
+            <div class="pure-control-group">
+                <label>型号</label>
+                <input name='model' type="text">
+            </div>
+            <div class="pure-control-group">
+                <label>排量</label>
+                <input name='volume' type="text">
+            </div>
 
-        <div class="pure-control-group">
-            <label>牌照</label>
-            <input name='plate' type="text">
-        </div>
-        <div class="pure-control-group">
-            <label>年份</label>
-            <input name='year' type="number" min='1800'>
-        </div>
+            <div class="pure-control-group">
+                <label>牌照</label>
+                <input name='plate' type="text">
+            </div>
+            <div class="pure-control-group">
+                <label>年份</label>
+                <input name='year' type="number" min='1800'>
+            </div>
         </form>
         <button id='save-car' class='btn btn-save'> 保存</button>
         <button id="cancel-car" class='btn btn-default'>取消</button>
     </div>
+
+    <div id="addr-tpl">
+        <div class="pure-form pure-form-aligned zform">
+            <b class='banner pure-u-1'>地址信息</b>
+            <div class='pure-control-group'>
+                <label>地址</label>
+                <select id='address-ids'>
+                    <option value=''>新增地址</option>
+                </select>
+            </div>
+        </div>
     </div>
+</div>
+</div>
+</div>
 <script>
     var customer = null;
     AV.$ = jQuery;
@@ -329,7 +295,7 @@ openSocket();
 
         function switchChatTo(peerId){
             if (peerId && peerId != ''){
-                
+
 
                 $('#peer-box > ul').each(function(){
                     $(this).addClass('hide');
