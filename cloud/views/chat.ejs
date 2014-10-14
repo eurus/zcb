@@ -251,21 +251,21 @@
         "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
     var peerId = '<%-user.username%>';
     var watching = [];
-    var toPeerId;
+   var toPeerId;
+
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
 
+
             if($('#watchingPeer').val()!=""){
                 watching = $('#watchingPeer').val().split(',');
             }
             chat = new AVChatClient({
                 appId: appid,
-                peerId: peerId,
-                watchingPeerIds: watching
-                // auth: auth
+                peerId: peerId
             });
             chat.on('close', function() {
                 alert('connection closed')
@@ -320,7 +320,15 @@ openSocket();
             $('#user-list').empty();
             addWatchingPeer($('#watchingPeer').val().split(','));
             chat.open().then(function() {
-                $('#connect-status').text('connected')
+                $('#connect-status').text('connected');
+                if(localStorage.getItem("watching") === null){
+                   localStorage["watching"] = JSON.stringify(watching);
+               }else{
+                console.log(JSON.parse(localStorage["watching"]));
+                _.each(JSON.parse(localStorage["watching"]), function(v) {
+                    addWatch(v);
+              });
+            }
             }, function(err) {
                 alert('open failure');
                 console.log(err)
@@ -336,6 +344,15 @@ openSocket();
         function addWatch(peerId){
             if (!_.contains(watching, peerId)){
                 addWatchingPeer(peerId.split(','));
+
+                list  = JSON.parse(localStorage["watching"]);
+                nlist=list.concat(peerId.split(','));
+                nlist = _.uniq(nlist);
+                console.log(nlist);
+                watching = nlist;
+                localStorage["watching"] = JSON.stringify(nlist);
+                // console.log(localStorage["watching"]);
+
                 chat.watch(peerId.split(',')).then(function() {
                 }, function() {
                     alert('watch failure')
@@ -343,8 +360,11 @@ openSocket();
             }
         }
         function removeWatch(target){
-            var peerId = $(target).data('peer-id');
-            peerId = [peerId];
+            var opeerId = $(target).data('peer-id');
+            peerId = [opeerId];
+            list  = JSON.parse(localStorage["watching"]);
+            nlist = _.without(list,opeerId);
+            localStorage["watching"] = JSON.stringify(nlist);
             removeWatchingPeer(peerId);
             chat.unwatch(peerId);
             $('#user-'+peerId).remove();
@@ -382,9 +402,10 @@ openSocket();
                 AV.Cloud.run("findUserByName", {username: peers[i]}, {
                     success: function(data){
                         $('#user-list').append(str);
-                        if(data.hasOwnProperty('username')){
-                            $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl);
-                        }
+                            if(typeof data != 'undefined'){
+                            $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl); 
+                            }
+
                     },
                     error: function(err){
                         console.log('oops, there is something wrong.');
