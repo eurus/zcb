@@ -260,7 +260,6 @@ openSocket();
                }else{
                 console.log(JSON.parse(localStorage["watching"]));
                 _.each(JSON.parse(localStorage["watching"]), function(v) {
-                    // console.log("hi");
                     addWatch(v);
               });
             }
@@ -284,6 +283,7 @@ openSocket();
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
                 console.log(nlist);
+                watching = nlist;
                 localStorage["watching"] = JSON.stringify(nlist);
                 // console.log(localStorage["watching"]);
 
