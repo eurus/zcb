@@ -11,7 +11,7 @@
     "ejs": "*",
     "express-ejs-layouts":"*",
     "express-partials":"*",
-    "lean-cloud-chat": "*"
-
+    "lean-cloud-chat": "*",
+    "unirest" :"*"
   }
 }

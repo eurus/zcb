@@ -1,4 +1,6 @@
 require("cloud/app.js");
+var unirest = require('unirest');
+var crypto = require('crypto');
 var avchat = require('lean-cloud-chat');
 var userCon = require('cloud/user.js');
 var zutil = require('cloud/zutil.js');
@@ -112,3 +114,24 @@ AV.Cloud.define("getOnlineCustomerService", function(req, res) {
 
 
 
+AV.Cloud.define("getchathis", function(req,res) {
+  console.log(req.params);
+  fpid = req.params.frompid;
+  tpid = req.params.topid;
+  id_string = fpid+':'+tpid;
+  convid = crypto.createHash('md5').update(id_string).digest('hex');
+  console.log(convid);
+  limit = 50;
+  uri = 'https://cn.avoscloud.com/1.1/rtm/messages/logs'
+  +'?convid='+convid;
+
+  unirest.get(uri)
+  .headers({ 
+    "X-AVOSCloud-Application-Id":" eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
+    "X-AVOSCloud-Application-Key": "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio"
+   })
+  .send(new Buffer([1,2,3]))
+  .end(function (response) {
+    console.log(response.body);
+  });
+});
