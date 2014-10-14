@@ -163,7 +163,7 @@
 
     <div id="addr-tpl">
         <div class="pure-form pure-form-aligned zform">
-            <b class='banner pure-u-1'>地址信息</b>
+            <div class='banner pure-u-1'>地址信息</div>
             <div class='pure-control-group'>
                 <label>地址</label>
                 <select id='addr-ids'>
@@ -209,6 +209,37 @@
         <button class='btn btn-default btn-cancel'>取消</button>
     </div>
 
+     <div id="item-tpl">
+        <div class="pure-form pure-form-aligned zform">
+            <div class='banner pure-u-1'>服务内容</div>
+            <form id='item-form'>
+            <div class='pure-control-group'>
+                <label>名称</label>
+                <input type='text' name='name'>
+            </div>
+            <div class='pure-control-group'>
+                <label>金额</label>
+                <input type='number' name='price'>
+            </div>
+            <div id='item-info'>
+            </div>
+            </form>
+            <button class='btn btn-primary btn-add'> 新增</button>
+            <button class='btn btn-save'> 保存</button>
+            <button class='btn btn-default btn-cancel'>取消</button>
+        </div>
+    </div>
+
+    <div id="item-info-tpl">
+        <div class='pure-control-group'>
+                <label>名称</label>
+                <input type='text' name='name'>
+            </div>
+            <div class='pure-control-group'>
+                <label>金额</label>
+                <input type='number' name='price'>
+            </div>
+    </div>
     <!-- end -->
 </div>
 </div>
