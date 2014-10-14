@@ -133,5 +133,6 @@ AV.Cloud.define("getchathis", function(req,res) {
   .send(new Buffer([1,2,3]))
   .end(function (response) {
     console.log(response.body);
+    res.success(response.body);
   });
 });
