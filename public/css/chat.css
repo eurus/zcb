@@ -67,6 +67,7 @@
     width:100%;
     border-top:1px solid #a3a09f;
     padding:10px;
+    background:white;
 }
 
 .pure-form input.chat-reply{
@@ -137,10 +138,11 @@
 }
 #peer-box{
     background:#f6f6f6;
+    padding-bottom:55px;
 }
 #peer-box ul{
     width:100%;
-    height:100%;
+    height:90%;
     padding:10px 15px 0 15px;
     list-style: none;
 }
@@ -179,3 +181,39 @@
     border-left: 6px solid #1b98f8;
 }
 
+
+/* chat */
+.msg{
+    width:100%;
+    position: relative;
+    min-height: 40px;
+}
+.msg.to-me{
+    padding-left:50px;
+    text-align: left;
+}
+.msg.from-me{
+    padding-right:50px;
+    text-align:right;
+}
+.msg .avatar{
+    position: absolute;
+    top:0px;
+    width:40px;
+    height:40px;
+    border-radius: 20px;
+    border:1px solid black;
+}
+.msg-text span{
+    display:inline-block;
+}
+.msg.to-me .avatar{
+    left:0px;
+}
+.msg.from-me .avatar{
+    right:0px;
+}
+
+.msg-image .image{
+    width:200px;
+}

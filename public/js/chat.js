@@ -437,10 +437,12 @@ var Store = AV.Object.extend("Store");
  		userQuery.first().then(function(user){
  			customer = user;
  			view.render();
- 			if (customer){
+ 			if (!customer){
+ 				customer = new AV.User()
+ 			}
 		 		$('#order').html(view.$el);
 		 		$('.datetimepicker').datetimepicker();
- 			}
+ 			
  			self.currentView = view;
  		});
  	},

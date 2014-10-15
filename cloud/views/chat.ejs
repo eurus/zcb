@@ -2,7 +2,7 @@
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            <img class="img-circle own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
+            <img class="img-circle pure-image own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
             <div id='user-title' class='title'>
                 联系人
             </div>
@@ -86,14 +86,20 @@
     </ul>   
 </div>
 
+
 <div id="text-tpl">
-    <li data-peer-id='{=peerId}'>
-    <img src='avatar'></img>{=content} </li>
+    <li class='msg msg-text {=klass}' data-peer-id='{=peerId}'>
+    <img src='img/user1.png' class='img-responsive avatar'></img>
+    <span>{=content}</span>
+    </li>
 </div>
 
+
+
 <div id="image-tpl">
-    <li>
-        {=peerId}说: <img src="{=content}" alt="{=peerId}" size='100'>
+    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
+        <img src='img/user1.png' class='img-responsive avatar'></img>
+        <img class='img-responsive image' src="{=content}" alt="{=peerId}">
     </li>
 </div>
 
@@ -265,6 +271,9 @@
     AV.initialize( "eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
         "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
     var peerId = '<%-user.username%>';
+    var myPeerId = '<%-user.username%>';
+    var myAvatarUrl = '<%-user.avatarUrl%>';
+    localStorage[myPeerId+'-avatar'] = myAvatarUrl;
     var watching = [];
    var toPeerId;
 
@@ -301,7 +310,8 @@
                     // str2 = str.replace(/@content@/g, receive_msg.Content);
                     str2 = _.template($('#image-tpl').html())({
                         peerId: data.fromPeerId,
-                        content: receive_msg.Content
+                        content: receive_msg.Content,
+                        klass:'to-me'
                     });
                     
                     break;
@@ -312,7 +322,8 @@
                     
                     str2 = _.template($('#voice-tpl').html())({
                         peerId: data.fromPeerId,
-                        content: receive_msg.Content
+                        content: receive_msg.Content,
+                        klass:'to-me'
                     });
                     break;
 
@@ -322,7 +333,8 @@
 
                     str2 = _.template($('#text-tpl').html())({
                         peerId: data.fromPeerId,
-                        content: receive_msg.Content
+                        content: receive_msg.Content,
+                        klass:'to-me'
                     });                   
                     break;
                 }             
@@ -349,13 +361,21 @@ openSocket();
             addWatchingPeer($('#watchingPeer').val().split(','));
             chat.open().then(function() {
                 $('#connect-status').text('connected');
-                if(localStorage.getItem("watching") === null){
-                   localStorage["watching"] = JSON.stringify(watching);
+                if(localStorage.getItem(myPeerId) === null){
+                   localStorage[myPeerId] = JSON.stringify(watching);
                }else{
-                console.log(JSON.parse(localStorage["watching"]));
-                _.each(JSON.parse(localStorage["watching"]), function(v) {
+                console.log('start');
+                console.log(JSON.parse(localStorage[myPeerId]));
+                _.each(JSON.parse(localStorage[myPeerId]), function(v) {
+                    console.log(v);
                     addWatch(v);
               });
+                if (watching.length> 0){
+                    console.log('xxlkajskldfjaskljflksjdf!');
+                    console.log(watching[0]);
+                    setSendTo(watching[0]);
+                    switchChatTo(watching[0]);
+                }
             }
             }, function(err) {
                 alert('open failure');
@@ -372,14 +392,16 @@ openSocket();
         function addWatch(peerId){
             if (!_.contains(watching, peerId)){
                 addWatchingPeer(peerId.split(','));
-
-                list  = JSON.parse(localStorage["watching"]);
+                console.log(peerId);
+                list  = JSON.parse(localStorage[myPeerId]);
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
+                console.log('nlist');
                 console.log(nlist);
-                watching = nlist;
-                localStorage["watching"] = JSON.stringify(nlist);
-                // console.log(localStorage["watching"]);
+                watching.push(peerId);
+                localStorage[myPeerId] = JSON.stringify(nlist);
+
+                // console.log(localStorage[myPeerId]);
 
                 chat.watch(peerId.split(',')).then(function() {
                 }, function() {
@@ -390,11 +412,12 @@ openSocket();
         function removeWatch(target){
             var opeerId = $(target).data('peer-id');
             peerId = [opeerId];
-            list  = JSON.parse(localStorage["watching"]);
+            list  = JSON.parse(localStorage[myPeerId]);
             nlist = _.without(list,opeerId);
-            localStorage["watching"] = JSON.stringify(nlist);
+            localStorage[myPeerId] = JSON.stringify(nlist);
             removeWatchingPeer(peerId);
             chat.unwatch(peerId);
+            watching.remove(peerId);
             $('#user-'+peerId).remove();
             $('#'+peerId).remove();
             $('#to-peer-id').empty();
@@ -432,6 +455,7 @@ openSocket();
                         $('#user-list').append(str);
                             if(typeof data != 'undefined'){
                             $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl); 
+                            localStorage[data.username+'-avatar'] = data.avatarUrl;
                             }
 
                     },
@@ -467,8 +491,14 @@ openSocket();
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            str = _.template($('#text-tpl').html())({peerId:peerId, content:origin_msg});
-                            $('#'+toPeerId).append(str);
+                            str = _.template($('#text-tpl').html())({
+                                peerId:peerId,
+                                content:origin_msg,
+                                klass:'from-me'
+                            });
+                            var elem = $(str);
+                            $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
+                            $('#'+toPeerId).append(elem);
                             $('#msg').val('');
 
                         }, function(err) {
