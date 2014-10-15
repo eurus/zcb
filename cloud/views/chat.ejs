@@ -87,19 +87,20 @@
 </div>
 
 <div id="text-tpl">
-    <li> @peerId@说: @content@ </li>
+    <li data-peer-id='{=peerId}'>
+    <img src='avatar'></img>{=content} </li>
 </div>
 
 <div id="image-tpl">
     <li>
-        @peerId@说: <img src="@content@" alt="@peerId@" size='100'>
+        {=peerId}说: <img src="{=content}" alt="{=peerId}" size='100'>
     </li>
 </div>
 
 <div id="voice-tpl">
     <li>
-        @peerId@说: <video controls="" autoplay="" name="media">
-        <source src="@content@" type="audio/mpeg"></video>   
+        {=peerId}说: <video controls="" autoplay="" name="media">
+        <source src="{=content}" type="audio/mpeg"></video>   
         </li>
     </div>
 
@@ -119,7 +120,6 @@
             <!-- cars -->
             <b class='banner pure-u-1'>车辆信息</b>
             <div class="pure-control-group">
-                <label>车辆</label>
                 <select id="car-ids">
                     <option value=''>新增车辆…</option>
                 </select> 
@@ -165,7 +165,6 @@
         <div class="pure-form pure-form-aligned zform">
             <div class='banner pure-u-1'>地址信息</div>
             <div class='pure-control-group'>
-                <label>地址</label>
                 <select id='addr-ids'>
                     <option value=''>新增地址...</option>
                 </select>
@@ -187,7 +186,7 @@
     </div>
 
     <div id="addr-form-tpl">
-        <form id='addr-form'>
+        <form id='addr-form' class='yfade'>
             <div class="pure-control-group">
                 <label>地址</label>
                 <input name='detail' type="text">
@@ -211,34 +210,50 @@
 
      <div id="item-tpl">
         <div class="pure-form pure-form-aligned zform">
-            <div class='banner pure-u-1'>服务内容</div>
+            <div class='banner pure-u-1'>
+            服务内容
+            <div class='actions'>
+                <button class='btn btn-add pull-right'> 新增</button>
+            </div>
+        </div>
             <form id='item-form'>
-            <div class='pure-control-group'>
-                <label>名称</label>
-                <input type='text' name='name'>
-            </div>
-            <div class='pure-control-group'>
-                <label>金额</label>
-                <input type='number' name='price'>
-            </div>
             <div id='item-info'>
             </div>
             </form>
-            <button class='btn btn-primary btn-add'> 新增</button>
-            <button class='btn btn-save'> 保存</button>
-            <button class='btn btn-default btn-cancel'>取消</button>
         </div>
     </div>
 
     <div id="item-info-tpl">
-        <div class='pure-control-group'>
-                <label>名称</label>
-                <input type='text' name='name'>
+        <div class='pure-control-group' id='item-{=id}'>
+            <label>名称</label>
+            <input type='text' name='name' value='{=name}'>
+            <label>金额</label>
+            <input type='number' name='price' value='{=price}'>
+            <button class='btn btn-remove' data-item-id='item-{=id}'>x</button>
+        </div>
+    </div>
+
+    <div id="other-tpl">
+        <div class="pure-form pure-form-aligned zform">
+            <div class='banner pure-u-1'>其他信息</div>
+            <div class="pure-control-group">
+                <label>服务时间</label>
+                <input type='text' name='serviceTime' value='{=name}' class='datetimepicker'>
             </div>
-            <div class='pure-control-group'>
-                <label>金额</label>
-                <input type='number' name='price'>
+            <div class="pure-control-group">
+                <label>销售员</label>
+                <select id='salesman-ids'>
+                <option></option>
+                </select>
             </div>
+            <div class="pure-control-group">
+                <label>服务商</label>
+                <select id='store-ids'>
+                <option></option>
+                </select>
+            </div>
+            <button class='btn btn-save'>发给客户确认</button>
+        </div>
     </div>
     <!-- end -->
 </div>
@@ -282,20 +297,33 @@
                 receive_msg = JSON.parse(data.msg);
                 switch(receive_msg.InfoType) {
                     case "IMAGE":
-                    str = $('#image-tpl').html().replace(/@peerId@/g, data.fromPeerId);
-                    str2 = str.replace(/@content@/g, receive_msg.Content);
+                    // str = $('#image-tpl').html().replace(/@peerId@/g, data.fromPeerId);
+                    // str2 = str.replace(/@content@/g, receive_msg.Content);
+                    str2 = _.template($('#image-tpl').html())({
+                        peerId: data.fromPeerId,
+                        content: receive_msg.Content
+                    });
                     
                     break;
 
                     case "VOICE":
-                    str = $('#voice-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    str2 = str.replace(/@content@/g, receive_msg.Content);
+                    // str = $('#voice-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
+                    // str2 = str.replace(/@content@/g, receive_msg.Content);
                     
+                    str2 = _.template($('#voice-tpl').html())({
+                        peerId: data.fromPeerId,
+                        content: receive_msg.Content
+                    });
                     break;
 
                     case "TEXT":
-                    str = $('#text-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    str2 = str.replace(/@content@/g, receive_msg.Content);                    
+                    // str = $('#text-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
+                    // str2 = str.replace(/@content@/g, receive_msg.Content);
+
+                    str2 = _.template($('#text-tpl').html())({
+                        peerId: data.fromPeerId,
+                        content: receive_msg.Content
+                    });                   
                     break;
                 }             
                 $('#'+data.fromPeerId).append(str2);
@@ -439,9 +467,8 @@ openSocket();
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
                             // 这里是发送的消息append
-                            str = $('#text-tpl').html().replace(/@peerId@/g, peerId);
-                            str2 = str.replace(/@content@/g,origin_msg);
-                            $('#'+toPeerId).append(str2);
+                            str = _.template($('#text-tpl').html())({peerId:peerId, content:origin_msg});
+                            $('#'+toPeerId).append(str);
                             $('#msg').val('');
 
                         }, function(err) {

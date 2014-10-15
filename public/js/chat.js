@@ -11,6 +11,7 @@ $.fn.serializeObject = function()
 {    
 	var o = {};    
 	var a = this.serializeArray();    
+	console.log(a);
 	$.each(a, function() {    
 		if (o[this.name]) {    
 			if (!o[this.name].push) {    
@@ -23,6 +24,10 @@ $.fn.serializeObject = function()
 	});    
 	return o;    
 };
+
+function getMS(){
+	return (new Date()).getTime();
+}
 
 
 /*----------------------------------------------------------
@@ -163,22 +168,57 @@ var ItemView = AV.View.extend({
  	events:{
  		"click .btn-add":"add",
  		"click .btn-remove":"remove",
- 		"click .btn-save":"save"
+ 		"click .btn-save":"save",
+ 		"blur input,select":"save"
  	},
- 	initialize: function(){
+ 	initialize: function(options){
+ 		this.order = options.order;
  	},
  	render:function(){
 		this.$el.html(this.template());
- 	},
+		var items = this.order.get('items');
+		for (var i in items){
+			var item = items[i];
+			if (item){
+				item.id = getMS();
+				var infoTpl = _.template($('#item-info-tpl').html());
+				$('#item-info', this.$el).prepend(infoTpl(item)); 	
+			}
+		}
+	},
  	add:function(){
  		var infoTpl = _.template($('#item-info-tpl').html());
- 		$('#item-info').prepend(infoTpl());
+ 		var elem = infoTpl({name:'', price:0, id: getMS()});
+ 		$(elem).addClass('yfade').prependTo($('#item-info'));//.hide().prependTo($('#item-info')).effect("highlight", {}, 1500);
  	},
  	remove:function(e){
- 		console.log(e);
+ 		var id = $(e.target).data('item-id');
+ 		var elem = $('#'+id);
+ 		var item = {
+ 			name: $('input[name=name]', elem).val(),
+ 			price: $('input[name=price]', elem).val() || 0
+ 		}
+ 		elem.remove();
+ 		this.order.unset('items');
+ 		this.save();
  	},
  	save:function(e){
- 		var item = $('#item-form').serializeObject();
+ 		var itemsRaw = $('#item-form').serializeObject();
+ 		var items = []
+ 		for (var i in itemsRaw.name){
+ 			var name = itemsRaw.name[i];
+ 			var price = itemsRaw.price[i];
+ 			if (name != '' && price != ''){
+ 				items.push({
+ 					name:name,
+ 					price: parseFloat(price) || 0
+ 				})
+ 			}
+ 		}
+ 		this.order.set('items', items);
+ 		this.order.save();
+
+ 		console.log(items);
 
  	}
 })
@@ -201,7 +241,7 @@ var AddressView = AV.View.extend({
  	template:_.template($('#addr-tpl').html()),
  	events:{
  		"change #addr-ids":"change", 
- 		"click .btn-save":"save",
+ 		"blur .btn-save":"save",
  		"click .btn-cancel":"render"
  	},
 
@@ -235,8 +275,13 @@ var AddressView = AV.View.extend({
  		var addrOptions = _.reduce(addrs.models, function(options, addr){
  			return options + addrOptionTpl(addr.toJSON());
  		}, '');
+
  		$('#addr-ids', this.$el).prepend(addrOptions);
- 		$('#addr-ids').val($('#addr-ids option:first').val());
+ 		if (this.order.get('address')){
+ 			$('#addr-ids').val(this.order.get('address').id);
+ 		}else{
+	 		$('#addr-ids').val($('#addr-ids option:last').val());
+ 		}
  		$('#addr-ids').trigger('change');
  	},
 
@@ -314,6 +359,7 @@ var Store = AV.Object.extend("Store");
  		this.orders.query = new AV.Query(Order);
  		this.orders.query.include('car');
  		this.orders.query.include('address');
+ 		this.orders.query.include('items');
  		this.orders.bind('reset', this.reset);
  		//this.render();
 	 	
@@ -323,21 +369,13 @@ var Store = AV.Object.extend("Store");
  		this.orders.fetch();
  	},
  	reset:function(orders){
- 		console.log(orders);
- 		console.log(orders.length);
-
  		if (orders.length > 0) {
  			this.order = orders.last();
- 			console.log('1');
  		}else{
- 			console.log('2');
  			this.order = new Order;
- 			console.log(this.order);
  		}
 
- 		console.log(this.order);
  		this.car = this.order.get('car');
- 		console.log(this.car);
  		this.carView = new CarView({
  			model: this.car,
  			order: this.order
@@ -349,15 +387,20 @@ var Store = AV.Object.extend("Store");
  			order:this.order
  		});
 
- 		this.itemView = new ItemView();	
+ 		this.itemView = new ItemView({
+ 			order: this.order
+ 		});	
+
  		this.carView.render();
  		this.addrView.render();
  		this.itemView.render();
+ 		this.otherView = _.template($('#other-tpl').html())();
 
  		this.$el.empty();
  		this.$el.append(this.carView.el);
  		this.$el.append(this.addrView.el);
  		this.$el.append(this.itemView.el);
+ 		this.$el.append(this.otherView);
  		this.delegateEvents();
  	}
  });
@@ -394,8 +437,10 @@ var Store = AV.Object.extend("Store");
  		userQuery.first().then(function(user){
  			customer = user;
  			view.render();
- 			if (customer)
+ 			if (customer){
 		 		$('#order').html(view.$el);
+		 		$('.datetimepicker').datetimepicker();
+ 			}
  			self.currentView = view;
  		});
  	},

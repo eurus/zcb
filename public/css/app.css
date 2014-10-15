@@ -63,7 +63,9 @@ body{
 .pure-form-aligned .pure-control-group {
 	margin-bottom: 0;
 	padding:6px;
+	padding-right:10px;
 	border-bottom:1px solid #d4d3d3;
+	position: relative;
 }
 .pure-form fieldset{
 	text-align: left;
@@ -76,8 +78,18 @@ body{
 }
 .pure-form-aligned .pure-control-group input, .pure-form-aligned .pure-control-group select{
 	width:60%;
+	margin:5px;
 }
-
+.pure-form-aligned .pure-control-group button{
+	position: absolute;
+	top:10px;
+	right:15px;
+	padding:0;
+	border:none;
+	background:white;
+	font-weight: bold;
+	text-align: right;
+}
 
 /*----------------------------------------------------
  * 					GLOBALS
@@ -180,6 +192,7 @@ input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[ty
 .scrollable .banner{
 	width:100%;
 	padding:6px;	
+	position: relative;
 	background:#efefef;
     /* Firefox 3.6+ */
     background: -moz-linear-gradient(top, #efefef, #e4e3e2);
@@ -192,6 +205,16 @@ input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[ty
    	border-bottom: 1px solid #d4d3d3; 
 }
 
+.scrollable .banner .actions{
+	position: absolute;
+	right:20px;
+	width:20px;
+	top:2px;
+}
+.scrollable .banner .actions .btn{
+	border:none;
+	background:none;
+}
 .scrollable .banner:hover{
 	text-decoration: none;
 	a{
@@ -288,4 +311,26 @@ input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[ty
   left:auto;
   border-width:10px 0 10px 20px;
   border-color:transparent #f3961c;
+}
+
+/*----------------------------------------------------
+					YELLOW FADE
+----------------------------------------------------*/
+
+.yfade{
+    -webkit-animation:yellow-fade 3s;
+       -moz-animation:yellow-fade 3s;
+            animation:yellow-fade 3s;
+}
+
+@-webkit-keyframes yellow-fade{
+    5%{ background-color:#ff8; }
+}
+
+@-moz-keyframes yellow-fade{
+    5%{ background-color:#ff8; }
+}
+
+@keyframes yellow-fade{
+    5%{ background-color:#ff8; }
 }
