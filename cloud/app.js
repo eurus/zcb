@@ -55,5 +55,9 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
+app.post('alipay/asyncnotice',function  (req,res) {
+	// body...
+});
+
 // 最后，必须有这行代码来使 express 响应 HTTP 请求
 app.listen();

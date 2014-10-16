@@ -79,7 +79,7 @@ AV.Cloud.define("getOrderList", function(req, res) {
 AV.Cloud.define("getOnlineCustomerService", function(req, res) {
   temp = req.params.temp;
   getCSnames().then(function(namelist){
-   appId="eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa";
+   appId="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34";
    chat = new avchat({
     appId: appId,
     peerId:'backend-chat-server'
@@ -127,8 +127,8 @@ AV.Cloud.define("getchathis", function(req,res) {
 
   unirest.get(uri)
   .headers({ 
-    "X-AVOSCloud-Application-Id":" eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
-    "X-AVOSCloud-Application-Key": "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio"
+    "X-AVOSCloud-Application-Id":" za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
+    "X-AVOSCloud-Application-Key": "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb"
    })
   .send(new Buffer([1,2,3]))
   .end(function (response) {
@@ -137,8 +137,6 @@ AV.Cloud.define("getchathis", function(req,res) {
   });
 });
 
-AV.Cloud.define("alipayrsagenerator", function(req,res) {
-// var hashes = crypto.getHashes();
-// console.log(hashes);
-  
-});
+AV.Cloud.define("getHealthCheckList", function(req,res) {
+
+})
