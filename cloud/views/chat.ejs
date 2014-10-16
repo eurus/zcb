@@ -87,9 +87,9 @@
 </div>
 
 
-<div id="text-tpl">
+<script  type='text/template' id="text-tpl">
     <li class='msg msg-text {=klass}' data-peer-id='{=peerId}'>
-        <img src='img/user1.png' class='img-responsive avatar'></img>
+        <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
             <span class='msg-body'>
                 <span>{=content}</span>
@@ -97,23 +97,24 @@
             <div class='arrow' > </div>
         </div>
     </li>
-</div>
+</script>
 
 
 
-<div id="image-tpl">
+<script type='text/template' id="image-tpl">
     <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
-        <img src='img/user1.png' class='img-responsive avatar'></img>
+        <img src="{=avatar}" class='img-responsive avatar'></img>
         <img class='img-responsive image' src="{=content}" alt="{=peerId}">
     </li>
-</div>
+</script>
 
-<div id="voice-tpl">
-    <li>
-        {=peerId}说: <video controls="" autoplay="" name="media">
+<script  type='text/template' id="voice-tpl">
+    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
+     <img src="{=avatar}" class='img-responsive avatar'></img>
+        <video controls="" autoplay="" name="media">
         <source src="{=content}" type="audio/mpeg"></video>   
         </li>
-    </div>
+    </script>
 
     <div id='car-info-tpl'>
         <div class="pure-control-group">
@@ -309,40 +310,39 @@
                 }
                 console.log(JSON.parse(data.msg));
                 receive_msg = JSON.parse(data.msg);
+                var from_avatar = data.fromPeerId + "-avatar"
                 switch(receive_msg.InfoType) {
                     case "IMAGE":
-                    // str = $('#image-tpl').html().replace(/@peerId@/g, data.fromPeerId);
-                    // str2 = str.replace(/@content@/g, receive_msg.Content);
                     str2 = _.template($('#image-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
+                        avatar: localStorage[from_avatar],
                         klass:'to-me'
                     });
                     
                     break;
 
                     case "VOICE":
-                    // str = $('#voice-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    // str2 = str.replace(/@content@/g, receive_msg.Content);
                     
                     str2 = _.template($('#voice-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
+                        avatar: localStorage[from_avatar],
                         klass:'to-me'
                     });
                     break;
 
                     case "TEXT":
-                    // str = $('#text-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    // str2 = str.replace(/@content@/g, receive_msg.Content);
 
                     str2 = _.template($('#text-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
+                        avatar: localStorage[from_avatar],
                         klass:'to-me'
                     });                   
                     break;
                 }             
+                console.log("str2"+str2);
                 $('#'+data.fromPeerId).append(str2);
                 switchChatTo($('#to-peer-id').text());
             });
@@ -369,8 +369,8 @@ openSocket();
                 if(localStorage.getItem(myPeerId) === null){
                    localStorage[myPeerId] = JSON.stringify(watching);
                }else{
-                console.log('start');
-                console.log(JSON.parse(localStorage[myPeerId]));
+                // console.log('start');
+                // console.log(JSON.parse(localStorage[myPeerId]));
                 _.each(JSON.parse(localStorage[myPeerId]), function(v) {
                     console.log(v);
                     addWatch(v);
@@ -401,8 +401,8 @@ openSocket();
                 list  = JSON.parse(localStorage[myPeerId]);
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
-                console.log('nlist');
-                console.log(nlist);
+                // console.log('nlist');
+                // console.log(nlist);
                 watching.push(peerId);
                 localStorage[myPeerId] = JSON.stringify(nlist);
 
@@ -451,8 +451,6 @@ openSocket();
                 }
                 var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
                 var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-
-                // $('#user-list').append(str);
                 AV.Cloud.run("findUserByName", {username: peers[i]}, {
                     success: function(data){
                         $('#user-list').append(str);
@@ -497,10 +495,11 @@ openSocket();
                             str = _.template($('#text-tpl').html())({
                                 peerId:peerId,
                                 content:origin_msg,
+                                avatar: localStorage[myPeerId+'-avatar'],
                                 klass:'from-me'
                             });
                             var elem = $(str);
-                            $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
+                            // $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
                             $('#'+toPeerId).append(elem);
                             $('#msg').val('');
 
