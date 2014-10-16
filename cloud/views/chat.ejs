@@ -33,7 +33,9 @@
     <div class='col-md-5 full-height'>
         <div class='full-height full-width'>
             <div class='title'>
-                订单信息
+                <a href="#order-home" class="pull-left"><i class="fa fa-edit">表单</i></a>
+                订单
+                <a href="#order-list" class="pull-right"><i class="fa fa-bars">列表</i></a>
             </div>
             <div id='order' class='scrollable' >
             </div>
@@ -87,9 +89,21 @@
 </div>
 
 
-<div id="text-tpl">
+<script type="text/template" id="order-list-tpl">
+    Hi
+    <div id="order-list">
+    </div>
+</script>
+
+<script type="text/template" id="order-item-tpl">
+    <p>
+        服务时间：{=serviceTime}
+        <button class="pull-right order-destroy"><i class="fa fa-cross">x</i></button>
+    </p>
+</script>
+<script  type='text/template' id="text-tpl">
     <li class='msg msg-text {=klass}' data-peer-id='{=peerId}'>
-        <img src='img/user1.png' class='img-responsive avatar'></img>
+        <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
             <span class='msg-body'>
                 <span>{=content}</span>
@@ -97,23 +111,24 @@
             <div class='arrow' > </div>
         </div>
     </li>
-</div>
+</script>
 
 
 
-<div id="image-tpl">
+<script type='text/template' id="image-tpl">
     <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
-        <img src='img/user1.png' class='img-responsive avatar'></img>
+        <img src="{=avatar}" class='img-responsive avatar'></img>
         <img class='img-responsive image' src="{=content}" alt="{=peerId}">
     </li>
-</div>
+</script>
 
-<div id="voice-tpl">
-    <li>
-        {=peerId}说: <video controls="" autoplay="" name="media">
+<script  type='text/template' id="voice-tpl">
+    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
+       <img src="{=avatar}" class='img-responsive avatar'></img>
+       <video controls="" autoplay="" name="media">
         <source src="{=content}" type="audio/mpeg"></video>   
         </li>
-    </div>
+    </script>
 
     <div id='car-info-tpl'>
         <div class="pure-control-group">
@@ -219,17 +234,17 @@
         <button class='btn btn-default btn-cancel'>取消</button>
     </div>
 
-     <div id="item-tpl">
+    <div id="item-tpl">
         <div class="pure-form pure-form-aligned zform">
             <div class='banner pure-u-1'>
-            服务内容
-            <div class='actions'>
-                <button class='btn btn-add pull-right'> 新增</button>
+                服务内容
+                <div class='actions'>
+                    <button class='btn btn-add pull-right'> 新增</button>
+                </div>
             </div>
-        </div>
             <form id='item-form'>
-            <div id='item-info'>
-            </div>
+                <div id='item-info'>
+                </div>
             </form>
         </div>
     </div>
@@ -254,13 +269,13 @@
             <div class="pure-control-group">
                 <label>销售员</label>
                 <select id='salesman-ids'>
-                <option></option>
+                    <option></option>
                 </select>
             </div>
             <div class="pure-control-group">
                 <label>服务商</label>
                 <select id='store-ids'>
-                <option></option>
+                    <option></option>
                 </select>
             </div>
             <button class='btn btn-save'>发给客户确认</button>
@@ -273,14 +288,14 @@
 <script>
     var customer = null;
     AV.$ = jQuery;
-    AV.initialize( "eenezb2s4tnlbytmv8rt3ndrv4qiux13jg7s90n7ff72kvoa",
-        "flo4ra0v81t51v0ug33pzwvm4xsclmgqo23fqht4iendgoio");
+    AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
+        "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb");
     var peerId = '<%-user.username%>';
     var myPeerId = '<%-user.username%>';
     var myAvatarUrl = '<%-user.avatarUrl%>';
     localStorage[myPeerId+'-avatar'] = myAvatarUrl;
     var watching = [];
-   var toPeerId;
+    var toPeerId;
 
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
@@ -309,40 +324,39 @@
                 }
                 console.log(JSON.parse(data.msg));
                 receive_msg = JSON.parse(data.msg);
+                var from_avatar = data.fromPeerId + "-avatar"
                 switch(receive_msg.InfoType) {
                     case "IMAGE":
-                    // str = $('#image-tpl').html().replace(/@peerId@/g, data.fromPeerId);
-                    // str2 = str.replace(/@content@/g, receive_msg.Content);
                     str2 = _.template($('#image-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
+                        avatar: localStorage[from_avatar],
                         klass:'to-me'
                     });
                     
                     break;
 
                     case "VOICE":
-                    // str = $('#voice-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    // str2 = str.replace(/@content@/g, receive_msg.Content);
                     
                     str2 = _.template($('#voice-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
+                        avatar: localStorage[from_avatar],
                         klass:'to-me'
                     });
                     break;
 
                     case "TEXT":
-                    // str = $('#text-tpl').addClass('other').html().replace(/@peerId@/g, data.fromPeerId);
-                    // str2 = str.replace(/@content@/g, receive_msg.Content);
 
                     str2 = _.template($('#text-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
+                        avatar: localStorage[from_avatar],
                         klass:'to-me'
                     });                   
                     break;
                 }             
+                console.log("str2"+str2);
                 $('#'+data.fromPeerId).append(str2);
                 switchChatTo($('#to-peer-id').text());
             });
@@ -367,14 +381,14 @@ openSocket();
             chat.open().then(function() {
                 $('#connect-status').text('connected');
                 if(localStorage.getItem(myPeerId) === null){
-                   localStorage[myPeerId] = JSON.stringify(watching);
-               }else{
-                console.log('start');
-                console.log(JSON.parse(localStorage[myPeerId]));
+                 localStorage[myPeerId] = JSON.stringify(watching);
+             }else{
+                // console.log('start');
+                // console.log(JSON.parse(localStorage[myPeerId]));
                 _.each(JSON.parse(localStorage[myPeerId]), function(v) {
                     console.log(v);
                     addWatch(v);
-              });
+                });
                 if (watching.length> 0){
                     console.log('xxlkajskldfjaskljflksjdf!');
                     console.log(watching[0]);
@@ -382,10 +396,10 @@ openSocket();
                     switchChatTo(watching[0]);
                 }
             }
-            }, function(err) {
-                alert('open failure');
-                console.log(err)
-            });
+        }, function(err) {
+            alert('open failure');
+            console.log(err)
+        });
         }
         function closeSocket() {
             chat.close().then(function() {
@@ -401,8 +415,8 @@ openSocket();
                 list  = JSON.parse(localStorage[myPeerId]);
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
-                console.log('nlist');
-                console.log(nlist);
+                // console.log('nlist');
+                // console.log(nlist);
                 watching.push(peerId);
                 localStorage[myPeerId] = JSON.stringify(nlist);
 
@@ -418,11 +432,13 @@ openSocket();
             var opeerId = $(target).data('peer-id');
             peerId = [opeerId];
             list  = JSON.parse(localStorage[myPeerId]);
-            nlist = _.without(list,opeerId);
+            nlist = _.without(list,opeerId+"");
             localStorage[myPeerId] = JSON.stringify(nlist);
+            console.log(nlist);
             removeWatchingPeer(peerId);
             chat.unwatch(peerId);
-            watching.remove(peerId);
+            watching = _.without(watching,peerId+"");
+            console.log(watching);
             $('#user-'+peerId).remove();
             $('#'+peerId).remove();
             $('#to-peer-id').empty();
@@ -451,15 +467,13 @@ openSocket();
                 }
                 var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
                 var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-
-                // $('#user-list').append(str);
                 AV.Cloud.run("findUserByName", {username: peers[i]}, {
                     success: function(data){
                         $('#user-list').append(str);
-                            if(typeof data != 'undefined'){
+                        if(typeof data != 'undefined'){
                             $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl); 
                             localStorage[data.username+'-avatar'] = data.avatarUrl;
-                            }
+                        }
 
                     },
                     error: function(err){
@@ -497,10 +511,11 @@ openSocket();
                             str = _.template($('#text-tpl').html())({
                                 peerId:peerId,
                                 content:origin_msg,
+                                avatar: localStorage[myPeerId+'-avatar'],
                                 klass:'from-me'
                             });
                             var elem = $(str);
-                            $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
+                            // $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
                             $('#'+toPeerId).append(elem);
                             $('#msg').val('');
 
@@ -509,5 +524,5 @@ openSocket();
                             alert("send failure!!!")
                         });
         });
-    </script>
-    
+</script>
+
