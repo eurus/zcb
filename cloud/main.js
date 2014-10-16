@@ -136,3 +136,9 @@ AV.Cloud.define("getchathis", function(req,res) {
     res.success(response.body);
   });
 });
+
+AV.Cloud.define("alipayrsagenerator", function(req,res) {
+// var hashes = crypto.getHashes();
+// console.log(hashes);
+  
+});
