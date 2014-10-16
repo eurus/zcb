@@ -187,13 +187,15 @@
     width:100%;
     position: relative;
     min-height: 40px;
+    margin-top:5px;
+    padding:4px;
 }
 .msg.to-me{
-    padding-left:50px;
+    padding-left:60px;
     text-align: left;
 }
 .msg.from-me{
-    padding-right:50px;
+    padding-right:60px;
     text-align:right;
 }
 .msg .avatar{
@@ -202,10 +204,78 @@
     width:40px;
     height:40px;
     border-radius: 20px;
-    border:1px solid black;
+    border:1px solid grey;
 }
 .msg-text span{
+    padding:6px 10px;
     display:inline-block;
+    border-radius:4px;
+}
+.msg.from-me div.arrow{
+    position: absolute;
+    right: -11px;
+    top: 11px;
+    width: 13px;
+    height: 24px;
+    background: url(../img/right-green-arrow.png) no-repeat;
+    z-index:999;
+}
+
+.msg.to-me div.arrow{
+    position: absolute;
+    left: -7px;
+    top: 11px;
+    width: 13px;
+    height: 24px;
+    background: url(../img/left-gray-arrow.png) no-repeat;
+    z-index:999;
+}
+.msg.to-me span{
+    padding: 5px 13px\9;
+    padding: 7px 10px;
+    color: #030303;
+    border-top: 1px solid #FFF;
+    border-bottom: 1px solid #F2F2F2;
+    border-right: 1px solid #F2F2F2;
+    background-color: #ECECEC\9;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#e5e5e5), color-stop(0.1, #f3f3f3), color-stop(0.3, #f1f1f1), color-stop(0.5, #ececec), color-stop(0.7, #e9e9e9), color-stop(0.9, #e6e6e6), color-stop(1, #e5e5e5));
+    background-image: -moz-linear-gradient(top, #f3f3f3 10%, #f1f1f1 30%, #ececec 50%, #e9e9e9 70%, #e6e6e6 90%, #e5e5e5 100%);
+}
+.msg.to-me span.msg-body{
+    padding:0;
+    border: 1px solid #AFAFAF;
+    box-shadow: 0px 1px 0px #D5D5D5;
+    border: 1px solid #9f9f9f\9;
+    border-radius: 6px\9;
+    background-color: #ECECEC;
+}
+.msg .msg-content{
+    position: relative;
+}
+.msg.from-me span{
+    border-top: 1px solid #DCE6C8;
+    border-bottom: 1px solid #B9CF8B;
+    border-left: 1px solid #CCDEA3;
+    padding: 13px\9;
+    padding: 7px 10px;
+    border-radius: 13px\9;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    overflow: hidden;
+    color: #000;
+    text-shadow: none;
+    background: #B2CF73\9;
+    box-shadow: 0px 1px 0px #D5D5D5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#cdeb96), to(#a4c363), color-stop(0.1, #b4d174), color-stop(0.3, #b2cf73), color-stop(0.5, #afcc74), color-stop(0.7, #abca6c), color-stop(0.9, #a9c572), color-stop(1, #a4c363));
+    background-image: -moz-linear-gradient(top, #b4d174 10%, #b2cf73 30%, #afcc74 50%, #abca6c 70%, #a9c572 90%, #a4c363 100%); 
+}
+.msg.from-me span.msg-body{
+    padding:0;
+    border: 1px solid #7AA23F;
+    box-shadow: 0px 1px 0px #D5D5D5;
+    border: 1px solid #9f9f9f\9;
+    background-color: #B2CF73;
 }
 .msg.to-me .avatar{
     left:0px;
@@ -213,7 +283,6 @@
 .msg.from-me .avatar{
     right:0px;
 }
-
 .msg-image .image{
     width:200px;
 }

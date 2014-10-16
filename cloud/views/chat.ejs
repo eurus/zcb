@@ -89,8 +89,13 @@
 
 <div id="text-tpl">
     <li class='msg msg-text {=klass}' data-peer-id='{=peerId}'>
-    <img src='img/user1.png' class='img-responsive avatar'></img>
-    <span>{=content}</span>
+        <img src='img/user1.png' class='img-responsive avatar'></img>
+        <div class='msg-content'>
+            <span class='msg-body'>
+                <span>{=content}</span>
+            </span>
+            <div class='arrow' > </div>
+        </div>
     </li>
 </div>
 
@@ -433,8 +438,6 @@ openSocket();
 
         function switchChatTo(peerId){
             if (peerId && peerId != ''){
-
-
                 $('#peer-box > ul').each(function(){
                     $(this).addClass('hide');
                 })
