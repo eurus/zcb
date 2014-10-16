@@ -334,7 +334,7 @@ var Store = AV.Object.extend("Store");
 
  var Order = AV.Object.extend("Order",{
  	defaults:{
- 		status:'processing',
+ 		status:'incomplete',
  		cancelReason:'',
  		items:[],
 			// package: '',

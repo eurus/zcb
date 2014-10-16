@@ -15,9 +15,8 @@ h5{
 #logo{
 	margin-top:6%;
 }
-.btn{
+#btns .btn{
 	background:#1c1311;
-	color:#544343;
 	font-size:18px;
 	margin:0 30px 0 30px;
 	padding:5px 30px 5px 30px;
@@ -26,38 +25,42 @@ h5{
      -webkit-background-clip: padding-box; /* for Safari */
     background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 }
-.btn:hover{
+#btns .btn:hover{
     color:#999;
 }
 
-.btn b, .btn i{
+#btns .btn b, #btns .btn i{
+    font-size:17px;
 	vertical-align: middle;
+    color:#544343;
 	height: 50px;
 	line-height: 50px;
 }
-.btn i.fa{
+#btns .btn i.fa{
 	font-size:50px;
 	margin-right:20px;
 }
-.btn.active:hover{
+#btns .btn.active:hover{
     color:#544343;
 }
-.btn.active{
+#btns .btn.active{
 	background:#fff100;
-	color:#1c1311;
 	border:10px solid rgba(100,100,100,0.3);
      -webkit-background-clip: padding-box; /* for Safari */
     background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 }
 
+#btns .btn.active i, #btns .btn.active b{
+    color:#1c1311;
+}
 
 
 @media screen and (max-width:767px){
-    .btn i.fa{
+    #btns .btn i.fa{
         font-size:40px;
         margin-right:20px;
     }
-    .btn{
+    #btns .btn{
         display:block;
         margin:20px auto;
     }
