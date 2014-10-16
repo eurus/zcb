@@ -40,7 +40,6 @@ function setSendTo(peerId) {
     // 重新设定选择对话人
     $('.user-item-selected').removeClass('user-item-selected');
     $('#user-'+peerId).addClass('user-item-selected');
-    orderRouter.home();
   }
   var orderRouter = null;
 
@@ -50,11 +49,66 @@ function setSendTo(peerId) {
   	AV.$ = jQuery;
   	AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
   		"0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb");
-  	var User = AV.Object.extend('_User');
 
 /*-------------------------------------------------------------
-		CAR
-		-------------------------------------------------------------*/
+							USER
+-------------------------------------------------------------*/
+  	var User = AV.Object.extend('_User', {
+  		defaults:{
+  			nickname:'',
+  			username:'',
+  			password:'',
+  			peerId: '',
+  			mobile:'',
+  			mobileVerified: false
+  		}
+  	});
+
+  	var UserView = AV.View.extend({
+			template:_.template($('#user-form-tpl').html()),
+			events:{
+				"click .btn-save":"save"
+			},
+
+			initialize:function(options){
+				console.log('init user view');
+			},
+
+			render:function(){
+				this.$el.html(this.template());
+			},
+
+			save:function(val){
+				var self = this;
+				var mobile = $('#user-form input[name=mobile]').val();
+				var user = new User;
+				var userForm = {
+					'mobile': mobile, 
+					'nickname':mobile,
+					'username':mobile,
+					'password':mobile,
+					'peerId':toPeerId
+				};
+				console.log(userForm);
+				user.save(userForm, {
+					success:function(user){
+						console.log(user);
+						customer = user;
+						orderRouter.home();
+					}
+				});
+
+			},
+			saveOrder:function(car){
+				this.order.set('user', user);
+				this.order.save();
+			}
+
+		});
+
+/*-------------------------------------------------------------
+							CAR
+-------------------------------------------------------------*/
 		var Car = AV.Object.extend("Car", {
 			defaults:{
 				make:'',
@@ -81,57 +135,65 @@ function setSendTo(peerId) {
 			},
 
 			initialize:function(options){
+				console.log('init car view');
 				_.bindAll(this, 'change', 'reset');
 				this.order = options.order;
 
 				this.cars = new CarList;
-				if (customer!= null){
- 			this.cars.query = new AV.Query(Car);
- 			this.cars.query.equalTo('user', customer);
+				
+			},
 
- 		}else{
- 			console.log(customer);
- 		}
+			render:function(){
+				console.log('render car view for '+customer.get('username'));
+				this.cars.query = new AV.Query(Car);
+				this.cars.query.equalTo('user', customer);
 
- 		this.cars.bind('reset', this.reset);
- 		this.cars.bind('change',this.reset);
- 		if (customer)
- 			this.render();
- 	},
+				this.cars.bind('reset', this.reset);
+				this.cars.bind('change',this.reset);
+				this.$el.html(this.template());
+				var self = this;
+				this.cars.fetch({
+					error:function(cars, response, options){
+						self.reset([]);
+					}
+				});
+				return this;
+			},
 
- 	render:function(){
- 		this.$el.html(this.template());
- 		this.cars.fetch();
- 		return this;
- 	},
+			reset:function(cars){
+				if (!cars || cars.length <= 0){
+					$('#car-ids').trigger('change');
+				}else{
 
- 	reset:function(cars){
- 		var carOptionTpl =  _.template($('#car-option-tpl').html());
- 		var carOptions = _.reduce(cars.models, function(options, car){
- 			return options + carOptionTpl(car.toJSON());
- 		}, '');
- 		$('#car-ids', this.$el).prepend(carOptions);
- 		if (this.order.get('car')){
- 			$('#car-ids').val(this.order.get('car').id);
- 		}else{
- 			$('#car-ids').val($('#car-ids option:first').val());
- 		}
- 		$('#car-ids').trigger('change');
- 	},
+					var carOptionTpl =  _.template($('#car-option-tpl').html());
+					var carOptions = _.reduce(cars.models, function(options, car){
+						return options + carOptionTpl(car.toJSON());
+					}, '');
+					$('#car-ids', this.$el).prepend(carOptions);
+					console.log('car ---');
+					console.log(this.order.get('car'));
+					if (this.order.get('car')){
+						$('#car-ids').val(this.order.get('car').id);
+					}else{
+						$('#car-ids').val($('#car-ids option:first').val());
+					}
+					$('#car-ids').trigger('change');
+				}
+			},
 
- 	change:function(e){
- 		var carId = $(e.target).val();
- 		var carInfoTpl =  _.template($('#car-info-tpl').html());
- 		var carFormTpl =  _.template($('#car-form-tpl').html());
- 		var car = this.cars.filter(function(c){
- 			if (c.id == carId) {
- 				return c;
- 			} 
- 			return null;
- 		})[0];
+			change:function(e){
+				var carId = $(e.target).val();
+				var carInfoTpl =  _.template($('#car-info-tpl').html());
+				var carFormTpl =  _.template($('#car-form-tpl').html());
+				var car = this.cars.filter(function(c){
+					if (c.id == carId) {
+						return c;
+					} 
+					return null;
+				})[0];
 
- 		if (car){
- 			$('#car-info').html(carInfoTpl(car.toJSON()));
+				if (car){
+					$('#car-info').html(carInfoTpl(car.toJSON()));
  			this.saveOrder(car);
  		}else{
  			$('#car-info').html(carFormTpl());
@@ -142,7 +204,8 @@ function setSendTo(peerId) {
  		var self = this;
  		var car = $('#car-form').serializeObject();
  		car.year = parseInt(car.year)|| 0;
- 		car.user = customer;
+ 		if (customer.get('username') && customer.get('username').length > 0)
+	 		car.user = customer;
  		//this.cars.create(car);
  		var carObj = new Car();
  		carObj.save(car, {
@@ -324,13 +387,13 @@ var AddressView = AV.View.extend({
  	}
  });
 /*-------------------------------------------------------------
-							STORE
-							-------------------------------------------------------------*/
-							var Store = AV.Object.extend("Store");
+STORE
+-------------------------------------------------------------*/
+var Store = AV.Object.extend("Store");
 
 /*-------------------------------------------------------------
-							ORDER
-							-------------------------------------------------------------*/
+ORDER
+-------------------------------------------------------------*/
 
  var Order = AV.Object.extend("Order",{
  	defaults:{
@@ -342,6 +405,7 @@ var AddressView = AV.View.extend({
 			car: new Car,
 			address: new Address,
 			serviceTime: new Date()
+			// user:new User
 		},initialize:function(){
 			if (!this.get("user")) {
 				this.set({"user": customer });
@@ -353,6 +417,7 @@ var OrderList = AV.Collection.extend({ model: Order });
 var OrderView = AV.View.extend({
  	// el:"#order",
  	initialize: function(options) {
+ 		console.log('init order view');
  		_.bindAll(this, 'reset');
 
  		this.orders = new OrderList;
@@ -365,15 +430,28 @@ var OrderView = AV.View.extend({
 
  	},
  	render:function(){
- 		this.orders.query.equalTo('user', customer);
- 		this.orders.fetch();
+ 		console.log('render order view');
+ 		if (customer && customer.get('username') && customer.get('username').length > 0){
+ 			this.orders.query.equalTo('user', customer);
+ 			this.orders.fetch();
+ 		}else{
+ 			this.userView = new UserView();
+ 			this.userView.render();
+ 			this.$el.empty();
+	 		this.$el.append(this.userView.el);
+ 		}
  	},
  	reset:function(orders){
+ 		console.log('reset order view');
+ 		console.log('orders length = '+orders.length);
  		if (orders.length > 0) {
  			this.order = orders.last();
  		}else{
  			this.order = new Order;
  		}
+
+ 		console.log(this.order.id);
+ 		console.log(this.order.get('car').id);
 
  		this.car = this.order.get('car');
  		this.carView = new CarView({
@@ -401,6 +479,7 @@ var OrderView = AV.View.extend({
  		this.$el.append(this.addrView.el);
  		this.$el.append(this.itemView.el);
  		this.$el.append(this.otherView);
+ 		$('.datetimepicker', this.$el).datetimepicker();
  		this.delegateEvents();
  	}
  });
@@ -470,22 +549,24 @@ var OrderRouter = AV.Router.extend({
 		this.listView = new OrderListView();
 	},
 	switchView: function(view) {
+		console.log('switchView');
 		if (this.currentView) {
 			this.currentView.remove();
 		}
-		var username = $('#to-peer-id').text()
+		var peerId = $('#to-peer-id').text()
 
 		var userQuery = new AV.Query(User);
-		userQuery.equalTo('username', username);
+		userQuery.equalTo('peerId', peerId);
+		console.log('customer peerId = '+peerId);
 		$('#order').empty();
 		userQuery.first().then(function(user){
 			customer = user;
+			console.log('SWITCH TO VIEW RENDER');
 			view.render();
 			if (!customer){
-				customer = new AV.User()
+				customer = new User;
 			}
 			$('#order').html(view.$el);
-			$('.datetimepicker').datetimepicker();
 
 			self.currentView = view;
 		});

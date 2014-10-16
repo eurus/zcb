@@ -130,6 +130,23 @@
         </li>
     </script>
 
+    <div id='user-info-tpl'>
+        <div class="pure-control-group">
+            <p>{=nickname}</p>
+            <p>{=mobile}</p>
+        </div>
+    </div>
+
+    <div id='user-form-tpl'>
+        <form id='user-form'>
+            <div class="pure-control-group">
+                <label>手机号</label>
+                <input name='mobile' type="text">
+            </div>
+        </form>
+        <button class='btn btn-save'> 保存</button>
+    </div>
+
     <div id='car-info-tpl'>
         <div class="pure-control-group">
             <p>{=make} {=series} {=model}</p>
@@ -146,7 +163,7 @@
             <!-- cars -->
             <b class='banner pure-u-1'>车辆信息</b>
             <div class="pure-control-group">
-                <select id="car-ids">
+                <select id="car-ids" class='selectpicker'>
                     <option value=''>新增车辆…</option>
                 </select> 
             </div>
@@ -219,7 +236,7 @@
             </div>
             <div class="pure-control-group">
                 <label>联系人</label>
-                <input name='name' type="text">
+                <input name='contact' type="text">
             </div>
             <div class="pure-control-group">
                 <label>手机</label>
@@ -381,20 +398,14 @@ openSocket();
             chat.open().then(function() {
                 $('#connect-status').text('connected');
                 if(localStorage.getItem(myPeerId) === null){
-                 localStorage[myPeerId] = JSON.stringify(watching);
-             }else{
+                   localStorage[myPeerId] = JSON.stringify(watching);
+               }else{
                 // console.log('start');
                 // console.log(JSON.parse(localStorage[myPeerId]));
                 _.each(JSON.parse(localStorage[myPeerId]), function(v) {
                     console.log(v);
                     addWatch(v);
                 });
-                if (watching.length> 0){
-                    console.log('xxlkajskldfjaskljflksjdf!');
-                    console.log(watching[0]);
-                    setSendTo(watching[0]);
-                    switchChatTo(watching[0]);
-                }
             }
         }, function(err) {
             alert('open failure');
@@ -453,6 +464,9 @@ openSocket();
             });
 
         function switchChatTo(peerId){
+            orderRouter.home();
+            toPeerId = peerId;
+            $('#to-peer-id').text(toPeerId);
             if (peerId && peerId != ''){
                 $('#peer-box > ul').each(function(){
                     $(this).addClass('hide');
@@ -470,6 +484,10 @@ openSocket();
                 AV.Cloud.run("findUserByName", {username: peers[i]}, {
                     success: function(data){
                         $('#user-list').append(str);
+                        if ($('#user-list .user-item-selected').length == 0) {
+                            setSendTo(data.username);
+                            switchChatTo(data.username);
+                        }
                         if(typeof data != 'undefined'){
                             $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl); 
                             localStorage[data.username+'-avatar'] = data.avatarUrl;
@@ -481,9 +499,7 @@ openSocket();
                     }
                 });
                 $('#peer-box').append(str3);
-                if ($('#user-list .user-item').length <= 1) {
-                    setSendTo(peers[i])
-                }
+                
                 
             }
         }
