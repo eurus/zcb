@@ -180,7 +180,7 @@ AV.Cloud.afterSave("Order", function(req,res) {
       console.log(save_flowNo);
       req.object.set("flowNo",save_flowNo);
       req.object.save();
-      res.success(save_flowNo);
+      console.log(save_flowNo);
     },
     error: function(error) {
       throw "Got an error " + error.code + " : " + error.message;
