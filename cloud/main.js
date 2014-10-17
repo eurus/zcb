@@ -78,7 +78,7 @@ AV.Cloud.define("getOrderList", function(req, res) {
   query.equalTo("user",user);
   query.find({
     success: function(results) {
-      console.log("Successfully retrieved " + results.length + " scores.");
+      console.log("Successfully retrieved " + results.length + " orders.");
       res.success(results);
     },
     error: function(error) {
