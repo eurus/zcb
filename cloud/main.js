@@ -49,6 +49,16 @@ AV.Cloud.define('findUserByName', function(req, res){
   });
 });
 
+AV.Cloud.define('findUserByPeerId', function(req, res){
+  // forceLogin(res);
+  var peerId = req.params.peerId || '';
+  userCon.findUserByPeerId(peerId).then(function(user){
+    res.success(user);
+  }, function(){
+    res.error('error');
+  });
+});
+
 AV.Cloud.define("getOrderList", function(req, res) {
   var Order = AV.Object.extend("Order");
   var User = AV.Object.extend("_User");

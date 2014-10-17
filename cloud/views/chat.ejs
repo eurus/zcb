@@ -2,7 +2,7 @@
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            <img class="img-circle pure-image own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
+            <img class="img-circle pure-image own-avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
             <div id='user-title' class='title'>
                 联系人
                 <div class="dropdown pull-right">
@@ -317,7 +317,8 @@
     AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
         "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb");
     var peerId = '<%-user.username%>';
-    var myPeerId = '<%-user.username%>';
+    var myPeerId = '<%-user.peerId%>';
+    var myNickname = '<%-user.nickname%>';
     var myAvatarUrl = '<%-user.avatarUrl%>';
     localStorage[myPeerId+'-avatar'] = myAvatarUrl;
     var watching = [];

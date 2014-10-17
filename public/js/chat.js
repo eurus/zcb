@@ -281,6 +281,8 @@ var ItemView = AV.View.extend({
  					})
  				}
  			}
+ 		}else{
+ 			items = [itemsRaw];
  		}
  		this.order.set('items', items);
  		this.order.save();

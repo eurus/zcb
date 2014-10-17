@@ -73,7 +73,9 @@ function transformUser(curUser) {
     username:curUser.get('username'),
     id:curUser.id,
     mobile:curUser.get('mobile'),
-    email:curUser.get('email')
+    email:curUser.get('email'),
+    nickname: curUser.get('nickname'),
+    peerId: curUser.get('peerId')
   };
 
   if (curUser.get('avatar')){
@@ -96,9 +98,21 @@ function findUserByName(name){
   });
 }
 
+function findUserByPeerId(peerId){
+  return findUser(function(q){
+    q.equalTo('peerId',peerId)
+  }).then(function (c) {
+    if (c) {
+      c = transformUser(c);
+    }
+    return AV.Promise.as(c);
+  });
+}
+
 exports.login = login;
 exports.isLogin = isLogin;
 exports.findUserById = findUserById;
 exports.findUserByName = findUserByName;
+exports.findUserByPeerId = findUserByPeerId;
 exports.transformUser = transformUser;
 exports.findRawUserById = findRawUserById;
