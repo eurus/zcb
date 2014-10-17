@@ -1,6 +1,7 @@
 require("cloud/app.js");
 var unirest = require('unirest');
 var crypto = require('crypto');
+var moment = require('moment');
 var avchat = require('lean-cloud-chat');
 var userCon = require('cloud/user.js');
 var zutil = require('cloud/zutil.js');
@@ -175,7 +176,7 @@ AV.Cloud.afterSave("Order", function(req,res) {
     success: function(count) {
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
-      var save_flowNo = new Date().getTime().toString() + this_flowNo;
+      var save_flowNo = moment().format("YYYYMMDD") + this_flowNo;
       console.log(save_flowNo);
       req.object.set("flowNo",save_flowNo);
       req.object.save();

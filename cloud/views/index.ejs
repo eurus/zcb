@@ -7,7 +7,7 @@ h5{
 	font-size:20px;
 }
 #bar{
-	margin-top:6%;
+	margin-top:1%;
 }
 #btns{
 	margin-top:2%;
@@ -97,15 +97,30 @@ h5{
 </style>
 <div id='bar' class='pure-u-1 center'>
  <h5>扫描二维码下载</h5>
- <img src='img/bar.png' class='pure-image pure-u-14-24 pure-u-md-8-24 pure-u-lg-5-24'>
+ <img id=codedown src='img/apple.png' class='pure-image pure-u-14-24 pure-u-md-8-24 pure-u-lg-5-24'>
 </div>
 
 <div id='btns' class="pure-u-1 center">
-   <button class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24"><i class='fa fa-android'></i><b>Android 下载</b></button>
-   <button class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24 active"><i class="fa fa-apple"></i><b>iOS 下载</b></button>
+   <button id=android class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24"><i class='fa fa-android'></i><b>Android 下载</b></button>
+   <button id=apple class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24 active"><i class="fa fa-apple"></i><b>iOS 下载</b></button>
 </div>	
 
 <div id='logo' class="pure-u-1 center">
    <img src="img/service-logo.png" class='pure-image pure-u-20-24 pure-u-md-10-24 pure-u-lg-7-24'>
 </div>
+
+<script>
+$( "#android" ).click(function() {
+      $( this ).addClass("active");
+      $( "#apple" ).removeClass("active");
+      $("#codedown").attr('src', 'img/android.png');
+
+  });
+$( "#apple" ).click(function() {
+      $( this ).addClass("active");
+      $( "#android" ).removeClass("active");
+      $("#codedown").attr('src', 'img/apple.png');
+
+  });
+</script>
 
