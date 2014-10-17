@@ -231,8 +231,7 @@ var ItemView = AV.View.extend({
 	events:{
 		"click .btn-add":"add",
 		"click .btn-remove":"remove",
-		"click .btn-save":"save",
-		"blur input,select":"save"
+		"click .btn-save":"save"
 	},
 	initialize: function(options){
 		this.order = options.order;
@@ -304,8 +303,9 @@ var AddressView = AV.View.extend({
 	template:_.template($('#addr-tpl').html()),
 	events:{
 		"change #addr-ids":"change", 
-		"blur .btn-save":"save",
-		"click .btn-cancel":"render"
+		"click .btn-save":"save",
+		"click .btn-cancel":"render",
+		"blur input,select":"save"
 	},
 
 	initialize:function(options){
@@ -416,9 +416,12 @@ var OrderList = AV.Collection.extend({ model: Order });
 
 var OrderView = AV.View.extend({
  	// el:"#order",
+ 	events:{
+ 		"blur #other-info input":"save"
+ 	},
  	initialize: function(options) {
  		console.log('init order view');
- 		_.bindAll(this, 'reset');
+ 		_.bindAll(this, 'reset', "save");
 
  		this.orders = new OrderList;
  		this.orders.query = new AV.Query(Order);
@@ -473,14 +476,22 @@ var OrderView = AV.View.extend({
  		this.addrView.render();
  		this.itemView.render();
  		this.otherView = _.template($('#other-tpl').html())();
+ 		// this.otherView.bind("blur input", this.save);
 
  		this.$el.empty();
  		this.$el.append(this.carView.el);
  		this.$el.append(this.addrView.el);
  		this.$el.append(this.itemView.el);
  		this.$el.append(this.otherView);
+ 		// $('.selectpicker', this.$el).selectpicker();
  		$('.datetimepicker', this.$el).datetimepicker();
  		this.delegateEvents();
+ 	},
+ 	save:function(){
+ 		var serviceTime = $('#other-info input[name=serviceTime]').val();
+ 		var time = moment(serviceTime, "YYYY-MM-DD hh:mm").toDate();
+ 		this.order.set('serviceTime', time);
+ 		this.order.save();
  	}
  });
 var OrderItemView = AV.View.extend({

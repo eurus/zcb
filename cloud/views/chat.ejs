@@ -5,7 +5,16 @@
             <img class="img-circle pure-image own-avatar" alt="Tilo Mitra&#x27;s avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
             <div id='user-title' class='title'>
                 联系人
+                <div class="dropdown pull-right">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"  style='background:transparent;border:transparent'>
+                  <span class="caret"  style='color:white;'></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">退出</a></li>
+                </ul>
             </div>
+            </div>
+
             <div id='user-list' class='scrollable' >
             </div>
         </div>
@@ -277,11 +286,11 @@
     </div>
 
     <div id="other-tpl">
-        <div class="pure-form pure-form-aligned zform">
+        <div id='other-info' class="pure-form pure-form-aligned zform">
             <div class='banner pure-u-1'>其他信息</div>
             <div class="pure-control-group">
                 <label>服务时间</label>
-                <input type='text' name='serviceTime' value='{=name}' class='datetimepicker'>
+                <input type='text' name='serviceTime' value='{=name}' class='datetimepicker' data-date-format="YYYY-MM-DD hh:mm">
             </div>
             <div class="pure-control-group">
                 <label>销售员</label>
@@ -295,7 +304,7 @@
                     <option></option>
                 </select>
             </div>
-            <button class='btn btn-save'>发给客户确认</button>
+            <button class='btn btn-save'>确认下单</button>
         </div>
     </div>
     <!-- end -->

@@ -51,10 +51,13 @@
     border-radius:4px 4px 0 0;
     /*overflow: auto;*/
 }
+.title .dropdown-menu{
+    min-width:0;
+}
 .own-avatar{
     position: absolute;
     top:-20px;
-    left:10px;
+    left:5px;
     z-index:999;
     border:2px solid white;
 
@@ -155,7 +158,10 @@
 }
 
 #user-title{
-    padding-left:25px;
+    padding-left:50px;
+}
+#user-title.title{
+    padding-right:0;
 }
 .user-item .avatar {
     margin:0 auto;
