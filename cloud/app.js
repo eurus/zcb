@@ -60,6 +60,7 @@ app.post('/alipay/asyncnotice',function  (req,res) {
 	console.log(req.body);
 	console.log("alibaba:");
 	var flowNo = req.body.out_trade_no;
+	console.log("out_trade_no",flowNo);
 	var Order = AV.Object.extend("Order");
 	var query = new AV.Query(Order);
 	query.equalTo("flowNo", flowNo);
