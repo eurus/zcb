@@ -148,13 +148,19 @@ AV.Cloud.define("getchathis", function(req,res) {
 });
 
 AV.Cloud.define("getHealthCheckList", function(req,res) {
-  var query = new AV.Query(CheckList);
-  query.equalTo("objectId", req.params.userid);
-  query.find({
-    success: function(results) {
-      res.success(results);
-    }
-  });
+ var CheckList = AV.Object.extend("CheckList");
+ var User =  AV.Object.extend("_User");
+ var user = new User();
+ user.id = req.params.userid;
+ var query = new AV.Query(CheckList);
+ query.include("user");
+ query.equalTo("user", user);
+ console.log(req.params.userid);
+ query.find({
+  success: function(results) {
+    res.success(results);
+  }
+});
 });
 
 AV.Cloud.define("getAlipay", function(req,res) {
