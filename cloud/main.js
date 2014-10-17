@@ -148,7 +148,7 @@ AV.Cloud.define("getchathis", function(req,res) {
 });
 
 AV.Cloud.define("getHealthCheckList", function(req,res) {
-  var query = new AV.Query(CheckLIst);
+  var query = new AV.Query(CheckList);
   query.equalTo("objectId", req.params.userid);
   query.find({
     success: function(results) {
