@@ -35,11 +35,7 @@
 * --------------------------------------------------------*/
 
 function setSendTo(peerId) {
-	toPeerId = peerId;
-	$('#to-peer-id').text(toPeerId);
-    // 重新设定选择对话人
-    $('.user-item-selected').removeClass('user-item-selected');
-    $('#user-'+peerId).addClass('user-item-selected');
+
   }
   var orderRouter = null;
 
@@ -460,9 +456,6 @@ var OrderView = AV.View.extend({
  		}else{
  			this.order = new Order;
  		}
-
- 		console.log(this.order.id);
- 		console.log(this.order.get('car').id);
 
  		this.car = this.order.get('car');
  		this.carView = new CarView({

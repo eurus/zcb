@@ -42,17 +42,17 @@ app.get('/chat', function(req, res) {
 			console.log(user);
 			res.render('chat', {user: user});
 		}, function(){
-			res.redirect('/');
+			res.redirect('/operator');
 		})
 	}else{
-		res.redirect('/');
+		res.redirect('/operator');
 	}
 });
 
 app.post('/login', userCon.login);
 app.get('/logout', function (req, res) {
   AV.User.logOut();
-  res.redirect('/');
+  res.redirect('/operator');
 });
 
 app.post('alipay/asyncnotice',function  (req,res) {

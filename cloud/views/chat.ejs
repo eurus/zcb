@@ -22,7 +22,7 @@
 
     <div class='col-md-5 full-height'>
         <div class='full-height full-width'>
-            <div id='to-peer-id' class='title'>
+            <div id='to-nickname' class='title'>
 
             </div>
             <div id='peer-box' class='scrollable' >
@@ -77,23 +77,19 @@
 
 <div class="hide">
     <div id="user-tpl">
-      <div id='user-@peerId@' class='user-item pure-g' data-peer-id='@peerId@'>
+      <div id='user-{=peerId}' class='user-item pure-g' data-peer-id='{=peerId}'>
         <div class="item">
-          <a href="#"  id="peer-@peerId@" onclick="addWatch('@peerId@');setSendTo('@peerId@');switchChatTo('@peerId@');">
+          <a href="#"  id="peer-{=peerId}" onclick="addWatch('{=peerId}');setSendTo('{=peerId}');switchChatTo('{=peerId}');">
               <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
-              <span class='name'>@peerId@</span>
+              <span class='name'>{=nickname}</span>
           </a>
-          <a class='removewatch' href='#' data-peer-id='@peerId@' onclick='removeWatch(this)'><i class='fa fa-remove'></i></a>
+          <a class='removewatch' href='#' data-peer-id='{=peerId}' onclick='removeWatch(this)'><i class='fa fa-remove'></i></a>
       </div>
   </div>
 </div>
 
-<div id="nav-tpl">
-    <a href="#@peerId@" id="slide-@peerId@">@peerId@</a>    
-</div>
-
 <div id="msg-tpl">
-    <ul id='@peerId@'>                      
+    <ul id='{=peerId}'>                      
     </ul>   
 </div>
 
@@ -346,8 +342,8 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
                 addWatch(data.fromPeerId);
-                if ($('to-peer-id').text() == ''){
-                    $('to-peer-id').text(data.fromPeerId);
+                if ($('to-nickname').text() == ''){
+                    $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                 }
                 console.log(JSON.parse(data.msg));
                 receive_msg = JSON.parse(data.msg);
@@ -462,7 +458,7 @@ openSocket();
             console.log(watching);
             $('#user-'+peerId).remove();
             $('#'+peerId).remove();
-            $('#to-peer-id').empty();
+            $('#to-nickname').empty();
             if ($('#user-list .user-item-selected').length <= 0){
                 var peerId = $('#user-list .user-item:first').data('peer-id');
                 setSendTo(peerId);
@@ -474,33 +470,41 @@ openSocket();
             });
 
         function switchChatTo(peerId){
-            orderRouter.home();
             toPeerId = peerId;
-            $('#to-peer-id').text(toPeerId);
-            if (peerId && peerId != ''){
-                $('#peer-box > ul').each(function(){
-                    $(this).addClass('hide');
-                })
-                $('#'+peerId).removeClass('hide');
-            }
+            $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
+    // 重新设定选择对话人
+    console.log('set send to '+peerId);
+    $('.user-item-selected').removeClass('user-item-selected');
+    $('#user-'+peerId).addClass('user-item-selected');
+    if (peerId && peerId != ''){
+        $('#peer-box > ul').each(function(){
+            $(this).addClass('hide');
+        })
+        $('#'+peerId).removeClass('hide');
+    }
+    orderRouter.home();
         }
         function addWatchingPeer(peers) {
             for (var i = 0; i < peers.length; i++) {
                 if (!peers[i]) {
                     return;
                 }
-                var str = $('#user-tpl').html().replace(/@peerId@/g, peers[i]);
-                var str3 = $('#msg-tpl').html().replace(/@peerId@/g, peers[i]);
-                AV.Cloud.run("findUserByName", {username: peers[i]}, {
+                AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
                     success: function(data){
-                        $('#user-list').append(str);
+                        console.log(data);
+                        var sidebar_li = _.template($('#user-tpl').html())(data);
+                        var chatBox_div = _.template($('#msg-tpl').html())(data);
+                        $('#user-list').append(sidebar_li);
+                        $('#peer-box').append(chatBox_div);
+                        localStorage[data.peerId+'-nickname'] = data.nickname;
+
                         if ($('#user-list .user-item-selected').length == 0) {
-                            setSendTo(data.username);
-                            switchChatTo(data.username);
+                            setSendTo(data.peerId);
+                            switchChatTo(data.peerId);
                         }
                         if(typeof data != 'undefined'){
-                            $('#user-' + data.username +'> div > a > img').attr("src",data.avatarUrl); 
-                            localStorage[data.username+'-avatar'] = data.avatarUrl;
+                            $('#user-' + data.peerId +'> div > a > img').attr("src",data.avatarUrl); 
+                            localStorage[data.peerId+'-avatar'] = data.avatarUrl;
                         }
 
                     },
@@ -508,7 +512,6 @@ openSocket();
                         console.log('oops, there is something wrong.');
                     }
                 });
-                $('#peer-box').append(str3);
                 
                 
             }
