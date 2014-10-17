@@ -138,16 +138,22 @@ AV.Cloud.define("getchathis", function(req,res) {
 });
 
 AV.Cloud.define("getHealthCheckList", function(req,res) {
-
+  var query = new AV.Query(CheckLIst);
+  query.equalTo("objectId", req.params.userid);
+  query.find({
+    success: function(results) {
+      res.success(results);
+    }
+  });
 });
 
 
 
-function padLeft(str, lenght) {
-  if (str.length >= lenght)
+function padLeft(str, length) {
+  if (str.length >= length)
     return str;
   else
-    return padLeft("0" + str, lenght);
+    return padLeft("0" + str, length);
 }
 AV.Cloud.afterSave("Order", function(req,res) {
   query = new AV.Query("Order");
@@ -159,7 +165,7 @@ AV.Cloud.afterSave("Order", function(req,res) {
       console.log(save_flowNo);
       req.object.set("flowNo",save_flowNo);
       req.object.save();
-      res.success(req.object);
+      res.success(save_flowNo);
     },
     error: function(error) {
       throw "Got an error " + error.code + " : " + error.message;
