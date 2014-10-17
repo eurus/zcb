@@ -231,7 +231,8 @@ var ItemView = AV.View.extend({
 	events:{
 		"click .btn-add":"add",
 		"click .btn-remove":"remove",
-		"click .btn-save":"save"
+		"click .btn-save":"save",
+		"blur input,select":"save"
 	},
 	initialize: function(options){
 		this.order = options.order;
@@ -267,14 +268,18 @@ var ItemView = AV.View.extend({
  	save:function(e){
  		var itemsRaw = $('#item-form').serializeObject();
  		var items = []
- 		for (var i in itemsRaw.name){
- 			var name = itemsRaw.name[i];
- 			var price = itemsRaw.price[i];
- 			if (name != '' && price != ''){
- 				items.push({
- 					name:name,
- 					price: parseFloat(price) || 0
- 				})
+
+ 		console.log(itemsRaw);
+ 		if (typeof itemsRaw == 'Array'){
+ 			for (var i in itemsRaw.name){
+ 				var name = itemsRaw.name[i];
+ 				var price = itemsRaw.price[i];
+ 				if (name != '' && price != ''){
+ 					items.push({
+ 						name:name,
+ 						price: parseFloat(price) || 0
+ 					})
+ 				}
  			}
  		}
  		this.order.set('items', items);
@@ -497,6 +502,7 @@ var OrderView = AV.View.extend({
  	commit:function(){
  		this.order.set('status', 'unconfirmed');
  		this.order.save();
+ 		orderRouter.list();
  	}
  });
 var OrderItemView = AV.View.extend({
