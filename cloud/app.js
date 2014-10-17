@@ -65,10 +65,10 @@ app.post('/alipay/asyncnotice',function  (req,res) {
 	query.equalTo("flowNo", flowNo);
 	query.first({
 		success: function(object) {
-			console.log("Object is");
-			console,log(object);
+			console.log("Object begin trade");
 			object.set("status","paid");
 			object.save();
+			console.log("Object end trade");
 		},
 		error: function(error) {
 			alert("Error: " + error.code + " " + error.message);
