@@ -129,7 +129,7 @@ AV.Cloud.define("getchathis", function(req,res) {
   .headers({ 
     "X-AVOSCloud-Application-Id":" za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
     "X-AVOSCloud-Application-Key": "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb"
-   })
+  })
   .send(new Buffer([1,2,3]))
   .end(function (response) {
     console.log(response.body);
@@ -139,4 +139,30 @@ AV.Cloud.define("getchathis", function(req,res) {
 
 AV.Cloud.define("getHealthCheckList", function(req,res) {
 
-})
+});
+
+
+
+function padLeft(str, lenght) {
+  if (str.length >= lenght)
+    return str;
+  else
+    return padLeft("0" + str, lenght);
+}
+AV.Cloud.afterSave("Order", function(req,res) {
+  query = new AV.Query("Order");
+  query.count({
+    success: function(count) {
+      var this_count = count + 1;
+      var this_flowNo = padLeft(this_count,6);
+      var save_flowNo = new Date().getTime().toString() + this_flowNo;
+      console.log(save_flowNo);
+      req.object.set("flowNo",save_flowNo);
+      req.object.save();
+      res.success(req.object);
+    },
+    error: function(error) {
+      throw "Got an error " + error.code + " : " + error.message;
+    }
+  });
+});
