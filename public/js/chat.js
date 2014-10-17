@@ -575,7 +575,7 @@ var OrderRouter = AV.Router.extend({
 		if (this.currentView) {
 			this.currentView.remove();
 		}
-		var peerId = $('#to-peer-id').text()
+		var peerId = toPeerId;
 
 		var userQuery = new AV.Query(User);
 		userQuery.equalTo('peerId', peerId);

@@ -384,7 +384,7 @@
                 }             
                 console.log("str2"+str2);
                 $('#'+data.fromPeerId).append(str2);
-                switchChatTo($('#to-peer-id').text());
+                switchChatTo(toPeerId);
             });
 chat.on('online', function(peers) {
     for (var i = 0; i < peers.length; i++) {
