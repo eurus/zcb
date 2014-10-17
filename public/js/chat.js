@@ -417,7 +417,8 @@ var OrderList = AV.Collection.extend({ model: Order });
 var OrderView = AV.View.extend({
  	// el:"#order",
  	events:{
- 		"blur #other-info input":"save"
+ 		"blur #other-info input":"save",
+ 		"click #other-info .btn-save":"commit"
  	},
  	initialize: function(options) {
  		console.log('init order view');
@@ -491,6 +492,10 @@ var OrderView = AV.View.extend({
  		var serviceTime = $('#other-info input[name=serviceTime]').val();
  		var time = moment(serviceTime, "YYYY-MM-DD hh:mm").toDate();
  		this.order.set('serviceTime', time);
+ 		this.order.save();
+ 	},
+ 	commit:function(){
+ 		this.order.set('status', 'unconfirmed');
  		this.order.save();
  	}
  });
