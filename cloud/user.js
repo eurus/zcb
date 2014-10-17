@@ -104,8 +104,12 @@ function findUserByPeerId(peerId){
   }).then(function (c) {
     if (c) {
       c = transformUser(c);
+      return AV.Promise.as(c);
+    }else{
+      return AV.Promise.as({
+        peerId:peerId
+      });
     }
-    return AV.Promise.as(c);
   });
 }
 

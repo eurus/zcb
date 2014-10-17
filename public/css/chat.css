@@ -292,3 +292,10 @@
 .msg-image .image{
     width:200px;
 }
+
+#order-list{
+    padding-left:0;
+}
+#order-list li{
+    list-style: none;
+}
