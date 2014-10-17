@@ -57,8 +57,7 @@ app.get('/logout', function (req, res) {
 
 app.post('alipay/asyncnotice',function  (req,res) {
 	// body...
-	AV.Cloud.run("getAlipay", {req: req}, {
-	});
+	console.log(req);
 });
 
 // 最后，必须有这行代码来使 express 响应 HTTP 请求
