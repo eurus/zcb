@@ -157,6 +157,10 @@ AV.Cloud.define("getHealthCheckList", function(req,res) {
   });
 });
 
+AV.Cloud.define("getAlipay", function(req,res) {
+  res.success(req.params.req);
+});
+
 
 
 function padLeft(str, length) {
@@ -182,3 +186,4 @@ AV.Cloud.afterSave("Order", function(req,res) {
     }
   });
 });
+
