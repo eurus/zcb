@@ -575,7 +575,7 @@ var OrderRouter = AV.Router.extend({
 		var userQuery = new AV.Query(User);
 		userQuery.equalTo('peerId', peerId);
 		console.log('customer peerId = '+peerId);
-		$('#order').empty();
+		$('#order-view').empty();
 		userQuery.first().then(function(user){
 			customer = user;
 			console.log('SWITCH TO VIEW RENDER');
@@ -583,7 +583,7 @@ var OrderRouter = AV.Router.extend({
 			if (!customer){
 				customer = new User;
 			}
-			$('#order').html(view.$el);
+			$('#order-view').html(view.$el);
 
 			self.currentView = view;
 		});
