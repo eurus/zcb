@@ -55,7 +55,7 @@ app.get('/logout', function (req, res) {
   res.redirect('/operator');
 });
 
-app.post('alipay/asyncnotice',function  (req,res) {
+app.post('/alipay/asyncnotice',function  (req,res) {
 	// body...
 	console.log("alibaba:" + req);
 });
