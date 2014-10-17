@@ -25,7 +25,7 @@
             <div id='to-nickname' class='title'>
 
             </div>
-            <div id='peer-box' class='scrollable' >
+            <div id='peer-box' class='scrollable' style='overflow:auto'>
             </div>
 
             <div class='footer form'>
@@ -89,7 +89,7 @@
 </div>
 
 <div id="msg-tpl">
-    <ul id='{=peerId}'>                      
+    <ul id='{=peerId}' style='overflow-y:scroll'>                      
     </ul>   
 </div>
 
@@ -381,6 +381,7 @@
                 }             
                 console.log("str2"+str2);
                 $('#'+data.fromPeerId).append(str2);
+                scrollToEnd(toPeerId);
                 switchChatTo(toPeerId);
             });
 chat.on('online', function(peers) {
@@ -469,6 +470,11 @@ openSocket();
                 addWatch($('#watchingPeer').val());
             });
 
+        function scrollToEnd(peerId){
+            var chatBox = $('#'+peerId);
+            console.log(chatBox.prop('scrollHeight'));
+            $('#peer-box').scrollTop(chatBox.prop('scrollHeight'));
+        }
         function switchChatTo(peerId){
             toPeerId = peerId;
             $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
@@ -496,6 +502,8 @@ openSocket();
                         var chatBox_div = _.template($('#msg-tpl').html())(data);
                         $('#user-list').append(sidebar_li);
                         $('#peer-box').append(chatBox_div);
+
+
                         localStorage[data.peerId+'-nickname'] = data.nickname;
 
                         if ($('#user-list .user-item-selected').length == 0) {
@@ -546,6 +554,7 @@ openSocket();
                             var elem = $(str);
                             // $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
                             $('#'+toPeerId).append(elem);
+                            scrollToEnd(toPeerId);
                             $('#msg').val('');
 
                         }, function(err) {

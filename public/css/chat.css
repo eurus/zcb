@@ -71,6 +71,7 @@
     border-top:1px solid #a3a09f;
     padding:10px;
     background:white;
+    z-index:1000;
 }
 
 .pure-form input.chat-reply{
@@ -140,12 +141,12 @@
 }
 #peer-box{
     background:#f6f6f6;
-    padding-bottom:55px;
+    margin-bottom:55px;
 }
 #peer-box ul{
     width:100%;
-    height:90%;
-    padding:10px 15px 0 15px;
+    padding:0 15px ;
+    margin-bottom:55px;
     list-style: none;
 }
 #peer-box ul li{
@@ -223,7 +224,7 @@
     width: 13px;
     height: 24px;
     background: url(../img/right-green-arrow.png) no-repeat;
-    z-index:999;
+    z-index:99;
 }
 
 .msg.to-me div.arrow{
