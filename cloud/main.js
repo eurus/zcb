@@ -149,14 +149,17 @@ function padLeft(str, lenght) {
   else
     return padLeft("0" + str, lenght);
 }
-AV.Cloud.afterSave("Order", function(req) {
+AV.Cloud.afterSave("Order", function(req,res) {
   query = new AV.Query("Order");
   query.count({
     success: function(count) {
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
       var save_flowNo = new Date().getTime().toString() + this_flowNo;
+      console.log(save_flowNo);
       req.object.set("flowNo",save_flowNo);
+      req.object.save();
+      res.success(req.object);
     },
     error: function(error) {
       throw "Got an error " + error.code + " : " + error.message;
