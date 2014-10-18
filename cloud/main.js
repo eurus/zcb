@@ -177,7 +177,7 @@ AV.Cloud.afterSave("Order", function(req,res) {
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
       var save_flowNo = moment().format("YYYYMMDD") + this_flowNo;
-      console.log(req.object.items);
+      console.log(req.object.get("items"));
       req.object.set("flowNo",save_flowNo);
       req.object.save();
       console.log(save_flowNo);
