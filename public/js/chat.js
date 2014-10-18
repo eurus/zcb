@@ -34,9 +34,9 @@
 *						CHAT
 * --------------------------------------------------------*/
 
-function setSendTo(peerId) {
+// function setSendTo(peerId) {
 
-  }
+//   }
   var orderRouter = null;
 
   $(function() {

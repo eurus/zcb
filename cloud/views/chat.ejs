@@ -79,7 +79,7 @@
     <div id="user-tpl">
       <div id='user-{=peerId}' class='user-item pure-g' data-peer-id='{=peerId}'>
         <div class="item">
-          <a href="#"  id="peer-{=peerId}" onclick="addWatch('{=peerId}');setSendTo('{=peerId}');switchChatTo('{=peerId}');">
+          <a href="#"  id="peer-{=peerId}" onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
               <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
               <span class='name'>{=nickname}</span>
           </a>
@@ -346,6 +346,7 @@
             });
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
+                if ($('#'+data.fromPeerId))
                 addWatch(data.fromPeerId);
                 if ($('to-nickname').text() == ''){
                     $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
@@ -432,7 +433,10 @@ openSocket();
             $('#to-nickname').empty();
             if ($('#user-list .user-item-selected').length <= 0){
                 var peerId = $('#user-list .user-item:first').data('peer-id');
-                setSendTo(peerId);
+                toPeerId = peerId;
+                $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
+                $('.user-item-selected').removeClass('user-item-selected');
+                $('#user-'+peerId).addClass('user-item-selected');
             }
         }
         $('#addwatch').click(       
@@ -480,7 +484,7 @@ openSocket();
                         $('#peer-box').append(chatBox_div);
 
                         if ($('#user-list .user-item-selected').length == 0) {
-                            setSendTo(data.peerId);
+                            // setSendTo(data.peerId);
                             switchChatTo(data.peerId);
                         }
                         if(typeof data != 'undefined'){
