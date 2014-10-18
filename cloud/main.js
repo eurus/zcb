@@ -178,9 +178,6 @@ AV.Cloud.afterSave("Order", function(req,res) {
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
       var save_flowNo = moment().format("YYYYMMDD") + this_flowNo;
-      total_price = _.reduce(req.object.get("items"),function(sum,i){return sum + i.price;},0);
-      console.log(total_price);
-      req.object.set("total_price",total_price);
       req.object.set("flowNo",save_flowNo);
       req.object.save();
       console.log(save_flowNo);
