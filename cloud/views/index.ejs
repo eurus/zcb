@@ -3,6 +3,9 @@ body,div,pre,h1,h2,h3,h4,h5,h6{
 	font-family: "微软雅黑","Microsoft YaHei", sans-serif, serif;
 	color:white;
 }
+html,body{
+  overflow-y:scroll;
+}
 h5{
 	font-size:20px;
 }
@@ -95,13 +98,13 @@ h5{
 }
 
 </style>
-<div id='bar' class='pure-u-1 center'>
+<div id='bar' class='pure-u-1 center hidden-xs'>
  <h5>扫描二维码下载</h5>
- <img id=codedown src='img/apple.png' class='pure-image pure-u-14-24 pure-u-md-8-24 pure-u-lg-5-24'>
+ <img id=codedown src='img/bar.jpg' class='img-rounded pure-image pure-u-14-24 pure-u-md-8-24 pure-u-lg-5-24'>
 </div>
 
 <div id='btns' class="pure-u-1 center">
-   <button id=android class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24"><i class='fa fa-android'></i><b>Android 下载</b></button>
+   <button id=android class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24 active"><i class='fa fa-android'></i><b>Android 下载</b></button>
    <button id=apple class="btn pure-u-18-24 pure-u-md-8-24 pure-u-lg-6-24 active"><i class="fa fa-apple"></i><b>iOS 下载</b></button>
 </div>	
 
@@ -111,15 +114,11 @@ h5{
 
 <script>
 $( "#android" ).click(function() {
-      $( this ).addClass("active");
-      $( "#apple" ).removeClass("active");
-      $("#codedown").attr('src', 'img/android.png');
+    window.location.href='/app/download/android';
 
   });
 $( "#apple" ).click(function() {
-      $( this ).addClass("active");
-      $( "#android" ).removeClass("active");
-      $("#codedown").attr('src', 'img/apple.png');
+    window.location.href='/app/download/ios';
   });
 </script>
 

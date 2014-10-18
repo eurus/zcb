@@ -36,16 +36,17 @@ app.get('/', function(req, res) {
 	res.render('index');
 });
 
-app.get('/android', function(req, res){
+app.get('/app/download/android', function(req, res){
 	agent = req.headers['user-agent']
 	console.log(agent);
-	if (agent.indexOf('MicroMessenger') != 0){
+	if (agent.indexOf('MicroMessenger') > 0){
 		res.render('android-weixin');
+	}else{
+		res.redirect('/download/CarAndCoffee.apk');
 	}
-	res.redirect('/download/android/CarAndCoffee.apk');
 });
 
-app.get('/ios', function(req, res){
+app.get('/app/download/ios', function(req, res){
 	res.redirect('/download/ios.html');
 });
 
