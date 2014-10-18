@@ -37,7 +37,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/app/download', function(req, res){
-	res.render('index');
+	res.redirect('/');
 })
 
 app.get('/app/download/android', function(req, res){
