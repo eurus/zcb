@@ -36,6 +36,19 @@ app.get('/', function(req, res) {
 	res.render('index');
 });
 
+app.get('/android', function(req, res){
+	agent = req.headers['user-agent']
+	console.log(agent);
+	if (agent.indexOf('MicroMessenger') != 0){
+		res.render('android-weixin');
+	}
+	res.redirect('/download/android/CarAndCoffee.apk');
+});
+
+app.get('/ios', function(req, res){
+	res.redirect('/download/ios.html');
+});
+
 app.get('/chat', function(req, res) {
 	if (userCon.isLogin()){
 		userCon.findUserById(AV.User.current().id).then(function(user){

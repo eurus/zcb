@@ -358,7 +358,7 @@
                     str2 = _.template($('#image-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
-                        avatar: localStorage[from_avatar],
+                        avatar: typeof localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
                         klass:'to-me'
                     });
                     
@@ -369,7 +369,7 @@
                     str2 = _.template($('#voice-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
-                        avatar: localStorage[from_avatar],
+                        avatar: typeof localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
                         klass:'to-me'
                     });
                     break;
@@ -379,7 +379,7 @@
                     str2 = _.template($('#text-tpl').html())({
                         peerId: data.fromPeerId,
                         content: receive_msg.Content,
-                        avatar: localStorage[from_avatar],
+                        avatar: typeof localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
                         klass:'to-me'
                     });                   
                     break;

@@ -307,8 +307,7 @@ var AddressView = AV.View.extend({
 	events:{
 		"change #addr-ids":"change", 
 		"click .btn-save":"save",
-		"click .btn-cancel":"render",
-		"blur input,select":"save"
+		"click .btn-cancel":"render"
 	},
 
 	initialize:function(options){
@@ -420,7 +419,7 @@ var OrderList = AV.Collection.extend({ model: Order });
 var OrderView = AV.View.extend({
  	// el:"#order",
  	events:{
- 		"blur #other-info input":"save",
+ 		"blur #other-info input,select":"save",
  		"click #other-info .btn-save":"commit"
  	},
  	initialize: function(options) {
