@@ -165,6 +165,8 @@ function setSendTo(peerId) {
 					var carOptions = _.reduce(cars.models, function(options, car){
 						return options + carOptionTpl(car.toJSON());
 					}, '');
+					$('#car-ids', this.$el).empty();
+					$('#car-ids', this.$el).append('<option value="">新增车辆…</option>')
 					$('#car-ids', this.$el).prepend(carOptions);
 					console.log('car ---');
 					console.log(this.order.get('car'));
@@ -341,6 +343,8 @@ var AddressView = AV.View.extend({
  			return options + addrOptionTpl(addr.toJSON());
  		}, '');
 
+ 		$('#addr-ids', this.$el).empty();
+ 		$('#addr-ids', this.$el).append('<option value="">新增地址…</option>');
  		$('#addr-ids', this.$el).prepend(addrOptions);
  		if (this.order.get('address')){
  			$('#addr-ids').val(this.order.get('address').id);
