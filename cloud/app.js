@@ -36,6 +36,10 @@ app.get('/', function(req, res) {
 	res.render('index');
 });
 
+app.get('/app/download', function(req, res){
+	res.redirect('/');
+})
+
 app.get('/app/download/android', function(req, res){
 	agent = req.headers['user-agent']
 	console.log(agent);
