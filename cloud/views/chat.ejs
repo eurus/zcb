@@ -351,42 +351,7 @@
                     $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                 }
                 console.log(JSON.parse(data.msg));
-                receive_msg = JSON.parse(data.msg);
-                var from_avatar = data.fromPeerId + "-avatar"
-                switch(receive_msg.InfoType) {
-                    case "IMAGE":
-                    str2 = _.template($('#image-tpl').html())({
-                        peerId: data.fromPeerId,
-                        content: receive_msg.Content,
-                        avatar: typeof localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
-                        klass:'to-me'
-                    });
-                    
-                    break;
-
-                    case "VOICE":
-                    
-                    str2 = _.template($('#voice-tpl').html())({
-                        peerId: data.fromPeerId,
-                        content: receive_msg.Content,
-                        avatar: typeof localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
-                        klass:'to-me'
-                    });
-                    break;
-
-                    case "TEXT":
-
-                    str2 = _.template($('#text-tpl').html())({
-                        peerId: data.fromPeerId,
-                        content: receive_msg.Content,
-                        avatar: typeof localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
-                        klass:'to-me'
-                    });                   
-                    break;
-                }             
-                console.log("str2"+str2);
-                $('#'+data.fromPeerId).append(str2);
-                scrollToEnd(toPeerId);
+                appendRecvMsg(data); 
                 switchChatTo(toPeerId);
             });
 chat.on('online', function(peers) {
@@ -545,6 +510,59 @@ openSocket();
                 $('#'+peers[i]).remove();
             }
         }
+
+        function appendSendMsg(peerId, content){
+            // 这里是发送的消息append
+            str = _.template($('#text-tpl').html())({
+                peerId:peerId,
+                content:content,
+                avatar: localStorage[myPeerId+'-avatar'],
+                klass:'from-me'
+            });
+            var elem = $(str);
+            $('#'+peerId).append(elem);
+            scrollToEnd(peerId);
+        }
+
+        function appendRecvMsg(data){
+            receive_msg = JSON.parse(data.msg);
+            var from_avatar = data.fromPeerId + "-avatar"
+            switch(receive_msg.InfoType) {
+                case "IMAGE":
+                str2 = _.template($('#image-tpl').html())({
+                    peerId: data.fromPeerId,
+                    content: receive_msg.Content,
+                    avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
+                    klass:'to-me'
+                });
+
+                break;
+
+                case "VOICE":
+
+                str2 = _.template($('#voice-tpl').html())({
+                    peerId: data.fromPeerId,
+                    content: receive_msg.Content,
+                    avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
+                    klass:'to-me'
+                });
+                break;
+
+                case "TEXT":
+
+                str2 = _.template($('#text-tpl').html())({
+                    peerId: data.fromPeerId,
+                    content: receive_msg.Content,
+                    avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
+                    klass:'to-me'
+                });                   
+                break;
+            }             
+            console.log("str2"+str2);
+            $('#'+data.fromPeerId).append(str2);
+            scrollToEnd(data.fromPeerId);
+
+        }
         $('#sendbtn').click(function() {
             origin_msg = $('#msg').val();
             send_msg = {
@@ -553,24 +571,15 @@ openSocket();
             }
 
             console.log(JSON.stringify(send_msg));
-            chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function() {
-                            // 这里是发送的消息append
-                            str = _.template($('#text-tpl').html())({
-                                peerId:peerId,
-                                content:origin_msg,
-                                avatar: localStorage[myPeerId+'-avatar'],
-                                klass:'from-me'
-                            });
-                            var elem = $(str);
-                            // $('img', elem).attr('src', localStorage[myPeerId+'-avatar']);
-                            $('#'+toPeerId).append(elem);
-                            scrollToEnd(toPeerId);
-                            $('#msg').val('');
+            chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
 
-                        }, function(err) {
-                            console.log(err)
-                            alert("send failure!!!")
-                        });
+                appendSendMsg(toPeerId, origin_msg);
+                $('#msg').val('');
+
+            }, function(err) {
+                console.log(err)
+                alert("send failure!!!")
+            });
         });
 </script>
 
