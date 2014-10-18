@@ -267,8 +267,7 @@ var ItemView = AV.View.extend({
  		var itemsRaw = $('#item-form').serializeObject();
  		var items = []
 
- 		console.log(itemsRaw);
- 		if (typeof itemsRaw == 'Array'){
+ 		if (Array.isArray(itemsRaw.name)){
  			for (var i in itemsRaw.name){
  				var name = itemsRaw.name[i];
  				var price = itemsRaw.price[i];
