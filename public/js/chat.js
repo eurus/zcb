@@ -281,7 +281,10 @@ var ItemView = AV.View.extend({
  		}else{
  			items = [itemsRaw];
  		}
+
+ 		var total = _.reduce(items, function(sum,i){return sum+parseInt(i.price)}, 0)
  		this.order.set('items', items);
+ 		this.order.set('total_price', total);
  		this.order.save();
 
  		console.log(items);
