@@ -86,31 +86,6 @@ var Order = AV.Object.extend("Order",{
 		if (!this.get("user")) {
 			this.set({"user": customer });
 		}
-	},
-	explainStatus:function(){
-		var status = this.get('status');
-		switch(status){
-			case 'incomplete':
-			return '不完整';
-			break;
-
-			case 'unconfirmed':
-			return '未确认';
-			break;
-
-			case 'paid':
-			return '已支付';
-			break;
-
-			case 'done':
-			return '已完成';
-			break;
-
-			case: 'cancel':
-			return '已取消';
-			break;
-		}
-		return "";
 	}
 });
 var OrderList = AV.Collection.extend({ model: Order });
