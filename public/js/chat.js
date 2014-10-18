@@ -430,21 +430,40 @@ var OrderView = AV.View.extend({
  	initialize: function(options) {
  		console.log('init order view');
  		_.bindAll(this, 'reset', "save");
-
- 		this.orders = new OrderList;
- 		this.orders.query = new AV.Query(Order);
- 		this.orders.query.include('car');
- 		this.orders.query.include('address');
- 		this.orders.query.include('items');
- 		this.orders.bind('reset', this.reset);
- 		//this.render();
-
  	},
  	render:function(){
  		console.log('render order view');
  		if (customer && customer.get('username') && customer.get('username').length > 0){
- 			this.orders.query.equalTo('user', customer);
- 			this.orders.fetch();
+ 			this.car = this.model.get('car');
+ 		this.carView = new CarView({
+ 			model: this.car,
+ 			order: this.model
+ 		});	
+
+ 		this.addr = this.model.get('address');
+ 		this.addrView = new AddressView({
+ 			model: this.addr,
+ 			order:this.model
+ 		});
+
+ 		this.itemView = new ItemView({
+ 			order: this.model
+ 		});	
+
+ 		this.carView.render();
+ 		this.addrView.render();
+ 		this.itemView.render();
+ 		this.otherView = _.template($('#other-tpl').html())();
+ 		// this.otherView.bind("blur input", this.save);
+
+ 		this.$el.empty();
+ 		this.$el.append(this.carView.el);
+ 		this.$el.append(this.addrView.el);
+ 		this.$el.append(this.itemView.el);
+ 		this.$el.append(this.otherView);
+ 		// $('.selectpicker', this.$el).selectpicker();
+ 		$('.datetimepicker', this.$el).datetimepicker();
+ 		this.delegateEvents();
  		}else{
  			this.userView = new UserView();
  			this.userView.render();
@@ -495,12 +514,12 @@ var OrderView = AV.View.extend({
  	save:function(){
  		var serviceTime = $('#other-info input[name=serviceTime]').val();
  		var time = moment(serviceTime, "YYYY-MM-DD hh:mm").toDate();
- 		this.order.set('serviceTime', time);
- 		this.order.save();
+ 		this.model.set('serviceTime', time);
+ 		this.model.save();
  	},
  	commit:function(){
- 		this.order.set('status', 'unconfirmed');
- 		this.order.save();
+ 		this.model.set('status', 'unconfirmed');
+ 		this.model.save();
  		orderRouter.list();
  	}
  });
@@ -508,7 +527,8 @@ var OrderItemView = AV.View.extend({
 	tagName:  "li",
 	template: _.template($('#order-item-tpl').html()),
 	events: {
-		 "click .order-destroy"   : "clear"
+		 "click .order-destroy"   : "clear",
+		 "click .order-edit": "edit"
 	},
 	initialize: function() {
 		_.bindAll(this, 'render',  'remove');
@@ -518,6 +538,12 @@ var OrderItemView = AV.View.extend({
 	render:function(){
 		$(this.el).html(this.template(this.model.toJSON()));
 		return this;
+	},
+	edit:function(){
+		var homeView = new OrderView({model: this.model});
+		homeView.render();
+		$('#order').html(homeView.$el);
+		location.hash='';
 	},
 	clear: function() {
 		this.model.destroy();
@@ -560,6 +586,7 @@ var OrderListView = AV.View.extend({
 
 var OrderRouter = AV.Router.extend({
 	routes:{
+		"order-new":"newOrder",
 		"order-home":"home",
 		"order-list":"list"
 	},
@@ -574,32 +601,45 @@ var OrderRouter = AV.Router.extend({
 		if (this.currentView) {
 			this.currentView.remove();
 		}
-		var peerId = toPeerId;
+		
+		console.log('SWITCH TO VIEW RENDER');
+		view.render();
+		if (!customer){
+			customer = new User;
+		}
+		$('#order').html(view.$el);
 
-		var userQuery = new AV.Query(User);
-		userQuery.equalTo('peerId', peerId);
-		console.log('customer peerId = '+peerId);
-		$('#order').empty();
-		userQuery.first().then(function(user){
-			customer = user;
-			console.log('SWITCH TO VIEW RENDER');
-			view.render();
-			if (!customer){
-				customer = new User;
-			}
-			$('#order').html(view.$el);
-
-			self.currentView = view;
-		});
+		self.currentView = view;
 	},
 	remove:function(){
 		$(this.el).empty().detach();
 	},
+	newOrder:function(){
+		var order = new Order();
+		order.set('user', customer);
+		var newView = new OrderView({model:order});
+		newView.render();
+		$('#order').html(newView.$el);
+		location.hash='';
+	},
 	home:function(){
-		this.switchView(this.homeView);
+ 		query = new AV.Query(Order);
+ 		query.include('car');
+ 		query.include('address');
+ 		query.include('items');
+ 		query.limit(1);
+ 		query.first({
+ 			success:function(order){
+ 				var homeView = new OrderView({model: order});
+ 				homeView.render();
+ 				$('#order').html(homeView.$el)
+ 			}
+ 		});
+ 		location.hash='';
 	},
 	list:function(){
 		this.switchView(this.listView);
+		location.hash='';
 	}
 });
 orderRouter = new OrderRouter();

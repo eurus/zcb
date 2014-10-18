@@ -124,6 +124,10 @@
     padding-left:0;
     border-bottom: 1px solid #ddd;
     border-left: 6px solid transparent;
+
+}
+.user-item .avatar:hover{
+    cursor:pointer;
 }
 .user-item a{
     text-decoration: none;
@@ -139,6 +143,12 @@
     top:14px;
     right:4px;
     font-size:13px;
+}
+.user-item .item .removewatch i{
+    color:transparent;
+}
+.user-item:hover .removewatch i{
+    color:black;
 }
 #peer-box{
     background:#f6f6f6;

@@ -42,7 +42,7 @@
     <div class='col-md-5 full-height'>
         <div class='full-height full-width'>
             <div class='title'>
-                <a href="#order-home" class="pull-left"><i class="fa fa-plus" style='color:white;font-size:16px;padding:2px;'></i></a>
+                <a href="#order-new" class="pull-left"><i class="fa fa-plus" style='color:white;font-size:16px;padding:2px;'></i></a>
                 订单
                 <a href="#order-list" class="pull-right"><i class="fa fa-bars"  style='color:white;font-size:14px;'></i></a>
             </div>
@@ -79,8 +79,8 @@
     <div id="user-tpl">
       <div id='user-{=peerId}' class='user-item pure-g' data-peer-id='{=peerId}'>
         <div class="item">
-          <a href="#"  id="peer-{=peerId}" onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
-              <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
+          <a href="#" class='switch-btn' id="peer-{=peerId}" onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
+              <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'  onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
               <span class='name'>{=nickname}</span>
           </a>
           <i class='badge'></i>
@@ -111,7 +111,9 @@
         <div class='pure-u-1-4' style='text-align:left'>
             <b>状态：{=status}</b>
             <p>金额：{=total_price}</p>
-            <button class="pull-right order-destroy" data-order-id='{=objectId}'><b class='fa fa-remove'></b></button>
+            <button class="pull-right order-destroy" style='font-size:12px;' data-order-id='{=objectId}'><b class='fa fa-remove'></b></button>
+            <button class="pull-right order-edit" style='font-size:12px; margin-top:30px;' data-order-id='{=objectId}'><b class='fa fa-edit'></b></button>
+
         </div>
     </div>
 </script>
@@ -336,7 +338,7 @@
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
 
-            
+
 
             if($('#watchingPeer').val()!=""){
                 watching = $('#watchingPeer').val().split(',');
@@ -479,19 +481,29 @@
         }
         function switchChatTo(peerId){
             toPeerId = peerId;
-            $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
-    // 重新设定选择对话人
-    console.log('set send to '+peerId);
-    $('.user-item-selected').removeClass('user-item-selected');
-    $('#user-'+peerId).addClass('user-item-selected');
-    if (peerId && peerId != ''){
-        $('#peer-box > ul').each(function(){
-            $(this).addClass('hide');
-        })
-        $('#'+peerId).removeClass('hide');
-    }
-    orderRouter.home();
+            var userQuery = new AV.Query(User);
+            userQuery.equalTo('peerId', peerId);
+            console.log('customer peerId = '+peerId);
+            userQuery.first().then(function(user){
+                customer = user;
+                $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
+
+                // select user @ sidebar
+                $('.user-item-selected').removeClass('user-item-selected');
+                $('#user-'+peerId).addClass('user-item-selected');
+
+                // 显示对话框
+                if (peerId && peerId != ''){
+                    $('#peer-box > ul').each(function(){
+                        $(this).addClass('hide');
+                    })
+                    $('#'+peerId).removeClass('hide');
+                }
+
+                orderRouter.home();
+        });
         }
+
         function addWatchingPeer(peers) {
             for (var i = 0; i < peers.length; i++) {
                 if (!peers[i]) {
@@ -510,7 +522,6 @@
                         }
                         var sidebar_li = _.template($('#user-tpl').html())(data);
                         $('#user-list').append(sidebar_li);
-
 
                         if ($('#user-list .user-item-selected').length == 0) {
                             // setSendTo(data.peerId);
