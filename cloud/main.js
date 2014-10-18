@@ -32,7 +32,6 @@ function getCSnames () {
 
 
 AV.Cloud.define('findUserById', function(req, res){
-  // forceLogin(res);
   var id = req.params.uid || '';
   userCon.findUserById(id).then(function(user){
     res.success(user);
@@ -79,7 +78,7 @@ AV.Cloud.define("getOrderList", function(req, res) {
   query.equalTo("user",user);
   query.find({
     success: function(results) {
-      console.log("Successfully retrieved " + results.length + " orders.");
+      console.log(user+"successfully retrieved " + results.length + " orders.");
       res.success(results);
     },
     error: function(error) {
@@ -123,20 +122,33 @@ AV.Cloud.define("getOnlineCustomerService", function(req, res) {
   });    
  });
 });
-
-
+function predicatBy(prop){
+ return function(a,b){
+  if( a[prop] > b[prop]){
+    return 1;
+  }else if( a[prop] < b[prop] ){
+    return -1;
+  }
+  return 0;
+}
+}
 AV.Cloud.define("getPackType", function(req,res) {
   var Package = AV.Object.extend("Package");
   var query = new AV.Query(Package);
   query.find({
-    success: function(results) {
-      all_type = _.map(results,function (v) {
-        return v.get("type");
-      })
-      suc_type = _.uniq(all_type);
-      res.success(suc_type);
-    }
-  })
+    success:function(results) {
+     all_type = _.map(results,function (v) {
+      result = {type: v.get("type"),order: v.get("order")}
+      return result;
+    })
+     sort_list = all_type.sort( predicatBy("order") );  
+     console.log(sort_list);
+     sort_all_type = _.pluck(sort_list, 'type');
+     suc_type = _.uniq(sort_all_type);
+     res.success(suc_type);
+   }
+ });
+
 });
 
 AV.Cloud.define("getchathis", function(req,res) {
