@@ -67,6 +67,10 @@ app.get('/chat', function(req, res) {
 	}
 });
 
+app.get('/store', function(req, res){
+	res.render('store');
+})
+
 app.post('/login', userCon.login);
 app.get('/logout', function (req, res) {
 	AV.User.logOut();

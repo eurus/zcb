@@ -1,0 +1,139 @@
+<div id='layout'>
+    <div class='col-md-8 full-height'>
+        <div class='full-height full-width'>
+            <div class='title'>
+                订单列表
+            </div>
+    <div class='pure-form pure-form-aligned'>
+            <div id='order-list' class='scrollable' >
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Template -->
+
+<script type="text/template" id="order-item-tpl">
+    <div class='pure-control-group'>
+        <div class='pure-u-1'>
+            <label class='pull-left '>订单号<span>{=flowNo}</span></label>
+        </div>
+        <label> 服务时间</label>
+        <span>{=moment(serviceTime).format('YYYY-MM-DD')}</span>
+        <span>{=status}</span>
+        <button class="pull-right btn-done" data-order-id='{=objectId}'><i class="fa fa-cross">完成</i></button>
+    </script>
+
+<script>
+$(function(){
+
+/**
+ * underscore template settings
+ */
+ _.templateSettings = {
+    evaluate    : /{([\s\S]+?)}/g,
+    interpolate : /{=([\s\S]+?)}/g,
+    escape      : /{-([\s\S]+?)}/g
+};
+    AV.$ = jQuery;
+    AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
+        "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb");
+    var User = AV.Object.extend('_User', {
+        defaults:{
+            nickname:'',
+            username:'',
+            password:'',
+            peerId: '',
+            mobile:'',
+            mobileVerified: false
+        }
+    });
+    var Car = AV.Object.extend("Car", {
+        defaults:{
+            make:'',
+            series:'',
+            year:0,
+            plate:'',
+            model:'',
+            volume:''
+        }
+    });
+    var Address = AV.Object.extend("Address", {
+        defaults:{
+            contact:'',
+            detail:'',
+            mobile:'',
+        }
+    });
+
+    var Order = AV.Object.extend("Order",{
+        defaults:{
+            status:'incomplete',
+            cancelReason:'',
+            items:[],
+        // package: '',
+        flowNo: '',
+        car: new Car,
+        address: new Address,
+        serviceTime: new Date()
+        // user:new User
+    },initialize:function(){
+    }
+    });
+
+    var OrderList = AV.Collection.extend({ model: Order });
+
+    var OrderItemView = AV.View.extend({
+        tagName:  "li",
+        template: _.template($('#order-item-tpl').html()),
+        events: {
+           "click .btn-done"   : "complete"
+       },
+       initialize: function() {
+        _.bindAll(this, 'render',  'complete');
+    },
+    render:function(){
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
+    complete: function() {
+        this.model.set('status', 'done')
+        this.model.save();
+        this.render();
+    }
+
+});
+
+
+    var OrderListView = AV.View.extend({
+    el:'',
+    initialize:function(){
+        var self = this;
+        _.bindAll(this, 'addOne', 'addAll',  'render');
+        this.orders = new OrderList;
+        var query = new AV.Query(Order);
+        query.include('car');
+        query.include('address');
+        query.include('items');
+        query.equalTo('status', 'paid')
+        this.orders.query = query;
+        this.orders.bind('reset',   this.addAll);
+    },
+    render:function(){
+        this.orders.fetch();
+        this.delegateEvents();
+    },
+    addOne: function(order) {
+        var view = new OrderItemView({model: order});
+        $("#order-list").append(view.render().el);
+    },
+    addAll: function(orders) {
+        $("#order-list").html("");
+        orders.each(this.addOne);
+    }
+    });
+    var orderList = new OrderListView();
+    orderList.render();
+});
+</script>
