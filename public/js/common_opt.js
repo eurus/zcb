@@ -1,3 +1,6 @@
-function disable(i){
-    $("#rbutton_"+i).prop("disabled",true);
-}
+$(document).ready(function(){
+    $('#sendbtn').prop('disabled',true);
+    $('#msg').keyup(function(){
+        $('#sendbtn').prop('disabled', this.value == "" ? true : false);     
+    })
+});  
