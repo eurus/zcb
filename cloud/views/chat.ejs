@@ -353,6 +353,8 @@
                     $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                 }
                 console.log(JSON.parse(data.msg));
+                console.log("THIS IS FUCKING DATA");
+                console.log(data);
                 appendRecvMsg(data); 
                 switchChatTo(toPeerId);
             });
@@ -402,8 +404,16 @@
                     console.log(data);
                     _.each(data,function (his) {
                         console.log(his);
-                        // appendSendMsg(peerId, content)
-                        // appendRecvMsg(data)
+                        console.log(myPeerId);
+                        if (myPeerId == his.from){
+                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content);
+                        }else{
+                            var data = {
+                                msg:his.data,
+                                fromPeerId:otherPeerId
+                            }
+                           appendRecvMsg(data);
+                        }
                     })
                  }
             });
@@ -543,6 +553,8 @@
         }
 
         function appendRecvMsg(data){
+            console.log('HOLY CRAP');
+            console.log(data);
             receive_msg = JSON.parse(data.msg);
             var from_avatar = data.fromPeerId + "-avatar"
             switch(receive_msg.InfoType) {
