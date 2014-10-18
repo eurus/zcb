@@ -125,6 +125,19 @@ AV.Cloud.define("getOnlineCustomerService", function(req, res) {
 });
 
 
+AV.Cloud.define("getPackType", function(req,res) {
+  var Package = AV.Object.extend("Package");
+  var query = new AV.Query(Package);
+  query.find({
+    success: function(results) {
+      all_type = _.map(results,function (v) {
+        return v.get("type");
+      })
+      suc_type = _.uniq(all_type);
+      res.success(suc_type);
+    }
+  })
+});
 
 AV.Cloud.define("getchathis", function(req,res) {
   console.log(req.params);
