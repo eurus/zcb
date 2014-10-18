@@ -83,6 +83,7 @@
               <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'>
               <span class='name'>{=nickname}</span>
           </a>
+          <i class='badge'></i>
           <a class='removewatch' href='#' data-peer-id='{=peerId}' onclick='removeWatch(this)'><i class='fa fa-remove'></i></a>
       </div>
   </div>
@@ -592,6 +593,14 @@
                 });                   
                 break;
             }             
+            if (data.fromPeerId!=toPeerId){
+                var count = $('#user-'+data.fromPeerId+' .badge').html();
+                console.log('count = '+count);
+                count = parseInt(count) || 1;
+                count += 1;
+                console.log('count after = '+count);
+                $('#user-'+data.fromPeerId+' .badge').html(count); 
+            }
             console.log("str2"+str2);
             $('#'+data.fromPeerId).append(str2);
             scrollToEnd(data.fromPeerId);
