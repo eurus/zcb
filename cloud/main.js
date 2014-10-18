@@ -75,7 +75,7 @@ AV.Cloud.define("getOrderList", function(req, res) {
   query.include("salesman");
   query.include("address");
   query.include("operator");
-
+  query.descending("createdAt");
   query.equalTo("user",user);
   query.find({
     success: function(results) {
