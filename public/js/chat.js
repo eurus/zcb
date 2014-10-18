@@ -29,6 +29,91 @@
  	return (new Date()).getTime();
  }
 
+/*----------------------------------------------------------
+*						MODEL
+* --------------------------------------------------------*/
+var User = AV.Object.extend('_User', {
+	defaults:{
+		nickname:'',
+		username:'',
+		password:'',
+		peerId: '',
+		mobile:'',
+		mobileVerified: false
+	}
+});
+var Car = AV.Object.extend("Car", {
+	defaults:{
+		make:'',
+		series:'',
+		year:0,
+		plate:'',
+		model:'',
+		volume:''
+	}
+});
+
+
+var CarList = AV.Collection.extend({
+	model:Car,
+	initialize:function(){
+	}
+});
+var Address = AV.Object.extend("Address", {
+	defaults:{
+		contact:'',
+		detail:'',
+		mobile:'',
+	}
+});
+
+var AddressList = AV.Collection.extend({ model:Address });
+
+var Store = AV.Object.extend("Store");
+
+var Order = AV.Object.extend("Order",{
+	defaults:{
+		status:'incomplete',
+		cancelReason:'',
+		items:[],
+		// package: '',
+		flowNo: '',
+		car: new Car,
+		address: new Address,
+		serviceTime: new Date()
+		// user:new User
+	},initialize:function(){
+		if (!this.get("user")) {
+			this.set({"user": customer });
+		}
+	},
+	explainStatus:function(){
+		var status = this.get('status');
+		switch(status){
+			case 'incomplete':
+			return '不完整';
+			break;
+
+			case 'unconfirmed':
+			return '未确认';
+			break;
+
+			case 'paid':
+			return '已支付';
+			break;
+
+			case 'done':
+			return '已完成';
+			break;
+
+			case: 'cancel':
+			return '已取消';
+			break;
+		}
+		return "";
+	}
+});
+var OrderList = AV.Collection.extend({ model: Order });
 
 /*----------------------------------------------------------
 *						CHAT
@@ -49,16 +134,6 @@
 /*-------------------------------------------------------------
 							USER
 -------------------------------------------------------------*/
-  	var User = AV.Object.extend('_User', {
-  		defaults:{
-  			nickname:'',
-  			username:'',
-  			password:'',
-  			peerId: '',
-  			mobile:'',
-  			mobileVerified: false
-  		}
-  	});
 
   	var UserView = AV.View.extend({
 			template:_.template($('#user-form-tpl').html()),
@@ -105,22 +180,7 @@
 /*-------------------------------------------------------------
 							CAR
 -------------------------------------------------------------*/
-		var Car = AV.Object.extend("Car", {
-			defaults:{
-				make:'',
-				series:'',
-				year:0,
-				plate:'',
-				model:'',
-				volume:''
-			}
-		});
 
-		var CarList = AV.Collection.extend({
-			model:Car,
-			initialize:function(){
-			}
-		});
 
 		var CarView = AV.View.extend({
 			template:_.template($('#car-tpl').html()),
@@ -296,15 +356,6 @@ var ItemView = AV.View.extend({
 /*-------------------------------------------------------------
 ADDRESS
 -------------------------------------------------------------*/
-var Address = AV.Object.extend("Address", {
-	defaults:{
-		contact:'',
-		detail:'',
-		mobile:'',
-	}
-});
-
-var AddressList = AV.Collection.extend({ model:Address });
 
 var AddressView = AV.View.extend({
 	template:_.template($('#addr-tpl').html()),
@@ -394,33 +445,6 @@ var AddressView = AV.View.extend({
  		this.order.save();
  	}
  });
-/*-------------------------------------------------------------
-STORE
--------------------------------------------------------------*/
-var Store = AV.Object.extend("Store");
-
-/*-------------------------------------------------------------
-ORDER
--------------------------------------------------------------*/
-
- var Order = AV.Object.extend("Order",{
- 	defaults:{
- 		status:'incomplete',
- 		cancelReason:'',
- 		items:[],
-			// package: '',
-			flowNo: '',
-			car: new Car,
-			address: new Address,
-			serviceTime: new Date()
-			// user:new User
-		},initialize:function(){
-			if (!this.get("user")) {
-				this.set({"user": customer });
-			}
-		}
-	});
-var OrderList = AV.Collection.extend({ model: Order });
 
 var OrderView = AV.View.extend({
  	// el:"#order",
@@ -556,7 +580,7 @@ var OrderListView = AV.View.extend({
 		this.$("#order-list").html("");
 		this.orders.each(this.addOne);
 	}
-})
+});
 
 
 var OrderRouter = AV.Router.extend({

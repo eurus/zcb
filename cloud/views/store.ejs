@@ -15,18 +15,21 @@
 <!-- Template -->
 
 <script type="text/template" id="order-item-tpl">
-    <div class='pure-control-group'>
-        <div class='pure-u-1'>
-            <label class='pull-left '>订单号<span>{=flowNo}</span></label>
+    <div class='pure-control-group pure-u-1'>
+        <div class='pure-u-1-2' style='text-align:left'>
+            <b>订单号: {=flowNo}</b>
+            <p> 服务时间: {=moment(serviceTime).format('YYYY-MM-DD')}</p>
         </div>
-        <label> 服务时间</label>
-        <span>{=moment(serviceTime).format('YYYY-MM-DD')}</span>
-        <span>{=status}</span>
-        <button class="pull-right btn-done" data-order-id='{=objectId}'><i class="fa fa-cross">完成</i></button>
-    </script>
+        <div class='pure-u-1-4' style='text-align:left'>
+            <b>状态：{=status}</b>
+            <p>金额：{=total_price}</p>
+            <button class="pull-right btn-done" data-order-id='{=objectId}'>完成</button>
+        </div>
+    </div>
+</script>
 
 <script>
-$(function(){
+    $(function(){
 
 /**
  * underscore template settings
