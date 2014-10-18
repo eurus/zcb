@@ -347,7 +347,8 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
                 if ($('#'+data.fromPeerId))
-                addWatch(data.fromPeerId);
+                    addWatch(data.fromPeerId);
+
                 if ($('to-nickname').text() == ''){
                     $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                 }
@@ -355,20 +356,20 @@
                 appendRecvMsg(data); 
                 switchChatTo(toPeerId);
             });
-chat.on('online', function(peers) {
-    for (var i = 0; i < peers.length; i++) {
-        $('#peer-' + peers[i]).removeClass('offline');
-        $('#peer-' + peers[i]).addClass('online');
-    }
-});
-chat.on('offline', function(peers) {
-    for (var i = 0; i < peers.length; i++) {
-        $('#peer-' + peers[i]).removeClass('online');
-        $('#peer-' + peers[i]).addClass('offline');
-    }
-});
-openSocket();
-});
+            chat.on('online', function(peers) {
+                for (var i = 0; i < peers.length; i++) {
+                    $('#peer-' + peers[i]).removeClass('offline');
+                    $('#peer-' + peers[i]).addClass('online');
+                }
+            });
+            chat.on('offline', function(peers) {
+                for (var i = 0; i < peers.length; i++) {
+                    $('#peer-' + peers[i]).removeClass('online');
+                    $('#peer-' + peers[i]).addClass('offline');
+                }
+            });
+            openSocket();
+        });
         // --------------- 基础 ---------------
         function openSocket(){
             $('#user-list').empty();
@@ -383,12 +384,29 @@ openSocket();
                 _.each(JSON.parse(localStorage[myPeerId]), function(v) {
                     console.log(v);
                     addWatch(v);
+                    console.log("myPeerId"+myPeerId);
+                    console.log('otherPeerId'+v);
+                    addChatHis(myPeerId,v);
                 });
             }
         }, function(err) {
             alert('open failure');
             console.log(err)
         });
+        }
+
+        function addChatHis (myPeerId,otherPeerId) {
+            AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
+                 success: function(data){
+                    console.log("Chat History");
+                    console.log(data);
+                    _.each(data,function (his) {
+                        console.log(his);
+                        // appendSendMsg(peerId, content)
+                        // appendRecvMsg(data)
+                    })
+                 }
+            });
         }
         function closeSocket() {
             chat.close().then(function() {
@@ -404,13 +422,8 @@ openSocket();
                 list  = JSON.parse(localStorage[myPeerId]);
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
-                // console.log('nlist');
-                // console.log(nlist);
                 watching.push(peerId);
                 localStorage[myPeerId] = JSON.stringify(nlist);
-
-                // console.log(localStorage[myPeerId]);
-
                 chat.watch(peerId.split(',')).then(function() {
                 }, function() {
                     alert('watch failure')
@@ -470,6 +483,8 @@ openSocket();
                     return;
                 }
                 localStorage[peers[i]+'-nickname'] = peers[i];
+                var chatBox_div = _.template($('#msg-tpl').html())(data={peerId:peers[i]});
+                $('#peer-box').append(chatBox_div);
                 AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
                     success: function(data){
                         if (typeof data.nickname == 'undefined'){
@@ -479,9 +494,8 @@ openSocket();
                             } 
                         }
                         var sidebar_li = _.template($('#user-tpl').html())(data);
-                        var chatBox_div = _.template($('#msg-tpl').html())(data);
                         $('#user-list').append(sidebar_li);
-                        $('#peer-box').append(chatBox_div);
+
 
                         if ($('#user-list .user-item-selected').length == 0) {
                             // setSendTo(data.peerId);
