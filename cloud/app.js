@@ -46,7 +46,7 @@ app.get('/app/download/android', function(req, res){
 	if (agent.indexOf('MicroMessenger') > 0){
 		res.render('android-weixin');
 	}else{
-		res.redirect('/download/CarAndCoffee.apk');
+		res.redirect('http://eurus.cn/assets/CarAndCoffee.apk');
 	}
 });
 
