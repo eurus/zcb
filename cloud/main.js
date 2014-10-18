@@ -198,8 +198,10 @@ function padLeft(str, length) {
 }
 AV.Cloud.afterSave("Order", function(req,res) {
   query = new AV.Query("Order");
+  query.include("package");
   query.count({
     success: function(count) {
+      console.log(req.object.get("package"));
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
       var save_flowNo = moment().format("YYYYMMDD") + this_flowNo;
@@ -212,4 +214,3 @@ AV.Cloud.afterSave("Order", function(req,res) {
     }
   });
 });
-
