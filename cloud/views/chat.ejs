@@ -335,6 +335,7 @@
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
 
+            
 
             if($('#watchingPeer').val()!=""){
                 watching = $('#watchingPeer').val().split(',');
@@ -350,8 +351,7 @@
             });
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
-                if ($('#'+data.fromPeerId))
-                    addWatch(data.fromPeerId);
+                addWatch(data.fromPeerId);
 
                 if ($('to-nickname').text() == ''){
                     $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
@@ -360,7 +360,7 @@
                 console.log("THIS IS FUCKING DATA");
                 console.log(data);
                 appendRecvMsg(data); 
-                switchChatTo(toPeerId);
+                //switchChatTo(toPeerId);
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
@@ -597,7 +597,7 @@
             scrollToEnd(data.fromPeerId);
 
         }
-        $('#sendbtn').click(function() {
+        function sendReply(){
             origin_msg = $('#msg').val();
             send_msg = {
                 "Content": origin_msg,
@@ -606,7 +606,6 @@
 
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
-
                 appendSendMsg(toPeerId, origin_msg);
                 $('#msg').val('');
 
@@ -614,6 +613,13 @@
                 console.log(err)
                 alert("send failure!!!")
             });
+        }
+        $('#sendbtn').click(sendReply);
+        $('#msg').keypress(function(e){
+               var key = e.which; //e.which是按键的值
+               if (key == 13) {
+                sendReply();
+            }
         });
-</script>
+    </script>
 

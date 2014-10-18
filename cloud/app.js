@@ -33,7 +33,7 @@ app.get('/operator', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-	res.render('index');
+	res.render('index', {layout:'index-layout'});
 });
 
 app.get('/app/download', function(req, res){
@@ -44,7 +44,7 @@ app.get('/app/download/android', function(req, res){
 	agent = req.headers['user-agent']
 	console.log(agent);
 	if (agent.indexOf('MicroMessenger') > 0){
-		res.render('android-weixin');
+		res.render('android-weixin', {layout:'index-layout'});
 	}else{
 		res.redirect('http://eurus.cn/assets/CarAndCoffee.apk');
 	}
