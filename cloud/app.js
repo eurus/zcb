@@ -52,12 +52,14 @@ app.get('/app/download/android', function(req, res){
 		query.first({
 			success: function(object) {
 				console.log(object.get("appfile").url());
+				var url = object.get("appfile").url();
+				res.redirect(url);
 			},
 			error: function(error) {
 				alert("Error: " + error.code + " " + error.message);
 			}
 		});
-		res.redirect('http://eurus.cn/assets/CarAndCoffee.apk');
+		
 	}
 });
 
