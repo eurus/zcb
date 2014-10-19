@@ -158,7 +158,13 @@ AV.Cloud.define("getchathis", function(req,res) {
   console.log(req.params);
   fpid = req.params.frompid;
   tpid = req.params.topid;
-  id_string = fpid+':'+tpid;
+  // var temp;
+  if(fpid < tpid){
+     var id_string = fpid+':'+tpid;
+  }else{
+    var id_string = tpid+':'+fpid;
+  }
+  // id_string = fpid+':'+tpid;
   convid = crypto.createHash('md5').update(id_string).digest('hex');
   console.log(convid);
   limit = 50;
