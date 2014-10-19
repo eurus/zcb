@@ -46,7 +46,20 @@ app.get('/app/download/android', function(req, res){
 	if (agent.indexOf('MicroMessenger') > 0){
 		res.render('android-weixin', {layout:'index-layout'});
 	}else{
-		res.redirect('http://eurus.cn/assets/CarAndCoffee.apk');
+		var Android = AV.Object.extend("Application");
+		var query = new AV.Query(Android);
+		query.equalTo("type", "android");
+		query.first({
+			success: function(object) {
+				console.log(object.get("appfile").url());
+				var url = object.get("appfile").url();
+				res.redirect(url);
+			},
+			error: function(error) {
+				alert("Error: " + error.code + " " + error.message);
+			}
+		});
+		
 	}
 });
 
