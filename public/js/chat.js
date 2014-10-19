@@ -566,10 +566,19 @@ var OrderListView = AV.View.extend({
 	},
 
 	render: function(){
+		if (customer && customer.get('username') && customer.get('username').length > 0){
 		this.$("#order-list").html("");
 		for (var i in this.orders){
 			this.addOne(this.orders[i]);
 		}
+	}else{
+		this.userView = new UserView();
+		this.userView.render();
+		$('#order-panel .title a').remove();
+		$('#order-panel .title').text('新建用户');
+		this.$el.empty();
+		this.$el.append(this.userView.el);
+	}
 	},
 	addOne: function(order){
 		var view = new OrderItemView({model: order});
