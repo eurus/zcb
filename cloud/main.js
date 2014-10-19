@@ -222,7 +222,7 @@ AV.Cloud.beforeSave("Order", function(req,res){
       var lv_three = l_three.substr(l_three.length-3);
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
-      var save_flowNo = moment().format("YYYYMMDDhhmmSSS") + this_flowNo+lv_three;
+      var save_flowNo = moment().format("YYYYMMDDhhmmSSS") + this_flowNo;
       console.log('flow no:'+save_flowNo);
       req.object.set("flowNo",save_flowNo);
 
