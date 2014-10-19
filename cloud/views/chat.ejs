@@ -549,7 +549,7 @@
             console.log('HOLY CRAP');
             console.log(data);
             receive_msg = JSON.parse(data.msg);
-            var from_avatar = data.fromPeerId + "-avatar"
+            var from_avatar = data.fromPeerId + "-avatar";
             switch(receive_msg.InfoType) {
                 case "IMAGE":
                 str2 = _.template($('#image-tpl').html())({
