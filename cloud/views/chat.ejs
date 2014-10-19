@@ -325,7 +325,7 @@
             }
             chat = new AVChatClient({
                 appId: appid,
-                peerId: peerId
+                peerId: myPeerId
             });
             chat.on('close', function() {
                 alert('connection closed')

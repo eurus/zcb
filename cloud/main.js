@@ -198,24 +198,59 @@ function padLeft(str, length) {
     return padLeft("0" + str, length);
 }
 
-AV.Cloud.afterSave("Order", function(req,res) {
+AV.Cloud.beforeSave("Order", function(req,res){
+  var pkg = req.object.get('package');
+  var items = req.object.get('items');
+  console.log('--- pkg ---');
+  console.log(pkg);
+  console.log('--- items ---')
+  console.log(items)
+
   query = new AV.Query("Order");
   query.include("package");
   query.count({
     success: function(count) {
-      console.log(req.object.get("package"));
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
       var save_flowNo = moment().format("YYYYMMDD") + this_flowNo;
+      console.log('flow no:'+save_flowNo);
       req.object.set("flowNo",save_flowNo);
-      req.object.save();
-      console.log(save_flowNo);
+
+      if (typeof pkg != 'undefined'){
+        var q = new AV.Query('Package');
+        q.get(pkg.id, {
+          success:function(pack){
+            var total_price = 0;
+
+            console.log(pack.get('price'));
+            total_price += pack.get('price');
+
+            console.log('after pkg: '+total_price);
+
+            if (typeof items != 'undefined'){
+              console.log(items);
+              var sum = _.reduce(items, function(sum, i){
+                return sum + parseFloat(i.price)*100/100.0;
+              }, 0);
+              console.log('sum = '+sum);
+              total_price += sum;
+            }
+            console.log('after items:' + total_price);
+
+            total_price = parseInt(total_price*100)/100.0;
+            req.object.set('total_price', total_price.toString());
+
+            console.log('total price: '+total_price);
+            res.success();
+          }
+        })
+      }
+      
     },
     error: function(error) {
       throw "Got an error " + error.code + " : " + error.message;
     }
   });
-  updateTotalPrice(req);
 });
 
 function updateTotalPrice(request){
