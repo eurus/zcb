@@ -219,7 +219,7 @@ AV.Cloud.beforeSave("Order", function(req,res){
   query.count({
     success: function(count) {
       var l_three = req.object.id;
-      var lv_three = l_three.substr(l_three.length-3);
+      console.log(l_three);
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
       var save_flowNo = moment().format("YYYYMMDDhhmmSSS") + this_flowNo;
