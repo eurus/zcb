@@ -104,7 +104,7 @@
     <div class='pure-control-group pure-u-1'>
         <div class='pure-u-1-2' style='text-align:left'>
             <b>订单号: {=flowNo}</b>
-            <p> 服务时间: {=moment(serviceTime).format('YYYY-MM-DD')}</p>
+            <p> 服务时间: {=moment(serviceTime.iso).format('YYYY-MM-DD hh:mm') }</p>
         </div>
         <div class='pure-u-1-4' style='text-align:left'>
             <b>状态：{=status}</b>
