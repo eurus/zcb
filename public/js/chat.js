@@ -193,7 +193,6 @@ var OrderList = AV.Collection.extend({ model: Order });
 
 			reset:function(cars){
 				if (!cars || cars.length <= 0){
-					$('#car-ids').trigger('change');
 				}else{
 
 					var carOptionTpl =  _.template($('#car-option-tpl').html());
@@ -210,8 +209,8 @@ var OrderList = AV.Collection.extend({ model: Order });
 					}else{
 						$('#car-ids').val($('#car-ids option:first').val());
 					}
-					$('#car-ids').trigger('change');
 				}
+				$('#car-ids').trigger('change');
 			},
 
 			change:function(e){
@@ -460,7 +459,12 @@ var OrderView = AV.View.extend({
  		this.$el.append(this.itemView.el);
  		this.$el.append(this.otherView);
  		// $('.selectpicker', this.$el).selectpicker();
- 		$('.datetimepicker', this.$el).datetimepicker();
+ 		$('.datetimepicker', this.$el).datetimepicker({
+ 		});
+ 		alert(this.model.get('serviceTime'));
+		alert(moment(this.model.get('serviceTime')).format('YYYY-MM-DD hh:mm'));
+ 		this.$('input[name=serviceTime]').val(moment(this.model.get('serviceTime')).format('YYYY-MM-DD hh:mm'))
+
  		this.delegateEvents();
  		}else{
  			this.userView = new UserView();
@@ -507,7 +511,7 @@ var OrderView = AV.View.extend({
  		this.$el.append(this.addrView.el);
  		this.$el.append(this.itemView.el);
  		this.$el.append(this.otherView);
- 		// $('.selectpicker', this.$el).selectpicker();
+  		// $('.selectpicker', this.$el).selectpicker();
  		$('.datetimepicker', this.$el).datetimepicker();
  		this.delegateEvents();
  	},
