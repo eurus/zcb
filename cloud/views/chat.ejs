@@ -39,12 +39,12 @@
         </div>
     </div>
 
-    <div class='col-md-5 full-height'>
+    <div id='order-panel' class='col-md-5 full-height'>
         <div class='full-height full-width'>
             <div class='title'>
-                <a href="#order-new" class="pull-left"><i class="fa fa-plus" style='color:white;font-size:16px;padding:2px;'></i></a>
+                <!-- <a href="#order-new" class="pull-left"><i class="fa fa-plus" style='color:white;font-size:16px;padding:2px;'></i></a> -->
                 订单
-                <a href="#order-list" class="pull-right"><i class="fa fa-bars"  style='color:white;font-size:14px;'></i></a>
+                <!-- <a href="#order-list" class="pull-right"><i class="fa fa-bars"  style='color:white;font-size:14px;'></i></a> -->
             </div>
             <div id='order' class='scrollable' >
             </div>
@@ -142,8 +142,7 @@
 <script  type='text/template' id="voice-tpl">
     <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
        <img src="{=avatar}" class='img-responsive avatar'></img>
-       <video controls="" autoplay="" name="media">
-        <source src="{=content}" type="audio/mpeg"></video>   
+       <audio src='{=content}' preload='auto'/>
         </li>
     </script>
 
@@ -194,25 +193,14 @@
             <div class="pure-control-group">
                 <label>厂商</label>
                 <input name='make' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>车系</label>
                 <input name='series' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>型号</label>
                 <input name='model' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>排量</label>
                 <input name='volume' type="text">
-            </div>
-
-            <div class="pure-control-group">
                 <label>牌照</label>
                 <input name='plate' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>年份</label>
                 <input name='year' type="number" min='1800'>
             </div>
@@ -224,11 +212,9 @@
     <div id="addr-tpl">
         <div class="pure-form pure-form-aligned zform">
             <div class='banner pure-u-1'>地址信息</div>
-            <div class='pure-control-group'>
                 <select id='addr-ids'>
                     <option value=''>新增地址...</option>
                 </select>
-            </div>
             <div id='addr-info'>
             </div>
         </div>
@@ -250,16 +236,10 @@
             <div class="pure-control-group">
                 <label>地址</label>
                 <input name='detail' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>联系人</label>
                 <input name='contact' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>手机</label>
                 <input name='mobile' type="text">
-            </div>
-            <div class="pure-control-group">
                 <label>固定电话（选填）</label>
                 <input name='tel' type="text">
             </div>
@@ -337,7 +317,7 @@
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
-
+           
 
 
             if($('#watchingPeer').val()!=""){
@@ -491,7 +471,7 @@
                 // select user @ sidebar
                 $('.user-item-selected').removeClass('user-item-selected');
                 $('#user-'+peerId).addClass('user-item-selected');
-
+                $('#user-'+peerId+' .badge').empty();
                 // 显示对话框
                 if (peerId && peerId != ''){
                     $('#peer-box > ul').each(function(){
@@ -614,6 +594,11 @@
             }
             console.log("str2"+str2);
             $('#'+data.fromPeerId).append(str2);
+
+            audiojs.events.ready(function() {
+                var as = audiojs.createAll();
+            });
+
             scrollToEnd(data.fromPeerId);
 
         }

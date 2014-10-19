@@ -613,6 +613,8 @@ var OrderRouter = AV.Router.extend({
 		$(this.el).empty().detach();
 	},
 	newOrder:function(){
+		$('#order-panel .title a').remove();
+		$('#order-panel .title').append("<a href='#order-home' class='pull-right'><i class='fa fa-chevron-right' style='color:white;font-size:16px;padding:2px;'></i></a>");
 		var order = new Order();
 		order.set('user', customer);
 		var newView = new OrderView({model:order});
@@ -621,6 +623,9 @@ var OrderRouter = AV.Router.extend({
 		location.hash='';
 	},
 	home:function(){
+		$('#order-panel .title a').remove();
+		$('#order-panel .title').prepend("<a href='#order-new' class='pull-left'><i class='fa fa-plus' style='color:white;font-size:16px;padding:2px;'></i></a>");
+		$('#order-panel .title').append("<a href='#order-list' class='pull-right'><i class='fa fa-bars' style='color:white;font-size:16px;padding:2px;'></i></a>");
  		query = new AV.Query(Order);
  		query.include('car');
  		query.include('address');
@@ -636,6 +641,8 @@ var OrderRouter = AV.Router.extend({
  		location.hash='';
 	},
 	list:function(){
+		$('#order-panel .title a').remove();
+		$('#order-panel .title').prepend("<a href='#order-home' class='pull-left'><i class='fa fa-chevron-left' style='color:white;font-size:16px;padding:2px;'></i></a>");
 		this.switchView(this.listView);
 		location.hash='';
 	}

@@ -310,3 +310,17 @@
 #order-list li{
     list-style: none;
 }
+
+/*------------------------------------------
+AUDIO JS
+------------------------------------------*/
+.audiojs{
+    width:100%;
+    border-radius:20px;
+}
+.audiojs .scrubber{
+    border-radius:5px;
+}
+.audiojs .play-pause{
+    width:40px;
+}
