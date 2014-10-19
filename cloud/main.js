@@ -164,8 +164,6 @@ AV.Cloud.define("getchathis", function(req,res) {
   }else{
     var id_string = tpid+':'+fpid;
   }
-  id_string = fpid+':'+tpid;
-  console.log(id_string);
   convid = crypto.createHash('md5').update(id_string).digest('hex');
   console.log(convid);
   limit = 30;
@@ -180,7 +178,6 @@ AV.Cloud.define("getchathis", function(req,res) {
   .send(new Buffer([1,2,3]))
   .end(function (response) {
     console.log(response.body);
-    // var reverse_his = _.reduceRight(response.body,function(a,b){return a.concat(b);},[]);
     res.success(response.body.reverse());
   });
 });
