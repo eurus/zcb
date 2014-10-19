@@ -56,6 +56,20 @@ body{
     /* Opera 11.10+ */
     background: -o-linear-gradient(top, #322624, #443836);
 }
+
+.btn-third {
+	background: white;
+	padding:6px 20px;
+	color: #666;
+	border: 1px solid #ddd;
+	border-radius:20px;
+}
+
+.btn-third:hover{
+	color:#adacac;
+	background:#eee;
+}
+
 /* form */
 .pure-form fieldset {
 	padding:0;
@@ -69,6 +83,12 @@ body{
 }
 .pure-form fieldset{
 	text-align: left;
+}
+.zform{
+	padding-bottom:10px;
+}
+.zform .pure-control-group{
+	border:1px solid white;
 }
 .pure-form-aligned .pure-control-group label{
 	width:10em;
@@ -122,6 +142,20 @@ body{
 .input-group-addon i{
 	color:#bcbcbc;
 	font-size:20px;
+}
+.btn-important {
+	border-radius:20px;
+	font-weight:bold;
+	letter-spacing: 1px;
+	padding:6px 20px;
+	color:white;
+	background: rgb(223, 117, 20);
+}
+
+.btn-important:hover{
+	color:#eee;
+	background: rgb(240,120,20);
+	border:1px solid rgb(202, 60, 60);
 }
 .btn-primary{
 	background: #fff100;
@@ -193,6 +227,7 @@ input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[ty
 	width:100%;
 	padding:6px;	
 	position: relative;
+	margin-bottom:5px;
 	background:#efefef;
     /* Firefox 3.6+ */
     background: -moz-linear-gradient(top, #efefef, #e4e3e2);
@@ -203,6 +238,7 @@ input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[ty
     font-size:16px;
     font-weight: normal;
    	border-bottom: 1px solid #d4d3d3; 
+   	border-top: 1px solid #d4d3d3; 
 }
 
 .scrollable .banner .actions{

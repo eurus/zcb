@@ -220,6 +220,7 @@ AV.Cloud.beforeSave("Order", function(req,res){
 
       if (typeof pkg != 'undefined'){
         var q = new AV.Query('Package');
+        console.log('pkg id='+pkg.id);
         q.get(pkg.id, {
           success:function(pack){
             var total_price = 0;
@@ -229,14 +230,7 @@ AV.Cloud.beforeSave("Order", function(req,res){
 
             console.log('after pkg: '+total_price);
 
-            if (typeof items != 'undefined'){
-              console.log(items);
-              var sum = _.reduce(items, function(sum, i){
-                return sum + parseFloat(i.price)*100/100.0;
-              }, 0);
-              console.log('sum = '+sum);
-              total_price += sum;
-            }
+            total_price += sumOfItems(req.object);
             console.log('after items:' + total_price);
 
             total_price = parseInt(total_price*100)/100.0;
@@ -246,6 +240,13 @@ AV.Cloud.beforeSave("Order", function(req,res){
             res.success();
           }
         })
+      }else{
+        total_price = sumOfItems(req.object);
+
+        console.log('after items:' + total_price);
+        total_price = parseInt(total_price*100)/100.0;
+        req.object.set('total_price', total_price.toString());
+        res.success();
       }
       
     },
@@ -254,6 +255,20 @@ AV.Cloud.beforeSave("Order", function(req,res){
     }
   });
 });
+
+function sumOfItems(order){
+  var total_price = 0;
+  var items = order.get('items');
+  if (typeof items != 'undefined'){
+    console.log(items);
+    var sum = _.reduce(items, function(sum, i){
+      return sum + parseFloat(i.price)*100/100.0;
+    }, 0);
+    console.log('sum = '+sum);
+    total_price += sum;
+  }
+  return total_price;
+}
 
 function updateTotalPrice(request){
  console.log("Updated order,the id is :" + request.object.id);
@@ -270,14 +285,8 @@ function updateTotalPrice(request){
     }
     console.log('total price: '+total_price);
 
-    if (typeof items != 'undefined'){
-      console.log(items);
-      var sum = _.reduce(items, function(sum, i){
-        return sum + i.price;
-      }, 0);
-      console.log('sum = '+sum);
-      total_price += sum;
-    }
+    total_price += sumOfItems(order);
+
     total_price = parseInt(total_price*100)/100.0;
     order.set('total_price', total_price.toString());
     console.log('total price: '+total_price);
