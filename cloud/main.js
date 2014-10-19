@@ -196,10 +196,6 @@ function padLeft(str, length) {
   else
     return padLeft("0" + str, length);
 }
-AV.Cloud.beforeSave('Order', function(req, res){
-  console.log(req.object.get('package'));
-
-});
 
 AV.Cloud.afterSave("Order", function(req,res) {
   query = new AV.Query("Order");
