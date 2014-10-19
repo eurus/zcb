@@ -22,7 +22,7 @@ function getCSnames () {
   }).then(function(list){
     var namelist =[];
     for (var i = list.length - 1; i >= 0; i--) {
-      namelist.push(list[i].get("username"));
+      namelist.push(list[i].get("peerId"));
     }; 
     var p = new AV.Promise();
     p.resolve(namelist);
@@ -93,10 +93,11 @@ AV.Cloud.define("getOnlineCustomerService", function(req, res) {
    appId="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34";
    chat = new avchat({
     appId: appId,
-    peerId:'backend-chat-server'
+    peerId:'banana'
   });
 
    chat.open().then(function(data){
+    console.log(namelist);
     chat.getStatus(namelist.toString().split(',')).then(function(data) {
       name =data.onlineSessionPeerIds[Math.floor(Math.random()*data.onlineSessionPeerIds.length)]
       console.log(name);
