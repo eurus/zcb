@@ -465,6 +465,8 @@ var OrderView = AV.View.extend({
  		}else{
  			this.userView = new UserView();
  			this.userView.render();
+ 			$('#order-panel .title a').remove();
+ 			$('#order-panel .title').text('新建用户');
  			this.$el.empty();
 	 		this.$el.append(this.userView.el);
  		}
@@ -518,7 +520,6 @@ var OrderView = AV.View.extend({
  		console.log('commit');
  		console.log(this.model);
  		console.log(JSON.stringify(this.model));
- 		alert('commit');
  		this.model.save();
  		orderRouter.list();
  	}
@@ -542,6 +543,7 @@ var OrderItemView = AV.View.extend({
 	edit:function(){
 		var homeView = new OrderView({model: this.model});
 		$('#order-panel .title a').remove();
+		$('#order-panel .title').text('修改订单: '+this.model.get('flowNo'));
 		$('#order-panel .title').prepend("<a href='#order-new' class='pull-left'><i class='fa fa-plus' style='color:white;font-size:16px;padding:2px;'></i></a>");
 		$('#order-panel .title').append("<a href='#order-list' class='pull-right'><i class='fa fa-bars' style='color:white;font-size:16px;padding:2px;'></i></a>");
 		homeView.render();
@@ -609,7 +611,8 @@ var OrderRouter = AV.Router.extend({
 	},
 	newOrder:function(){
 		$('#order-panel .title a').remove();
-		$('#order-panel .title').append("<a href='#order-home' class='pull-right'><i class='fa fa-chevron-right' style='color:white;font-size:16px;padding:2px;'></i></a>");
+		$('#order-panel .title').text('新建订单');
+		$('#order-panel .title').append("<a href='#order-list' class='pull-right'><i class='fa fa-chevron-right' style='color:white;font-size:16px;padding:2px;'></i></a>");
 		var order = new Order();
 		order.set('user', customer);
 		var newView = new OrderView({model:order});
@@ -619,6 +622,7 @@ var OrderRouter = AV.Router.extend({
 	},
 	home:function(){
 		$('#order-panel .title a').remove();
+		$('#order-panel .title').text('订单');
 		$('#order-panel .title').prepend("<a href='#order-new' class='pull-left'><i class='fa fa-plus' style='color:white;font-size:16px;padding:2px;'></i></a>");
 		$('#order-panel .title').append("<a href='#order-list' class='pull-right'><i class='fa fa-bars' style='color:white;font-size:16px;padding:2px;'></i></a>");
  		var query = new AV.Query(Order);
@@ -637,7 +641,8 @@ var OrderRouter = AV.Router.extend({
 	},
 	list:function(){
 		$('#order-panel .title a').remove();
-		$('#order-panel .title').prepend("<a href='#order-home' class='pull-left'><i class='fa fa-chevron-left' style='color:white;font-size:16px;padding:2px;'></i></a>");
+		$('#order-panel .title').text('订单列表');
+		$('#order-panel .title').prepend("<a href='#order-new' class='pull-left'><i class='fa fa-plus' style='color:white;font-size:16px;padding:2px;'></i></a>");
 
 		query = new AV.Query(Order);
 		query.include('car');
