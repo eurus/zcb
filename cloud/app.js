@@ -64,7 +64,19 @@ app.get('/app/download/android', function(req, res){
 });
 
 app.get('/app/download/ios', function(req, res){
-	res.redirect('/download/ios.html');
+	var IOS = AV.Object.extend("Application");
+	var query = new AV.Query(IOS);
+	query.equalTo("type", "ios");
+	query.first({
+		success: function(object) {
+			console.log(object.get("url"));
+			var url = object.get("url");
+			res.render('ios', {url:url});
+		},
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+	});
 });
 
 app.get('/chat', function(req, res) {
