@@ -213,4 +213,40 @@ AV.Cloud.afterSave("Order", function(req,res) {
       throw "Got an error " + error.code + " : " + error.message;
     }
   });
+  updateTotalPrice(request);
 });
+
+function updateTotalPrice(request){
+ console.log("Updated order,the id is :" + request.object.id);
+ query = new AV.Query("Order");
+ query.include('package');
+ query.include('items');
+ query.get(request.object.id, {
+  success:function(order){
+    var pkg = order.get('package');
+    var items = order.get('items');
+    var total_price = 0;
+    if (typeof pkg != 'undefined'){
+      total_price += pkg.get('price');
+    }
+    console.log('total price: '+total_price);
+
+    if (typeof items != 'undefined'){
+      console.log(items);
+      var sum = _.reduce(items, function(sum, i){
+        return sum + i.price;
+      }, 0);
+      console.log('sum = '+sum);
+      total_price += sum;
+    }
+    total_price = parseInt(total_price*100)/100.0;
+    order.set('total_price', total_price.toString());
+    console.log('total price: '+total_price);
+    order.save();
+  },
+  error:function(e){
+    throw 'got an error' + error.code + ':'+error.message;
+  }
+});
+}
+AV.Cloud.afterUpdate("Order", updateTotalPrice);
