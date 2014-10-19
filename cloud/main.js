@@ -77,6 +77,7 @@ AV.Cloud.define("getOrderList", function(req, res) {
   query.include("operator");
   query.descending("createdAt");
   query.equalTo("user",user);
+  query.notEqualTo("status","incomplete");
   query.find({
     success: function(results) {
       console.log(user+"successfully retrieved " + results.length + " orders.");
@@ -219,7 +220,7 @@ AV.Cloud.beforeSave("Order", function(req,res){
     success: function(count) {
       var this_count = count + 1;
       var this_flowNo = padLeft(this_count,6);
-      var save_flowNo = moment().format("YYYYMMDD") + this_flowNo;
+      var save_flowNo = moment().format("YYYYMMDDhhmmSSS") + this_flowNo;
       console.log('flow no:'+save_flowNo);
       req.object.set("flowNo",save_flowNo);
 
