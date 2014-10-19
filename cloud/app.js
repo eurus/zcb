@@ -51,8 +51,8 @@ app.get('/app/download/android', function(req, res){
 		query.equalTo("type", "android");
 		query.first({
 			success: function(object) {
-				console.log(object.get("appfile").url());
-				var url = object.get("appfile").url();
+				console.log(object.get("url"));
+				var url = object.get("url");
 				res.redirect(url);
 			},
 			error: function(error) {
