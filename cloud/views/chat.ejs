@@ -136,7 +136,7 @@
 </script>
 
 <script  type='text/template' id="voice-tpl">
-    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}'>
        <img src="{=avatar}" class='img-responsive avatar'></img>
        <audio src='{=content}' preload='auto'/>
         </li>
@@ -600,6 +600,10 @@
             console.log("str2"+str2);
             $('#'+data.fromPeerId).append(str2);
 
+            $('.msg.msg-voice > .audiojs').each(function(e){
+                $(this).replaceWith($('audio', $(this)));
+
+            })
             audiojs.events.ready(function() {
                 var as = audiojs.createAll();
             });
