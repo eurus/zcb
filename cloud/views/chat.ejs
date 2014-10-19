@@ -131,7 +131,12 @@
 <script type='text/template' id="image-tpl">
     <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
         <img src="{=avatar}" class='img-responsive avatar'></img>
-        <img class='img-responsive image' src="{=content}" alt="{=peerId}">
+        <div class='msg-content'>
+        <div class='msg-body'>
+                <img class='img-responsive image' src="{=content}" alt="{=peerId}">
+            </div>
+            <div class='arrow'></div>
+        </div>
     </li>
 </script>
 

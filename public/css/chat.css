@@ -247,6 +247,20 @@
     background: url(../img/left-gray-arrow.png) no-repeat;
     z-index:999;
 }
+
+.msg.msg-image.to-me div.arrow{
+    left: -7px;
+    top: 30px;
+}
+
+.msg.msg-image.to-me .image{
+    padding:5px;
+    width:250px;
+    border: 1px solid #AFAFAF;
+    border-radius: 6px;
+    box-shadow: 0px 1px 0px #D5D5D5;
+    border: 1px solid #9f9f9f;
+}
 .msg.to-me span{
     padding: 5px 13px\9;
     padding: 7px 10px;
@@ -300,9 +314,7 @@
 .msg.from-me .avatar{
     right:0px;
 }
-.msg-image .image{
-    width:200px;
-}
+
 
 #order-list{
     padding-left:0;
