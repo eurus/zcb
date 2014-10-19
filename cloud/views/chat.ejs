@@ -90,7 +90,7 @@
 </div>
 
 <div id="msg-tpl">
-    <ul id='{=peerId}' style='overflow-y:scroll'>                      
+    <ul id='{=peerId}' style='overflow-y:scroll' class='hide'>                     
     </ul>   
 </div>
 
@@ -129,8 +129,6 @@
         </div>
     </li>
 </script>
-
-
 
 <script type='text/template' id="image-tpl">
     <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
@@ -334,12 +332,21 @@
             });
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
-                addWatch(data.fromPeerId);
-
-                if ($('to-nickname').text() == ''){
-                    $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
+                if ($('#user-'+data.fromPeerId).length > 0){
+                    if ($('to-nickname').text() == ''){
+                        $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
+                    }
+                    appendRecvMsg(data); 
+                }else{
+                    addWatch(data.fromPeerId).then(function(){
+                        if ($('to-nickname').text() == ''){
+                        $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
+                    }
+                    appendRecvMsg(data); 
+                });
                 }
-                appendRecvMsg(data); 
+
+                
                 
             });
             chat.on('online', function(peers) {
@@ -411,17 +418,18 @@
         //---------------- 1 v 1 聊天相关 ----------------
         function addWatch(peerId){
             if (!_.contains(watching, peerId)){
-                addWatchingPeer(peerId.split(','));
                 console.log(peerId);
                 list  = JSON.parse(localStorage[myPeerId]);
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
                 watching.push(peerId);
                 localStorage[myPeerId] = JSON.stringify(nlist);
+
                 chat.watch(peerId.split(',')).then(function() {
                 }, function() {
                     alert('watch failure')
                 });
+                return addWatchingPeer(peerId.split(','));
             }
         }
         function removeWatch(target){
@@ -489,7 +497,7 @@
                 localStorage[peers[i]+'-nickname'] = peers[i];
                 var chatBox_div = _.template($('#msg-tpl').html())(data={peerId:peers[i]});
                 $('#peer-box').append(chatBox_div);
-                AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
+                return AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
                     success: function(data){
                         if (typeof data.nickname == 'undefined'){
                             data = {
@@ -511,6 +519,7 @@
                             localStorage[data.peerId+'-avatar'] = data.avatarUrl;
                             localStorage[data.peerId+'-nickname'] = data.nickname;
                         }
+                        return AV.Promise();
                     },
                     error: function(err){
                         console.log('oops, there is something wrong.');
@@ -584,7 +593,7 @@
             if (data.fromPeerId!=toPeerId){
                 var count = $('#user-'+data.fromPeerId+' .badge').html();
                 console.log('count = '+count);
-                count = parseInt(count) || 1;
+                count = parseInt(count) || 0;
                 count += 1;
                 console.log('count after = '+count);
                 $('#user-'+data.fromPeerId+' .badge').html(count); 
@@ -601,6 +610,8 @@
         }
         function sendReply(){
             origin_msg = $('#msg').val();
+            if (origin_msg.trim()=='')
+                return ;
             send_msg = {
                 "Content": origin_msg,
                 "InfoType":"TEXT"
