@@ -114,7 +114,7 @@ AV.Cloud.define("getOnlineCustomerService", function(req, res) {
         str2 = Math.random().toString(36).substring(7);
 
         result = {
-          operatorPeerId: name,
+          cspid: name,
           tempPeerId: str1 + str2
         }
         res.success(result);
