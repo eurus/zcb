@@ -164,10 +164,9 @@ AV.Cloud.define("getchathis", function(req,res) {
   }else{
     var id_string = tpid+':'+fpid;
   }
-  // id_string = fpid+':'+tpid;
   convid = crypto.createHash('md5').update(id_string).digest('hex');
   console.log(convid);
-  limit = 50;
+  limit = 30;
   uri = 'https://cn.avoscloud.com/1.1/rtm/messages/logs'
   +'?convid='+convid;
 
@@ -179,7 +178,7 @@ AV.Cloud.define("getchathis", function(req,res) {
   .send(new Buffer([1,2,3]))
   .end(function (response) {
     console.log(response.body);
-    res.success(response.body);
+    res.success(response.body.reverse());
   });
 });
 
