@@ -53,12 +53,15 @@ var Car = AV.Object.extend("Car", {
 	}
 });
 
-
-var CarList = AV.Collection.extend({
-	model:Car,
-	initialize:function(){
+var Package = AV.Object.extend("Package", {
+	defaults:{
 	}
 });
+
+var PackageList = AV.Collection.extend({ model:Package })
+
+var CarList = AV.Collection.extend({ model:Car });
+
 var Address = AV.Object.extend("Address", {
 	defaults:{
 		contact:'',
@@ -417,7 +420,55 @@ var AddressView = AV.View.extend({
  		this.order.save();
  	}
  });
+/*----------------------------------------------------------
+* PACKAGE
+*----------------------------------------------------------*/
+var PackageView = AV.View.extend({
+			template:_.template($('#pkg-tpl').html()),
+			events:{
+				"change #pkg-ids":"change"
+			},
 
+			initialize:function(options){
+				console.log('init pkg view');
+				_.bindAll(this, 'reset');
+				this.order = options.order;
+				this.pkgs = new PackageList;
+				this.pkgs.query = new AV.Query(Package);
+				this.pkgs.bind('reset', this.reset);
+			},
+
+			render:function(){
+				this.$el.html(this.template());
+				this.pkgs.fetch();
+				return this;
+			},
+			addOne: function(pkg){
+				var optionTpl = _.template($('#pkg-option-tpl').html());
+				this.$('#pkg-ids').append(optionTpl(pkg.toJSON()))
+			},
+			reset:function(pkgs){
+				this.$('#pkg-ids').empty();
+				this.$('#pkg-ids').append('<option value=""></option>')
+				this.pkgs.each(this.addOne);
+				this.$('#pkg-ids').val(this.order.get('package').id);
+				// $('#car-ids').trigger('change');
+			},
+			change:function(){
+				var pkgId = this.$('#pkg-ids').val();
+				var pkg = this.pkgs.filter(function(c){
+					if (c.id == pkgId) {
+						return c;
+					} 
+					return null;
+				})[0];
+				if (pkg){
+					this.order.set('package', pkg);
+					this.order.save();
+				}
+			}
+
+ });
 var OrderView = AV.View.extend({
  	// el:"#order",
  	events:{
@@ -443,6 +494,12 @@ var OrderView = AV.View.extend({
  			order:this.model
  		});
 
+ 		this.pkg = this.model.get('package');
+ 		this.pkgView = new PackageView({
+ 			model:this.pkg,
+ 			order:this.model
+ 		})
+
  		this.itemView = new ItemView({
  			order: this.model
  		});	
@@ -450,6 +507,7 @@ var OrderView = AV.View.extend({
  		this.carView.render();
  		this.addrView.render();
  		this.itemView.render();
+ 		this.pkgView.render();
  		this.otherView = _.template($('#other-tpl').html())();
  		// this.otherView.bind("blur input", this.save);
 
@@ -457,12 +515,11 @@ var OrderView = AV.View.extend({
  		this.$el.append(this.carView.el);
  		this.$el.append(this.addrView.el);
  		this.$el.append(this.itemView.el);
+ 		this.$el.append(this.pkgView.el);
  		this.$el.append(this.otherView);
  		// $('.selectpicker', this.$el).selectpicker();
  		$('.datetimepicker', this.$el).datetimepicker({
  		});
- 		alert(this.model.get('serviceTime'));
-		alert(moment(this.model.get('serviceTime')).format('YYYY-MM-DD hh:mm'));
  		this.$('input[name=serviceTime]').val(moment(this.model.get('serviceTime')).format('YYYY-MM-DD hh:mm'))
 
  		this.delegateEvents();
@@ -524,8 +581,11 @@ var OrderView = AV.View.extend({
  		console.log('commit');
  		console.log(this.model);
  		console.log(JSON.stringify(this.model));
- 		this.model.save();
- 		orderRouter.list();
+ 		this.model.save({
+ 			success:function(){
+		 		orderRouter.list();
+ 			}
+ 		});
  	}
  });
 var OrderItemView = AV.View.extend({
@@ -642,6 +702,7 @@ var OrderRouter = AV.Router.extend({
  		query.include('car');
  		query.include('address');
  		query.include('items');
+ 		query.include('package');
  		query.limit(1);
  		query.first({
  			success:function(order){

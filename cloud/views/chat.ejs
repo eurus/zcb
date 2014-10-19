@@ -110,8 +110,8 @@
             <b>状态：{=status}</b>
             <p>金额：{=total_price}</p>
             <button class="pull-right order-destroy" style='font-size:12px;' data-order-id='{=objectId}'><b class='fa fa-remove'></b></button>
+            { if (status == 'incomplete' || status == 'unconfirmed') }
             <button class="pull-right order-edit" style='font-size:12px; margin-top:30px;' data-order-id='{=objectId}'><b class='fa fa-edit'></b></button>
-
         </div>
     </div>
 </script>
@@ -174,11 +174,9 @@
         <div class="pure-form pure-form-aligned zform">
             <!-- cars -->
             <b class='banner pure-u-1'>车辆信息</b>
-            <div class="pure-control-group">
                 <select id="car-ids" class='selectpicker'>
                     <option value=''>新增车辆…</option>
                 </select> 
-            </div>
             <div id='car-info'>
             </div>
         </div>
@@ -204,6 +202,7 @@
         <button id='save-car' class='btn btn-save btn-secondary'> 保存</button>
         <button id="cancel-car" class='btn btn-cancel btn-third'>取消</button>
     </div>
+    <!-- END OF Car -->
 
     <div id="addr-tpl">
         <div class="pure-form pure-form-aligned zform">
@@ -244,6 +243,7 @@
         <button class='btn btn-save btn-secondary'> 保存</button>
         <button class='btn btn-cancel btn-third'>取消</button>
     </div>
+    <!-- END OF Address -->
 
     <div id="item-tpl">
         <div class="pure-form pure-form-aligned zform">
@@ -293,6 +293,21 @@
         </div>
     </div>
     <!-- end -->
+
+    <div id="pkg-tpl">
+        <div class="pure-form pure-form-aligned zform">
+            <!-- cars -->
+            <b class='banner pure-u-1'>套餐信息</b>
+            <select id="pkg-ids" class='selectpicker'>
+            </select> 
+        </div>
+    </div>
+
+    <div id="pkg-option-tpl">
+        <option value='{=objectId}'>{=type} {=title} {=price}元</option>
+    </div>
+
+
 </div>
 </div>
 </div>

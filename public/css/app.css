@@ -96,9 +96,13 @@ body{
 .pure-form-aligned .pure-control-group label:after{
 	content: ":";
 }
-.pure-form-aligned .pure-control-group input, .pure-form-aligned .pure-control-group select{
+.pure-form-aligned .pure-control-group input {
 	width:60%;
 	margin:5px;
+}
+.pure-form-aligned .pure-control-group select{
+	margin:5px;
+	width:auto;
 }
 .pure-form-aligned .pure-control-group button{
 	position: absolute;
