@@ -359,11 +359,8 @@
                 if ($('to-nickname').text() == ''){
                     $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                 }
-                console.log(JSON.parse(data.msg));
-                console.log("THIS IS FUCKING DATA");
-                console.log(data);
                 appendRecvMsg(data); 
-                //switchChatTo(toPeerId);
+                
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
