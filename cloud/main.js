@@ -104,22 +104,16 @@ AV.Cloud.define("getOnlineCustomerService", function(req, res) {
       console.log( data);
       name =data.onlineSessionPeerIds[Math.floor(Math.random()*data.onlineSessionPeerIds.length)]
       console.log(name);
-      if(temp == "n") {
-        result = {
-          cspid: name
-        }
-        res.success(result);
-      } else {
-        n = (new Date()).getTime();
-        str1 = n + "";
-        str2 = Math.random().toString(36).substring(7);
+      n = (new Date()).getTime();
+      str1 = n + "";
+      str2 = Math.random().toString(36).substring(7);
 
-        result = {
-          operatorPeerId: name,
-          tempPeerId: str1 + str2
-        }
-        res.success(result);
+      result = {
+        cspid: name,
+        operatorPeerId: name,
+        tempPeerId: str1 + str2
       }
+      res.success(result);
     });
   },function(data){
     console.log('open rejected',data);
