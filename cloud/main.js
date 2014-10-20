@@ -298,7 +298,8 @@ function updateTotalPrice(request){
     total_price = parseInt(total_price*100)/100.0;
     order.set('total_price', total_price.toString());
     console.log('total price: '+total_price);
-    order.save();
+    if (total_price != request.object.get('total_price'))
+      order.save();
   },
   error:function(e){
     throw 'got an error' + error.code + ':'+error.message;
