@@ -408,7 +408,27 @@
         });
         }
         function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
-            //todo
+            AV.Cloud.run("getchathis", {frompid:myPeerId,
+                                        topid:otherPeerId,
+                                        limit:limit}, {
+                 success: function(data){
+                    console.log("Chat History");
+                    console.log(data);
+                    _.each(data,function (his) {
+                        console.log(his);
+                        console.log(myPeerId);
+                        if (myPeerId == his.from){
+                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content);
+                        }else{
+                            var data = {
+                                msg:his.data,
+                                fromPeerId:otherPeerId
+                            }
+                           appendRecvMsg(data);
+                        }
+                    })
+                 }
+            });
         }
         function addChatHis (myPeerId,otherPeerId) {
             AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
