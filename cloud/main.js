@@ -199,7 +199,7 @@
       var sort = _.sortBy(r, function (a) {
         return a.timestamp;
       })
-      res.success(sort);  
+      res.success(sort.reverse());  
       })
   });
 
