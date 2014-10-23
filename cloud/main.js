@@ -194,7 +194,8 @@
           var sort = _.sortBy(results, function (a) {
             return a.timestamp;
           })
-          console.log(sort);       
+          console.log(sort);     
+          res.success(sort);  
         });
         
 
