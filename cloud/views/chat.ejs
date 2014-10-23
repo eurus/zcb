@@ -26,6 +26,7 @@
 
             </div>
             <div id='peer-box' class='scrollable' style='overflow:auto'>
+                <p><button id=‘loadMore’>加载更多聊天记录</button></p>
             </div>
 
             <div class='footer form'>
@@ -124,6 +125,7 @@
                 <span>{=content}</span>
             </span>
             <div class='arrow' > </div>
+            <div class="hidden">{=timestamp}</div>
         </div>
     </li>
 </script>
@@ -136,6 +138,7 @@
                 <img class='img-responsive image' src="{=content}" alt="{=peerId}">
             </div>
             <div class='arrow'></div>
+            <div class="hidden">{=timestamp}</div>
         </div>
     </li>
 </script>
@@ -144,6 +147,7 @@
     <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}'>
        <img src="{=avatar}" class='img-responsive avatar'></img>
        <audio src='{=content}' preload='auto'/>
+       <div class="hidden">{=timestamp}</div>
         </li>
     </script>
 
@@ -392,8 +396,6 @@
                 if(localStorage.getItem(myPeerId) === null){
                    localStorage[myPeerId] = JSON.stringify(watching);
                }else{
-                // console.log('start');
-                // console.log(JSON.parse(localStorage[myPeerId]));
                 _.each(JSON.parse(localStorage[myPeerId]), function(v) {
                     console.log(v);
                     addWatch(v);
@@ -415,14 +417,13 @@
                     console.log("Chat History");
                     console.log(data);
                     _.each(data,function (his) {
-                        console.log(his);
-                        console.log(myPeerId);
                         if (myPeerId == his.from){
-                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content);
+                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
                         }else{
                             var data = {
                                 msg:his.data,
-                                fromPeerId:otherPeerId
+                                fromPeerId:otherPeerId,
+                                timestamp:his.timestamp
                             }
                            appendRecvMsg(data);
                         }
@@ -433,17 +434,16 @@
         function addChatHis (myPeerId,otherPeerId) {
             AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
                  success: function(data){
-                    console.log("Chat History");
-                    console.log(data);
                     _.each(data,function (his) {
                         console.log(his);
                         console.log(myPeerId);
                         if (myPeerId == his.from){
-                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content);
+                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
                         }else{
                             var data = {
                                 msg:his.data,
-                                fromPeerId:otherPeerId
+                                fromPeerId:otherPeerId,
+                                timestamp:his.timestamp
                             }
                            appendRecvMsg(data);
                         }
@@ -583,12 +583,13 @@
             }
         }
 
-        function appendSendMsg(peerId, content){
+        function appendSendMsg(peerId, content,timestamp){
             // 这里是发送的消息append
             str = _.template($('#text-tpl').html())({
                 peerId:peerId,
                 content:content,
                 avatar: localStorage[myPeerId+'-avatar'],
+                timestamp:timestamp,
                 klass:'from-me'
             });
             var elem = $(str);
@@ -598,8 +599,8 @@
 
         function appendRecvMsg(data){
             console.log('HOLY CRAP');
-            console.log(data);
             receive_msg = JSON.parse(data.msg);
+
             var from_avatar = data.fromPeerId + "-avatar";
             switch(receive_msg.InfoType) {
                 case "IMAGE":
@@ -607,6 +608,7 @@
                     peerId: data.fromPeerId,
                     content: receive_msg.Content,
                     avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
+                    timestamp: data.timestamp,
                     klass:'to-me'
                 });
 
@@ -618,6 +620,7 @@
                     peerId: data.fromPeerId,
                     content: receive_msg.Content,
                     avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
+                    timestamp: data.timestamp,
                     klass:'to-me'
                 });
                 break;
@@ -628,6 +631,7 @@
                     peerId: data.fromPeerId,
                     content: receive_msg.Content,
                     avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
+                    timestamp: data.timestamp,
                     klass:'to-me'
                 });                   
                 break;
@@ -665,7 +669,7 @@
 
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
-                appendSendMsg(toPeerId, origin_msg);
+                appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
 
             }, function(err) {
