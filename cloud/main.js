@@ -6,7 +6,7 @@
   var userCon = require('cloud/user.js');
   var zutil = require('cloud/zutil.js');
   var _=require('underscore');
-
+    var result = [];
   function forceLogin(res){
     if (!userCon.isLogin()){
       res.error('please login');
@@ -172,35 +172,35 @@
       }   
     });
     console.log(uri_list);
-    _.reduce(uri_list,function (a,b) {
-      unirest.get(a)
+
+
+    
+    var promises = _.map(uri_list,function (b) {
+    var p = new AV.Promise;
+
+      unirest.get(b)
       .headers({ 
         "X-AVOSCloud-Application-Id":" za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
         "X-AVOSCloud-Application-Key": "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb"
       })
       .send(new Buffer([1,2,3]))
       .end(function (response) {
-        left = response.body;
-
-        unirest.get(b)
-        .headers({ 
-          "X-AVOSCloud-Application-Id":" za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
-          "X-AVOSCloud-Application-Key": "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb"
-        })
-        .send(new Buffer([1,2,3]))
-        .end(function (response) {
-          var right = response.body;
-          var results = left.concat(right);
-          var sort = _.sortBy(results, function (a) {
-            return a.timestamp;
-          })
-          console.log(sort);     
-          res.success(sort);  
-        });
-        
-
+        console.log(response.body)
+        p.resolve(response.body);
+        result = result.concat(response.body);
+        //response.body;
       });
-    })
+      return p;
+    });
+
+    AV.Promise.when(promises).then(function(r){
+      console.log(r.length);
+      console.log(r);
+      var sort = _.sortBy(r, function (a) {
+        return a.timestamp;
+      })
+      res.success(sort);  
+      })
   });
 
   AV.Cloud.define("GetChatHistory", function(req,res) {
