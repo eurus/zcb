@@ -155,6 +155,7 @@
     tpid = req.params.topid;
     limit = req.params.limit || 30;
     timestamp = req.params.timestamp || moment().utc().valueOf();
+    console.log(timestamp);
     if(fpid < tpid){
        var id_string = fpid+':'+tpid;
     }else{

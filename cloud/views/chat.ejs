@@ -27,7 +27,20 @@
 
             </div>
             <div id='peer-box' class='scrollable' style='overflow:auto'>
-                <p><button id=‘loadMore’>加载更多聊天记录</button></p>
+                <p><button id="loadMore">加载更多聊天记录</button></p>
+                <script>
+                    $('#loadMore').click(function (a) {
+                        var peerId = $('.user-item-selected').attr('data-peer-id');
+                        var ulist = $(this).parent().parent();
+                        var timestamp = $('#'+peerId+' li:first').data('timestamp');
+
+                        console.log(peerId);
+                        console.log(timestamp);
+                        loadChatHis(myPeerId,peerId,30,timestamp);
+
+
+                    });
+                </script>
             </div>
 
             <div class='footer form'>
@@ -119,7 +132,7 @@
 </script>
 
 <script  type='text/template' id="text-tpl">
-    <li class='msg msg-text {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-text {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
         <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
             <span class='msg-body'>
@@ -132,7 +145,7 @@
 </script>
 
 <script type='text/template' id="image-tpl">
-    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
         <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
         <div class='msg-body'>
@@ -145,7 +158,7 @@
 </script>
 
 <script  type='text/template' id="voice-tpl">
-    <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
        <img src="{=avatar}" class='img-responsive avatar'></img>
        <audio src='{=content}' preload='auto'/>
        <div class="hidden">{=timestamp}</div>
@@ -410,48 +423,7 @@
             console.log(err)
         });
         }
-        function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
-            AV.Cloud.run("getchathis", {frompid:myPeerId,
-                                        topid:otherPeerId,
-                                        limit:limit}, {
-                 success: function(data){
-                    console.log("Chat History");
-                    console.log(data);
-                    _.each(data,function (his) {
-                        if (myPeerId == his.from){
-                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
-                        }else{
-                            var data = {
-                                msg:his.data,
-                                fromPeerId:otherPeerId,
-                                timestamp:his.timestamp
-                            }
-                           appendRecvMsg(data);
-                        }
-                    })
-                 }
-            });
-        }
-        function addChatHis (myPeerId,otherPeerId) {
-            AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
-                 success: function(data){
-                    _.each(data,function (his) {
-                        console.log(his);
-                        console.log(myPeerId);
-                        if (myPeerId == his.from){
-                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
-                        }else{
-                            var data = {
-                                msg:his.data,
-                                fromPeerId:otherPeerId,
-                                timestamp:his.timestamp
-                            }
-                           appendRecvMsg(data);
-                        }
-                    })
-                 }
-            });
-        }
+        
         function closeSocket() {
             chat.close().then(function() {
                 $('#connect-status').text('not connected');

@@ -1,3 +1,44 @@
+function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
+    AV.Cloud.run("getchathis", {frompid:myPeerId,
+                                topid:otherPeerId,
+                                limit:limit,
+                                timestamp:timestamp}, {
+         success: function(data){
+            _.each(data,function (his) {
+                if (myPeerId == his.from){
+                  prependSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
+                }else{
+                    var data = {
+                        msg:his.data,
+                        fromPeerId:otherPeerId,
+                        timestamp:his.timestamp
+                    }
+                   prependRecvMsg(data);
+                }
+            })
+         }
+    });
+}
+function addChatHis (myPeerId,otherPeerId) {
+    AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
+         success: function(data){
+            _.each(data,function (his) {
+                console.log(his);
+                console.log(myPeerId);
+                if (myPeerId == his.from){
+                  appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
+                }else{
+                    var data = {
+                        msg:his.data,
+                        fromPeerId:otherPeerId,
+                        timestamp:his.timestamp
+                    }
+                   appendRecvMsg(data);
+                }
+            })
+         }
+    });
+}
 //append msg for init msg
 function appendSendMsg(peerId, content,timestamp){
     // 这里是发送的消息append
@@ -60,7 +101,7 @@ function appendRecvMsg(data){
         console.log('count after = '+count);
         $('#user-'+data.fromPeerId+' .badge').html(count); 
     }
-    console.log("str2"+str2);
+    // console.log("str2"+str2);
     $('#'+data.fromPeerId).append(str2);
 
     $('.msg.msg-voice > .audiojs').each(function(e){
@@ -86,11 +127,10 @@ function prependSendMsg(peerId, content,timestamp){
         klass:'from-me'
     });
     var elem = $(str);
-    $('#'+peerId).append(elem);
+    $('#'+peerId).prepend(elem);
 }
 
 function prependRecvMsg(data){
-    console.log('HOLY CRAP');
     receive_msg = JSON.parse(data.msg);
 
     var from_avatar = data.fromPeerId + "-avatar";
@@ -136,8 +176,8 @@ function prependRecvMsg(data){
         console.log('count after = '+count);
         $('#user-'+data.fromPeerId+' .badge').html(count); 
     }
-    console.log("str2"+str2);
-    $('#'+data.fromPeerId).append(str2);
+    // console.log("str2"+str2);
+    $('#'+data.fromPeerId).prepend(str2);
 
     $('.msg.msg-voice > .audiojs').each(function(e){
         $(this).replaceWith($('audio', $(this)));
