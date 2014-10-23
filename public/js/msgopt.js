@@ -1,20 +1,20 @@
 function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
-    AV.Cloud.run("CsToPeerHistory", {cus:myPeerId,
+    AV.Cloud.run("CsToPeerHistory", {cus:otherPeerId,
                                 peers:['service1','service2','service3','service4'],
                                 limit:limit,
                                 timestamp:timestamp,
                                 reverse:'yes'}, {
          success: function(data){
             _.each(data,function (his) {
-                if (myPeerId == his.from){
-                  prependSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
-                }else{
+                if(otherPeerId == his.from){
                     var data = {
                         msg:his.data,
                         fromPeerId:otherPeerId,
                         timestamp:his.timestamp
                     }
                    prependRecvMsg(data);
+                }else{
+                    prependSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
                 }
             })
          }
