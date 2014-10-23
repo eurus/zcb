@@ -2,7 +2,8 @@ function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
     AV.Cloud.run("getchathis", {frompid:myPeerId,
                                 topid:otherPeerId,
                                 limit:limit,
-                                timestamp:timestamp}, {
+                                timestamp:timestamp,
+                                reverse:'yes'}, {
          success: function(data){
             _.each(data,function (his) {
                 if (myPeerId == his.from){

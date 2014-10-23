@@ -151,6 +151,7 @@
 
   AV.Cloud.define("getchathis", function(req,res) {
     console.log(req.params);
+    reverse = req.params.reverse;
     fpid = req.params.frompid;
     tpid = req.params.topid;
     limit = req.params.limit || 30;
@@ -174,7 +175,12 @@
     .send(new Buffer([1,2,3]))
     .end(function (response) {
       console.log(response.body.length);
-      res.success(response.body.reverse());
+      if(reverse == 'yes'){
+        res.success(response.body);
+      }else{
+        res.success(response.body.reverse());
+      }
+      
     });
   });
 
