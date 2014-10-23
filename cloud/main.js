@@ -148,8 +148,61 @@
    });
 
   });
+  AV.Cloud.define("CsToPeerHistory", function (req,res) {
+    var cus = req.params.cus;
+    var plist = req.params.peers;
+    var reverse = req.params.reverse;
+    var limit = req.params.limit || 30;
+    var timestamp = req.params.timestamp || moment().utc().valueOf();
+    console.log(cus);
+    console.log(plist);
+    var uri_list = _.map(plist, function(peer){ 
+      var id_string;
+      if(cus < peer){
+        id_string = cus+":"+peer; 
+        convid = crypto.createHash('md5').update(id_string).digest('hex');
+        return uri = 'https://cn.avoscloud.com/1.1/rtm/messages/logs'
+        +'?convid='+convid+'&limit='+limit+'&timestamp='+timestamp;
+      }else{
+        id_string = peer+":"+cus; 
+        convid = crypto.createHash('md5').update(id_string).digest('hex');
+        return uri = 'https://cn.avoscloud.com/1.1/rtm/messages/logs'
+        +'?convid='+convid+'&limit='+limit+'&timestamp='+timestamp;
 
-  AV.Cloud.define("getchathis", function(req,res) {
+      }   
+    });
+    console.log(uri_list);
+    _.reduce(uri_list,function (a,b) {
+      unirest.get(a)
+      .headers({ 
+        "X-AVOSCloud-Application-Id":" za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
+        "X-AVOSCloud-Application-Key": "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb"
+      })
+      .send(new Buffer([1,2,3]))
+      .end(function (response) {
+        left = response.body;
+
+        unirest.get(b)
+        .headers({ 
+          "X-AVOSCloud-Application-Id":" za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
+          "X-AVOSCloud-Application-Key": "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb"
+        })
+        .send(new Buffer([1,2,3]))
+        .end(function (response) {
+          var right = response.body;
+          var results = left.concat(right);
+          var sort = _.sortBy(results, function (a) {
+            return a.timestamp;
+          })
+          console.log(sort);       
+        });
+        
+
+      });
+    })
+  });
+
+  AV.Cloud.define("GetChatHistory", function(req,res) {
     console.log(req.params);
     reverse = req.params.reverse;
     fpid = req.params.frompid;

@@ -1,6 +1,6 @@
 function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
-    AV.Cloud.run("getchathis", {frompid:myPeerId,
-                                topid:otherPeerId,
+    AV.Cloud.run("CsToPeerHistory", {cus:myPeerId,
+                                peers:['service1','service2','service3','service4'],
                                 limit:limit,
                                 timestamp:timestamp,
                                 reverse:'yes'}, {
@@ -21,7 +21,7 @@ function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
     });
 }
 function addChatHis (myPeerId,otherPeerId) {
-    AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
+    AV.Cloud.run("GetChatHistory", {frompid:myPeerId,topid:otherPeerId}, {
          success: function(data){
             _.each(data,function (his) {
                 console.log(his);
