@@ -12,10 +12,19 @@
     li.new-order i{
         color:#fff100;
     }
+    li.selected{
+        background:#eee;
+    }
+    li.selected i{
+        color:#eee;
+    }
     .mid-cell{
         display:table-cell;
         vertical-align: middle;
         text-align: right;
+    }
+    .btn-cancel i{
+        color:white;
     }
     .show-order i{
         margin:auto auto;
@@ -87,7 +96,7 @@
             <p> 服务时间: {=moment(serviceTime).format('YYYY-MM-DD hh:mm')}</p>
         </div>
         <div class='pure-u-1-4' style='text-align:left'>
-            <b>状态：{=status}</b>
+            <b class='status'>状态：{=status}</b>
             <p>金额：{=total_price}</p>
         </div>
         <div class='mid-wrapper full-height pure-u-1-4 actions' >
@@ -313,11 +322,16 @@
                 $('#order-detail').html(detailView.render().el);
             }
             this.$el.removeClass('new-order');
+            $('#order-list li.selected').removeClass('selected');
+            this.$el.addClass('selected')
         }
     });
 
 var OrderDetailView = AV.View.extend({
     el:'',
+    events:{
+        'click .btn-cancel':'cancel'
+    },
     initialize:function(){
         this.$el.html();
     },
@@ -332,6 +346,12 @@ var OrderDetailView = AV.View.extend({
             });
         }
         return this;
+    },
+    cancel:function(){
+        this.model.set('status', 'cancel');
+        this.model.save();
+        $('.btn-cancel', this.$el).remove();
+        $('#order-list div[data-order-id='+this.model.id+'] b.status').text('状态：'+this.model.get('status'));
     }
 })
 
@@ -412,7 +432,7 @@ var OrderDetailView = AV.View.extend({
         query.include('items');
         query.equalTo('status', status);
         query.descending('updatedAt');
-        
+        $('#order-detail').empty();
         query.find({
             success:function(orders){
                 console.log(orders);
