@@ -14,25 +14,44 @@
     defaults: {
       // avatar: 'img/user1.png'
     }});
+ 	var Check = AV.Object.extend('CheckList');
+
  	var UserList = AV.Collection.extend({
  		model: User
  	});
-
- 	var UserItemView = AV.View.extend({
- 		tagName:  "div",
- 		template: _.template($('#user-tpl').html()),
+ 	var CheckView = AV.View.extend({
+ 		tagName: "div",
+ 		template: _.template($('#checklist-tpl').html()),
  		events: {
 
  		},
  		initialize: function() {
  			_.bindAll(this, 'render');
  		},
+ 		render: function() {
+ 			this.$el.html(this.template(this.model.toJSON));
+ 			$('#order').html(this.el);
+ 			return this;
+ 		}
+ 	});
+
+ 	var UserItemView = AV.View.extend({
+ 		tagName:  "div",
+ 		template: _.template($('#user-tpl').html()),
+ 		events: {
+ 			'click .item': 'showCheckList'
+ 		},
+ 		initialize: function() {
+ 			_.bindAll(this, 'render');
+ 		},
  		render:function(){
- 			// console.log(this.model);
- 			// console.log(this.model.toJSON());
  			this.$el.html(this.template(this.model.toJSON()));
  			return this;
  		},
+ 		showCheckList: function() {
+ 			var checkView = new CheckView({model: Check});
+ 			checkView.render();
+ 		}
  	});
  	var UserListView = AV.View.extend({
  		el: '',
