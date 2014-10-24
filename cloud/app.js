@@ -37,7 +37,16 @@ app.get('/', function(req, res) {
 });
 
 app.get('/man',function(req,res) {
-	res.render('manpage');
+		if (userCon.isLogin()){
+		userCon.findUserById(AV.User.current().id).then(function(user){
+			console.log(user);
+			res.render('manpage', {user: user});
+		}, function(){
+			res.redirect('/man');
+		})
+	}else{
+		res.redirect('/operator');
+	}
 });
 
 app.get('/app/download', function(req, res){
