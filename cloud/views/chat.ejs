@@ -1,4 +1,5 @@
 <script src="js/chat.js"></script>
+<script src="js/msgopt.js"></script>
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
@@ -26,6 +27,20 @@
 
             </div>
             <div id='peer-box' class='scrollable' style='overflow:auto'>
+                <p><button id="loadMore">加载更多聊天记录</button></p>
+                <script>
+                    $('#loadMore').click(function (a) {
+                        var peerId = $('.user-item-selected').attr('data-peer-id');
+                        var ulist = $(this).parent().parent();
+                        var timestamp = $('#'+peerId+' li:first').data('timestamp');
+
+                        console.log(peerId);
+                        console.log(timestamp);
+                        loadChatHis(myPeerId,peerId,30,timestamp);
+
+
+                    });
+                </script>
             </div>
 
             <div class='footer form'>
@@ -117,33 +132,36 @@
 </script>
 
 <script  type='text/template' id="text-tpl">
-    <li class='msg msg-text {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-text {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
         <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
             <span class='msg-body'>
                 <span>{=content}</span>
             </span>
             <div class='arrow' > </div>
+            <div class="hidden">{=timestamp}</div>
         </div>
     </li>
 </script>
 
 <script type='text/template' id="image-tpl">
-    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-image {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
         <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
         <div class='msg-body'>
                 <img class='img-responsive image' src="{=content}" alt="{=peerId}">
             </div>
             <div class='arrow'></div>
+            <div class="hidden">{=timestamp}</div>
         </div>
     </li>
 </script>
 
 <script  type='text/template' id="voice-tpl">
-    <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}'>
+    <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
        <img src="{=avatar}" class='img-responsive avatar'></img>
        <audio src='{=content}' preload='auto'/>
+       <div class="hidden">{=timestamp}</div>
         </li>
     </script>
 
@@ -392,8 +410,6 @@
                 if(localStorage.getItem(myPeerId) === null){
                    localStorage[myPeerId] = JSON.stringify(watching);
                }else{
-                // console.log('start');
-                // console.log(JSON.parse(localStorage[myPeerId]));
                 _.each(JSON.parse(localStorage[myPeerId]), function(v) {
                     console.log(v);
                     addWatch(v);
@@ -407,28 +423,7 @@
             console.log(err)
         });
         }
-
-        function addChatHis (myPeerId,otherPeerId) {
-            AV.Cloud.run("getchathis", {frompid:myPeerId,topid:otherPeerId}, {
-                 success: function(data){
-                    console.log("Chat History");
-                    console.log(data);
-                    _.each(data,function (his) {
-                        console.log(his);
-                        console.log(myPeerId);
-                        if (myPeerId == his.from){
-                          appendSendMsg(otherPeerId, JSON.parse(his.data).Content);
-                        }else{
-                            var data = {
-                                msg:his.data,
-                                fromPeerId:otherPeerId
-                            }
-                           appendRecvMsg(data);
-                        }
-                    })
-                 }
-            });
-        }
+        
         function closeSocket() {
             chat.close().then(function() {
                 $('#connect-status').text('not connected');
@@ -561,77 +556,7 @@
             }
         }
 
-        function appendSendMsg(peerId, content){
-            // 这里是发送的消息append
-            str = _.template($('#text-tpl').html())({
-                peerId:peerId,
-                content:content,
-                avatar: localStorage[myPeerId+'-avatar'],
-                klass:'from-me'
-            });
-            var elem = $(str);
-            $('#'+peerId).append(elem);
-            scrollToEnd(peerId);
-        }
-
-        function appendRecvMsg(data){
-            console.log('HOLY CRAP');
-            console.log(data);
-            receive_msg = JSON.parse(data.msg);
-            var from_avatar = data.fromPeerId + "-avatar";
-            switch(receive_msg.InfoType) {
-                case "IMAGE":
-                str2 = _.template($('#image-tpl').html())({
-                    peerId: data.fromPeerId,
-                    content: receive_msg.Content,
-                    avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
-                    klass:'to-me'
-                });
-
-                break;
-
-                case "VOICE":
-
-                str2 = _.template($('#voice-tpl').html())({
-                    peerId: data.fromPeerId,
-                    content: receive_msg.Content,
-                    avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
-                    klass:'to-me'
-                });
-                break;
-
-                case "TEXT":
-
-                str2 = _.template($('#text-tpl').html())({
-                    peerId: data.fromPeerId,
-                    content: receive_msg.Content,
-                    avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
-                    klass:'to-me'
-                });                   
-                break;
-            }             
-            if (data.fromPeerId!=toPeerId){
-                var count = $('#user-'+data.fromPeerId+' .badge').html();
-                console.log('count = '+count);
-                count = parseInt(count) || 0;
-                count += 1;
-                console.log('count after = '+count);
-                $('#user-'+data.fromPeerId+' .badge').html(count); 
-            }
-            console.log("str2"+str2);
-            $('#'+data.fromPeerId).append(str2);
-
-            $('.msg.msg-voice > .audiojs').each(function(e){
-                $(this).replaceWith($('audio', $(this)));
-
-            })
-            audiojs.events.ready(function() {
-                var as = audiojs.createAll();
-            });
-
-            scrollToEnd(data.fromPeerId);
-
-        }
+        
         function sendReply(){
             origin_msg = $('#msg').val();
             if (origin_msg.trim()=='')
@@ -643,7 +568,7 @@
 
             console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
-                appendSendMsg(toPeerId, origin_msg);
+                appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
 
             }, function(err) {
