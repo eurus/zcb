@@ -96,8 +96,8 @@ app.get('/chat', function(req, res) {
 	}
 });
 
-app.get('/store', function(req, res){
-	res.render('store');
+app.get('/orders', function(req, res){
+	res.render('orders');
 })
 
 app.post('/login', userCon.login);

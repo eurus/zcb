@@ -1,0 +1,393 @@
+<style type="text/css">
+#layout{
+    height:90%;
+}
+    .mid-wrapper{
+        display:table;
+        height:50px;
+    }
+    .mid-cell{
+        display:table-cell;
+        vertical-align: middle;
+        text-align: right;
+    }
+    .show-order i{
+        margin:auto auto;
+        font-size:16px;
+        color:white;
+    }
+    .order-item:hover{
+        background:#9e9896;
+        cursor:pointer;
+    }
+    .order-item:hover p, .order-item:hover b, .order-item:hover i{
+        color:white;
+    }
+    .order-item p{
+        margin-bottom:0;
+    }
+    #order-list .order-item{
+        padding-left:20px;
+        padding-right:20px;
+    }
+    #order-detail p{
+        text-align:left;
+        padding-left:40px;
+    }
+</style>
+<div id='layout'>
+    <div class='col-md-8 full-height'>
+        <div class='full-height full-width'>
+            <div class='title'>
+            <span id='list-title' style='font-size:14px; padding:10px; font-weight: bold; color:white;'></span> <div class="dropdown pull-right">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"  style='background:transparent;border:transparent'>
+                      <span class="caret"  style='color:white;'></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#unconfirmed">待处理</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#processing">处理中</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#paid">已支付</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#done">已完成</a></li>
+
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#cancel">已取消</a></li>
+                </ul>
+            </div> 
+        </div>
+
+            <div class='pure-form pure-form-aligned full-height'>
+                <div id='order-list' class='scrollable full-height'>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 full-height">
+        <div class="full-height full-width">
+            <div class='title'> 详情</div>
+            <div id='order-detail' class='scrollable full-height'>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Template -->
+
+<script type="text/template" id="order-item-tpl">
+    <div class='order-item pure-control-group pure-g full-height' data-order-id='{=objectId}' >
+        <div class='pure-u-1-2' style='text-align:left;'>
+            <b>订单号: {=flowNo}</b>
+            <p> 服务时间: {=moment(serviceTime).format('YYYY-MM-DD hh:mm')}</p>
+        </div>
+        <div class='pure-u-1-4' style='text-align:left'>
+            <b>状态：{=status}</b>
+            <p>金额：{=total_price}</p>
+        </div>
+        <div class='mid-wrapper full-height pure-u-1-4 actions' >
+        <div class='mid-cell'>
+            <a class='show-order'>
+                <i class='fa fa-chevron-right'></i>
+            </a>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id='order-detail-tpl'>
+    <div class='pure-u-1 banner'>车辆信息</div>
+    <p>车型：{=car.make} {=car.series} {=car.model}</p>
+    <p>车牌：{=car.plate}</p>
+    <p>年份：{=car.year} </p>
+
+    <div class='pure-u-1 banner'>地址时间</div>
+    <p>地址：{=address.detail}</p>
+    <p>时间：{=moment(serviceTime.iso).format('YYYY-MM-DD hh:mm')}
+    <p>联系人：{=address.contact} {=address.mobile}</p>
+    <p>固定电话：{=address.tel} </p>
+    
+    <div class='pure-u-1 banner'>套餐选择</div>
+    <p>套餐：{=pkg.title}</p>
+    <p>套餐价格：{=pkg.price}</p>
+    <div class='items'></div>
+
+    <div class='pure-u-1 banner'>其他信息</div>
+    <p>操作员：{=operator.nickname}</p>
+    <p>销售：{=salesman.nickname}</p>
+    <p>服务商：{=store.name}</p>
+    {if (status=='unconfirmed')}
+    <button class='btn-cancel btn-secondary btn'>
+    <i class='fa fa-remove' style='padding-right:10px;'></i>取消</button>
+</script>
+
+<script>
+    $(function(){
+
+/**
+ * underscore template settings
+ */
+ _.templateSettings = {
+    evaluate    : /{([\s\S]+?)}/g,
+    interpolate : /{=([\s\S]+?)}/g,
+    escape      : /{-([\s\S]+?)}/g
+};
+    AV.$ = jQuery;
+    var appid ="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34" ;
+    var appkey =  "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb";
+    AV.initialize( appid,appkey);
+
+    chat = new AVChatClient({
+        appId: appid,
+        peerId: 'order-manager',
+        watching: ['order-notification']
+    });
+
+    chat.on('close', function() {
+        console.log('chat close');
+    });
+
+    chat.on('message', function(data) {
+
+    });
+    chat.on('online', function(peers) {
+        console.log(peers+' online');
+    });
+
+    chat.on('offline', function(peers) {
+        console.log(peers+' offline');
+    });
+
+    openSocket();
+
+    function openSocket(){
+        chat.open().then(function() {
+            console.log('open success');
+        }, function(err) {
+            console.log('open failure:'+err)
+        });
+    }
+
+    var curStatus = 'unconfirmed';
+    var curOrder = null;
+    var curOrderList = null;
+    var User = AV.Object.extend('_User', {
+        defaults:{
+            nickname:'',
+            username:'',
+            password:'',
+            peerId: '',
+            mobile:'',
+            mobileVerified: false
+        }
+    });
+    var Car = AV.Object.extend("Car", {
+        defaults:{
+            make:'',
+            series:'',
+            year:0,
+            plate:'',
+            model:'',
+            volume:''
+        }
+    });
+    var Address = AV.Object.extend("Address", {
+        defaults:{
+            contact:'',
+            detail:'',
+            mobile:'',
+        }
+    });
+
+    var Order = AV.Object.extend("Order",{
+        defaults:{
+            status:'incomplete',
+            cancelReason:'',
+            items:[],
+        // package: '',
+        flowNo: '',
+        car: new Car,
+        address: new Address,
+        serviceTime: new Date()
+        // user:new User
+    },initialize:function(){
+    }
+    });
+
+    var OrderList = AV.Collection.extend({ model: Order });
+
+    var OrderItemView = AV.View.extend({
+        tagName:  "li",
+        template: _.template($('#order-item-tpl').html()),
+        events: {
+            'click':'show'
+        },
+        initialize: function() {
+            _.bindAll(this, 'render',  'complete', 'show');
+        },
+        render:function(){
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+        complete: function() {
+            this.model.set('status', 'done')
+            this.model.save();
+            this.render();
+        },
+        show:function(){
+            if (this.model){
+                console.log(this.model.get('car'));
+                var detailView = new OrderDetailView({model: this.model});
+                $('#order-detail').html(detailView.render().el);
+            }
+        }
+    });
+
+var OrderDetailView = AV.View.extend({
+    el:'',
+    initialize:function(){
+        this.$el.html();
+    },
+    render:function(){
+        var json = this.model.toJSON();
+        if (this.model.get('car'))
+            json.car = this.model.get('car').toJSON();
+        else
+            json.car = {}
+
+        if (this.model.get('address'))
+            json.address = this.model.get('address').toJSON();
+        else
+            json.address = {}
+
+        if (this.model.get('package'))
+            json.pkg = this.model.get('package').toJSON();
+        else
+            json.pkg = {}
+
+        if (this.model.get('user'))
+            json.user = this.model.get('user').toJSON();
+        if (this.model.get('operator'))
+            json.operator = this.model.get('operator').toJSON();
+        else
+            json.operator = {}
+
+        if (this.model.get('salesman'))
+            json.salesman = this.model.get('salesman').toJSON();
+        else
+            json.salesman = {}
+
+        if (this.model.get('store'))
+            json.store = this.model.get('store').toJSON();
+        else
+            json.store = {}
+  
+        
+        console.log(json);
+        console.log(json.car);
+        this.$el.html(_.template($('#order-detail-tpl').html())(json));
+        if (this.model.get('items')){
+            _.each(this.model.get('items'), function(item){
+                $('.items', this.$el).append($("<p>"+item.get('name')+' '+item.get('price')+"元</p>"))
+            });
+        }
+        return this;
+    }
+})
+
+    var OrderListView = AV.View.extend({
+    el:'',
+    events:[
+    ],
+    initialize:function(options){
+        _.bindAll(this, 'addOne', 'render');
+        this.orders = options.orders;
+    },
+    render:function(){
+        this.$el.html("");
+        _.each(this.orders, this.addOne)
+        this.delegateEvents();
+    },
+    addOne: function(order) {
+        var view = new OrderItemView({model: order});
+        this.$el.append(view.render().el);
+    }
+
+    });
+
+    var OrderRouter = AV.Router.extend({
+    routes:{
+        "done":"done",
+        "unconfirmed":"unconfirmed",
+        "cancel":"cancel",
+        "processing":'processing',
+        'paid':'paid'
+    },
+    currentView:null,
+    initialize:function(el){
+        this.el = el;
+        this.unconfirmed();
+    },
+    switchView: function(view) {
+        console.log('switchView');
+        if (this.currentView) {
+            this.currentView.remove();
+        }
+        
+        console.log('SWITCH TO VIEW RENDER');
+        view.render();
+        if (!customer){
+            customer = new User;
+        }
+        $('#order').html(view.$el);
+
+        self.currentView = view;
+    },
+    done:function(){
+        this.list('done');
+        $('#list-title').text('已完成 订单列表');
+    },
+    paid:function(){
+        this.list('paid');
+        $('#list-title').text('已支付 订单列表');
+    },
+    unconfirmed:function(){
+        this.list('unconfirmed');
+        $('#list-title').text('待处理 订单列表');
+    },
+    cancel:function(){
+        this.list('cancel');
+        $('#list-title').text('已取消 订单列表');
+    },
+    processing:function(){
+        this.list('processing');
+        $('#list-title').text('处理中 订单列表');
+    },
+    list:function(status){
+        query = new AV.Query(Order);
+        query.include('car');
+        query.include('address');
+        query.include('package');
+        query.include('user');
+        query.include('items');
+        query.equalTo('status', status);
+        
+        query.find({
+            success:function(orders){
+                console.log(orders);
+                var listView = new OrderListView({orders: orders});
+                listView.render();
+                $('#order-list').html(listView.$el);
+                location.hash='';
+            },
+            error:function(){
+
+            }
+        });
+        // this.switchView(this.listView);
+    }
+});
+
+var router= new OrderRouter();
+AV.history.start();
+});
+</script>
