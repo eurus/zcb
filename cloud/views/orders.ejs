@@ -6,6 +6,12 @@
         display:table;
         height:50px;
     }
+    li.new-order{
+        background:#fff100;
+    }
+    li.new-order i{
+        color:#fff100;
+    }
     .mid-cell{
         display:table-cell;
         vertical-align: middle;
@@ -121,6 +127,42 @@
 </script>
 
 <script>
+    function fillInDefaults(order){
+        var json = order.toJSON();
+        if (order.get('car'))
+            json.car = order.get('car').toJSON();
+        else
+            json.car = {}
+
+        if (order.get('address'))
+            json.address = order.get('address').toJSON();
+        else
+            json.address = {}
+
+        if (order.get('package'))
+            json.pkg = order.get('package').toJSON();
+        else
+            json.pkg = {}
+
+        if (order.get('user'))
+            json.user = order.get('user').toJSON();
+        if (order.get('operator'))
+            json.operator = order.get('operator').toJSON();
+        else
+            json.operator = {}
+
+        if (order.get('salesman'))
+            json.salesman = order.get('salesman').toJSON();
+        else
+            json.salesman = {}
+
+        if (order.get('store'))
+            json.store = order.get('store').toJSON();
+        else
+            json.store = {} 
+        return json;
+    }
+
     $(function(){
 
 /**
@@ -132,14 +174,17 @@
     escape      : /{-([\s\S]+?)}/g
 };
     AV.$ = jQuery;
-    var appid ="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34" ;
+    hintAudio = document.createElement('audio');
+    hintAudio.setAttribute('src', '/audio/hint.mp3');
+        //audioElement.load()
+        var appid ="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34" ;
     var appkey =  "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb";
     AV.initialize( appid,appkey);
 
     chat = new AVChatClient({
         appId: appid,
         peerId: 'order-manager',
-        watching: ['order-notification']
+        watching: ['order-notification', 'simonzg']
     });
 
     chat.on('close', function() {
@@ -147,6 +192,34 @@
     });
 
     chat.on('message', function(data) {
+        var msg = JSON.parse(data.msg);
+        console.log(msg);
+        if (msg.hasOwnProperty('InfoType') && msg.InfoType=='NewOrder'){
+
+            var query = new AV.Query(Order);
+            query.include('car');
+            query.include('address');
+            query.include('package');
+            query.include('user');
+            query.include('items');
+
+            query.get(msg.Content, {
+                success:function(order){
+                    console.log('Notification:'+JSON.stringify(msg));
+                    //var elem = _.template($('#order-item-tpl').html())(fillInDefaults(order));
+                    var item = new OrderItemView({model:order});
+                    item.render();
+                    item.$el.addClass('new-order')
+                    $('#order-list > div').prepend(item.el);
+                    hintAudio.play();
+                },
+                error:function(err){
+                    console.log('query error:'+err);
+                }
+            });
+        }else{
+            console.log('Ignore Notification:'+JSON.stringify(data));
+        }
 
     });
     chat.on('online', function(peers) {
@@ -239,6 +312,7 @@
                 var detailView = new OrderDetailView({model: this.model});
                 $('#order-detail').html(detailView.render().el);
             }
+            this.$el.removeClass('new-order');
         }
     });
 
@@ -248,40 +322,7 @@ var OrderDetailView = AV.View.extend({
         this.$el.html();
     },
     render:function(){
-        var json = this.model.toJSON();
-        if (this.model.get('car'))
-            json.car = this.model.get('car').toJSON();
-        else
-            json.car = {}
-
-        if (this.model.get('address'))
-            json.address = this.model.get('address').toJSON();
-        else
-            json.address = {}
-
-        if (this.model.get('package'))
-            json.pkg = this.model.get('package').toJSON();
-        else
-            json.pkg = {}
-
-        if (this.model.get('user'))
-            json.user = this.model.get('user').toJSON();
-        if (this.model.get('operator'))
-            json.operator = this.model.get('operator').toJSON();
-        else
-            json.operator = {}
-
-        if (this.model.get('salesman'))
-            json.salesman = this.model.get('salesman').toJSON();
-        else
-            json.salesman = {}
-
-        if (this.model.get('store'))
-            json.store = this.model.get('store').toJSON();
-        else
-            json.store = {}
-  
-        
+        var json = fillInDefaults(this.model);
         console.log(json);
         console.log(json.car);
         this.$el.html(_.template($('#order-detail-tpl').html())(json));
@@ -370,6 +411,7 @@ var OrderDetailView = AV.View.extend({
         query.include('user');
         query.include('items');
         query.equalTo('status', status);
+        query.descending('updatedAt');
         
         query.find({
             success:function(orders){

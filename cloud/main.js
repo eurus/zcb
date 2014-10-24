@@ -6,7 +6,8 @@
   var userCon = require('cloud/user.js');
   var zutil = require('cloud/zutil.js');
   var _=require('underscore');
-    var result = [];
+  var result = [];
+  appId="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34";
   function forceLogin(res){
     if (!userCon.isLogin()){
       res.error('please login');
@@ -92,7 +93,6 @@
   AV.Cloud.define("getOnlineCustomerService", function(req, res) {
     temp = req.params.temp;
     getCSnames().then(function(namelist){
-     appId="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34";
      chat = new avchat({
       appId: appId,
       peerId:'backend-chat-server'
@@ -318,6 +318,34 @@
       }
     });
   });
+
+  AV.Cloud.afterSave("Order", function(req){
+   chat = new avchat({
+    appId: appId,
+    peerId:'order-notification'
+  });
+  chat.open().then(function(){
+    console.log('send notification');
+    chat.watch(['order-manager']).then(function(){
+      console.log('watch success');
+      var msg = JSON.stringify({
+        Content:req.object.id,
+        InfoType:'NewOrder'});
+      console.log(msg);
+
+      chat.send(msg,'order-manager').then(function(){
+        console.log('send success');
+      }, function(err){
+        console.log('send failure:'+err);
+      });
+    }, function(err){
+      console.log('watch failure:'+err);
+    });
+    
+  }, function(err){
+    console.log('open failure:'+err)
+  })
+});
 
   function sumOfItems(order){
     var total_price = 0;
