@@ -132,8 +132,40 @@
     escape      : /{-([\s\S]+?)}/g
 };
     AV.$ = jQuery;
-    AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
-        "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb");
+    var appid ="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34" ;
+    var appkey =  "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb";
+    AV.initialize( appid,appkey);
+
+    chat = new AVChatClient({
+        appId: appid,
+        peerId: 'order-manager',
+        watching: ['order-notification']
+    });
+
+    chat.on('close', function() {
+        console.log('chat close');
+    });
+
+    chat.on('message', function(data) {
+
+    });
+    chat.on('online', function(peers) {
+        console.log(peers+' online');
+    });
+
+    chat.on('offline', function(peers) {
+        console.log(peers+' offline');
+    });
+
+    openSocket();
+
+    function openSocket(){
+        chat.open().then(function() {
+            console.log('open success');
+        }, function(err) {
+            console.log('open failure:'+err)
+        });
+    }
 
     var curStatus = 'unconfirmed';
     var curOrder = null;
