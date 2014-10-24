@@ -36,9 +36,22 @@ app.get('/', function(req, res) {
 	res.render('index', {layout:'index-layout'});
 });
 
+app.get('/man',function(req,res) {
+		if (userCon.isLogin()){
+		userCon.findUserById(AV.User.current().id).then(function(user){
+			console.log(user);
+			res.render('manpage', {user: user});
+		}, function(){
+			res.redirect('/man');
+		})
+	}else{
+		res.redirect('/operator');
+	}
+});
+
 app.get('/app/download', function(req, res){
 	res.redirect('/');
-})
+});
 
 app.get('/app/download/android', function(req, res){
 	agent = req.headers['user-agent']
