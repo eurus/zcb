@@ -112,6 +112,7 @@ function appendRecvMsg(data, addCount){
         console.log(unreadAudios);
         if (_.contains(unreadAudios, li_id)){
             $('#'+li_id).addClass('unread');
+            console.log($('#'+li_id));
         }
         break;
 
@@ -141,6 +142,7 @@ function appendRecvMsg(data, addCount){
     $('p.play').click(function(){
         var msg_id = $(this).parent().parent().parent().attr('id');
         var un_read = JSON.parse(localStorage["unReadMsg"]);
+        $('#'+msg_id).removeClass('unread');
         un_read = _.without(un_read, msg_id);
         localStorage['unReadMsg'] = JSON.stringify(un_read);
         console.log(localStorage['unReadMsg']);
