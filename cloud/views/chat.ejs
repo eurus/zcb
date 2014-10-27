@@ -108,7 +108,6 @@
     </ul>   
 </div>
 
-
 <script type="text/template" id="order-list-tpl">
     <div class='pure-form pure-form-aligned'>
         <ul id="order-list">
@@ -163,6 +162,7 @@
        <div class="time">{=moment(timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
        <img src="{=avatar}" class='img-responsive avatar'></img>
    </li>
+
 </script>
 
     <div id='user-info-tpl'>
@@ -353,7 +353,7 @@
     localStorage[myPeerId+'-avatar'] = myAvatarUrl;
     var watching = [];
     var toPeerId;
-    localStorage[unReadMsg] = [];
+    
 
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
@@ -378,6 +378,7 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
                 playFB();
+                
                 if ($('#user-'+data.fromPeerId).length > 0){
                     if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
@@ -391,6 +392,7 @@
                     appendRecvMsg(data); 
                 });
                 }
+                
 
                 
                 
@@ -431,7 +433,6 @@
                         if (localStorage[myPeerId+'-selected']){
                             p = switchChatTo(localStorage[myPeerId+'-selected']);
                         }else if ($('#user-list .user-item').length > 0) {
-                            // setSendTo(data.peerId);
                             p = switchChatTo($('#user-list .user-item:first').data('peer-id'));
                         }
 
