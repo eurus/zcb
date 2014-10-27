@@ -59,6 +59,7 @@ function appendRecvMsg(data){
     console.log('HOLY CRAP');
     receive_msg = JSON.parse(data.msg);
 
+
     var from_avatar = data.fromPeerId + "-avatar";
     switch(receive_msg.InfoType) {
         case "IMAGE":
@@ -90,7 +91,6 @@ function appendRecvMsg(data){
         break;
 
         case "TEXT":
-
         str2 = _.template($('#text-tpl').html())({
             peerId: data.fromPeerId,
             content: receive_msg.Content,
@@ -99,9 +99,13 @@ function appendRecvMsg(data){
             klass:'to-me'
         });                   
         $('#'+data.fromPeerId).append(str2);
-
         break;
-    }             
+    }    
+    console.log('play');
+    console.log(data);
+    // fbAudio.play(); 
+    playFB();
+
     if (data.fromPeerId!=toPeerId){
         var count = $('#user-'+data.fromPeerId+' .badge').html();
         console.log('count = '+count);
@@ -112,6 +116,7 @@ function appendRecvMsg(data){
     }else{
         scrollToEnd(data.fromPeerId);
     }
+
     // console.log("str2"+str2);
     // $('#'+data.fromPeerId).append(str2);
 
@@ -166,7 +171,7 @@ function prependRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });
-        
+
         var elem = $(str2);
         var audio = $("<audio src='"+receive_msg.Content+"' preload='auto'/>");
         audio.appendTo(elem);
@@ -195,14 +200,16 @@ function prependRecvMsg(data){
         console.log('count after = '+count);
         $('#user-'+data.fromPeerId+' .badge').html(count); 
     }
+
+    // fbAudio.play(); 
     // console.log("str2"+str2);
-    $('#'+data.fromPeerId).prepend(str2);
+    // $('#'+data.fromPeerId).prepend(str2);
 
-    $('.msg.msg-voice > .audiojs').each(function(e){
-        $(this).replaceWith($('audio', $(this)));
+    // $('.msg.msg-voice > .audiojs').each(function(e){
+    //     $(this).replaceWith($('audio', $(this)));
 
-    })
-    audiojs.events.ready(function() {
-        var as = audiojs.createAll();
-    });
+    // })
+    // audiojs.events.ready(function() {
+    //     var as = audiojs.createAll();
+    // });
 }

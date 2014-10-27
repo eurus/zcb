@@ -335,6 +335,12 @@
 </div>
 <script>
     var customer = null;
+    function playFB(){
+        var fbAudio = document.createElement('audio');
+        fbAudio.setAttribute('src', '/audio/facebook.mp3');
+        fbAudio.play();
+    }
+
     var appid = "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34";
     AV.$ = jQuery;
     AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
