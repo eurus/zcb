@@ -98,10 +98,6 @@ function appendRecvMsg(data, addCount){
             klass:'to-me'
         });
         
-        var un_read = _.uniq(JSON.parse(localStorage["unReadMsg"]));
-        var msg_id = data.fromPeerId +"-" +data.timestamp;
-        un_read.push(msg_id);
-        localStorage["unReadMsg"] = JSON.stringify(un_read);
         var elem = $(str2);
         var audio = $("<audio src='"+receive_msg.Content+"' preload='auto'/>");
         audio.appendTo(elem);
