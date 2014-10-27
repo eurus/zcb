@@ -103,6 +103,16 @@ function appendRecvMsg(data, addCount){
         audio.appendTo(elem);
         elem.appendTo($('#'+data.fromPeerId));
         audiojs.create(audio, {});
+
+        unreadAudios = JSON.parse(localStorage['unReadMsg']);
+
+        var li_id = data.fromPeerId+'-'+data.timestamp;
+        console.log('li id = '+li_id);
+        console.log('unread audio');
+        console.log(unreadAudios);
+        if (_.contains(unreadAudios, li_id)){
+            $('#'+li_id).addClass('unread');
+        }
         break;
 
         case "TEXT":

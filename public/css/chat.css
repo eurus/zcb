@@ -218,6 +218,15 @@
     padding:4px;
     padding-top:0px;
 }
+.msg.msg-voice .audiojs .play-pause .play{
+    background: url("/js/player-graphics-white.gif") -2px -1px no-repeat;
+}
+.msg.msg-voice .audiojs .play-pause .pause{
+    background: url("/js/player-graphics-white.gif") -2px -91px no-repeat;
+}
+.msg.msg-voice .audiojs .play-pause .loading{
+    background: url("js/player-graphics-white.gif") -2px -31px no-repeat;
+}
 .msg.to-me{
     padding-left:60px;
     text-align: left;
