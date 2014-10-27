@@ -31,23 +31,20 @@
         font-size:16px;
         color:white;
     }
-    .order-item:hover{
-        background:#9e9896;
-        cursor:pointer;
+    #pkg-list, #promotion-list{
+        padding-top:20px;
+        padding-bottom:20px;
     }
-    .order-item:hover p, .order-item:hover b, .order-item:hover i{
-        color:white;
+    #promotion-list img.promo{
+        width:400px;
+        margin:5px;
+        margin-top:15px;
     }
-    .order-item p{
-        margin-bottom:0;
+    .pure-control-group{
+        margin-top:8px;
     }
-    #order-list .order-item{
-        padding-left:20px;
-        padding-right:20px;
-    }
-    #order-detail p{
-        text-align:left;
-        padding-left:40px;
+    input[name=title]{
+        width:200px;
     }
 </style>
 <div id='layout'>
@@ -70,50 +67,6 @@
 </div>
 
 <!-- Template -->
-
-<script type="text/template" id="order-item-tpl">
-    <div class='order-item pure-control-group pure-g full-height' data-order-id='{=objectId}' >
-        <div class='pure-u-1-2' style='text-align:left;'>
-            <b>订单号: {=flowNo}</b>
-            <p> 服务时间: {=moment(serviceTime).format('YYYY-MM-DD hh:mm')}</p>
-        </div>
-        <div class='pure-u-1-4' style='text-align:left'>
-            <b class='status'>状态：{=status}</b>
-            <p>金额：{=total_price}</p>
-        </div>
-        <div class='mid-wrapper full-height pure-u-1-4 actions' >
-        <div class='mid-cell'>
-            <a class='show-order'>
-                <i class='fa fa-chevron-right'></i>
-            </a>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/template" id='order-detail-tpl'>
-    
-
-    <div class='pure-u-1 banner'>地址时间</div>
-    <p>地址：{=address.detail}</p>
-    <p>时间：{=moment(serviceTime.iso).format('YYYY-MM-DD hh:mm')}
-    <p>联系人：{=address.contact} {=address.mobile}</p>
-    <p>固定电话：{=address.tel} </p>
-    
-    <div class='pure-u-1 banner'>套餐选择</div>
-    <p>套餐：{=pkg.title}</p>
-    <p>套餐价格：{=pkg.price}</p>
-    <div id='items'></div>
-
-    <div class='pure-u-1 banner'>其他信息</div>
-    <p>操作员：{=operator.nickname}</p>
-    <p>销售：{=salesman.nickname}</p>
-    <p>服务商：{=store.name}</p>
-    {if (status=='unconfirmed')}
-    <button class='btn-cancel btn-secondary btn'>
-    <i class='fa fa-remove' style='padding-right:10px;'></i>取消</button>
-</script>
-
 <script type="text/template" id='promotion-tpl'>
     <div class="col-md-9 full-height">
         <div class="full-height full-width">
@@ -126,16 +79,23 @@
 </script>
 
 <script type="text/template" id='promotion-item-tpl'>
-    <div class='pure-control-group' id='item-{=objectId}'>
-    {=activity_pic}
-        <button class='btn btn-remove' data-item-id='item-{=objectId}'>x</button>
+    <div class='pure-control-group' >
+    <img src='{=activity_pic.url}' class='pure-image promo'/>
+    {if (!deleted) }
+        <button class='btn btn-remove' >删除</button>
+
+    {if (deleted)}
+        <button class='btn btn-restore' >恢复</button>
+
     </div>
+    }
 </script>
 
 <script type="text/template" id='pkg-tpl'>
     <div class="col-md-9 full-height">
         <div class="full-height full-width">
-            <div class='title'> 套餐列表</div>
+            <div class='title'> 套餐列表
+            <i class='pull-right fa fa-plus btn-new' style='color:white'></i></div>
             <div id='pkg-list' class='scrollable full-height'>
             </div>
 
@@ -144,12 +104,16 @@
 </script>
 
 <script type="text/template" id='pkg-item-tpl'>
-    <div class='pure-control-group' id='item-{=objectId}'>
+    <div class='pure-control-group'>
         <label>名称</label>
         <input type='text' name='title' value='{=title}'>
         <label>金额</label>
         <input type='number' name='price' value='{=price}'>
-        <button class='btn btn-remove' data-item-id='item-{=objectId}'>x</button>
+        {if (!deleted) }
+        <button class='btn btn-remove'>删除</button>
+
+    {if (deleted)}
+        <button class='btn btn-restore'>恢复</button>
     </div>
 </script>
 
@@ -208,126 +172,29 @@
     var appkey =  "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb";
     AV.initialize( appid,appkey);
 
-
-    var curStatus = 'unconfirmed';
-    var curOrder = null;
-    var curOrderList = null;
-    var User = AV.Object.extend('_User', {
-        defaults:{
-            nickname:'',
-            username:'',
-            password:'',
-            peerId: '',
-            mobile:'',
-            mobileVerified: false
-        }
-    });
-    var Car = AV.Object.extend("Car", {
-        defaults:{
-            make:'',
-            series:'',
-            year:0,
-            plate:'',
-            model:'',
-            volume:''
-        }
-    });
-    var Address = AV.Object.extend("Address", {
-        defaults:{
-            contact:'',
-            detail:'',
-            mobile:'',
-        }
-    });
-
-    var Order = AV.Object.extend("Order",{
-        defaults:{
-            status:'incomplete',
-            cancelReason:'',
-            items:[],
-        // package: '',
-        flowNo: '',
-        car: new Car,
-        address: new Address,
-        serviceTime: new Date()
-        // user:new User
-    },initialize:function(){
-    }
-    });
-
-    var OrderList = AV.Collection.extend({ model: Order });
-
-    var OrderItemView = AV.View.extend({
-        tagName:  "li",
-        template: _.template($('#order-item-tpl').html()),
-        events: {
-            'click':'show'
-        },
-        initialize: function() {
-            _.bindAll(this, 'render',  'complete', 'show');
-        },
-        render:function(){
-            this.$el.html(this.template(this.model.toJSON()));
-            return this;
-        },
-        complete: function() {
-            this.model.set('status', 'done')
-            this.model.save();
-            this.render();
-        },
-        show:function(){
-            if (this.model){
-                console.log(this.model.get('car'));
-                var detailView = new OrderDetailView({model: this.model});
-                $('#order-detail').html(detailView.render().el);
-            }
-            this.$el.removeClass('new-order');
-            $('#order-list li.selected').removeClass('selected');
-            this.$el.addClass('selected')
-        }
-    });
-
-var OrderDetailView = AV.View.extend({
-    el:'',
-    events:{
-        'click .btn-cancel':'cancel'
-    },
-    initialize:function(){
-        this.$el.html();
-    },
-    render:function(){
-        var json = fillInDefaults(this.model);
-        console.log(json);
-        console.log(json.car);
-        this.$el.html(_.template($('#order-detail-tpl').html())(json));
-        if (this.model.get('items')){
-            _.each(this.model.get('items'), function(item){
-                $('.items', this.$el).append($("<p>"+item.get('name')+' '+item.get('price')+"元</p>"))
-            });
-        }
-        return this;
-    },
-    cancel:function(){
-        this.model.set('status', 'cancel');
-        this.model.save();
-        $('.btn-cancel', this.$el).remove();
-        $('#order-list div[data-order-id='+this.model.id+'] b.status').text('状态：'+this.model.get('status'));
-    }
-})
-
 var Package = AV.Object.extend("Package", {defaults:{} });
 
 var PackageList = AV.Collection.extend({ model:Package })
 
 var PackageItemView = AV.View.extend({
-    el:'<div class="full-height"></div>',
-    tagName:'',
-    className:'full-height',
+    el:'<div class="pure-form"></div>',
     template: _.template($('#pkg-item-tpl').html()),
-    events:{},
+    events:{
+        'click .btn-remove':'remove',
+        'click .btn-restore':'restore'
+    },
     initialize:function(options){
         _.bindAll(this, 'render');
-        this.orders = options.orders;
+    },
+    remove:function(elem){
+        this.model.set('deleted', true);
+        this.model.save();
+        this.render();
+    },
+    restore:function(elem){
+        this.model.set('deleted',false);
+        this.model.save();
+        this.render();
     },
     render:function(){
         this.$el.html(this.template(this.model.toJSON()));
@@ -335,10 +202,21 @@ var PackageItemView = AV.View.extend({
 });
 
 var PackageView = AV.View.extend({
-    el:'',
+    el:'<div class="full-height"></div>',
     template:_.template($('#pkg-tpl').html()),
     events:{
-
+        'click .btn-new':'newPackage'
+    },
+    newPackage:function(){
+        alert('pkg');
+        var pkg = new Package({
+            title: '',
+            price:0,
+            deleted:false
+        });
+        var item = new PackageItemView({model: pkg})
+        item.render();
+        this.$('#pkg-list').prepend(item.el);
     },
     initialize:function(argument) {
         this.pkgList = new PackageList;
@@ -347,6 +225,8 @@ var PackageView = AV.View.extend({
         this.pkgList.bind('reset', this.reset);
     },
     render:function(){
+        console.log('pkg render');
+        this.$el.html("");
         this.$el.html(this.template());
         this.pkgList.fetch();
         //this.delegateEvents();
@@ -370,9 +250,15 @@ var PromotionList = AV.Collection.extend({ model:Promotion })
 var PromotionItemView = AV.View.extend({
     el:'',
     template: _.template($('#promotion-item-tpl').html()),
-    events:{},
+    events:{
+        'click .btn-remove':'remove'
+    },
     initialize:function(options){
         _.bindAll(this, 'render');
+    },
+    remove:function(elem){
+        this.model.set('deleted',true);
+        this.model.save();
     },
     render:function(){
         this.$el.html(this.template(this.model.toJSON()));
@@ -380,7 +266,7 @@ var PromotionItemView = AV.View.extend({
 });
 
 var PromotionView = AV.View.extend({
-    el:'',
+    el:'<div class="full-height"></div>',
     template:_.template($('#promotion-tpl').html()),
     events:{
 
@@ -392,11 +278,13 @@ var PromotionView = AV.View.extend({
         this.list.bind('reset', this.reset);
     },
     render:function(){
+        console.log('promo render');
         this.$el.html(this.template());
         this.list.fetch();
         //this.delegateEvents();
     },
     reset:function(promos){
+        this.$el.html();
         _.each(promos.models, this.append);
         console.log(this.el);
     },
@@ -404,7 +292,7 @@ var PromotionView = AV.View.extend({
         console.log(promo);
         var item = new PromotionItemView({model: promo});
         item.render();
-        this.$('#pkg-list').append(item.el);
+        this.$('#promotion-list').append(item.el);
     }
 });
 
@@ -417,13 +305,14 @@ var PromotionView = AV.View.extend({
     currentView:null,
     initialize:function(el){
         this.el = el;
-        this.packages();
+        // this.packages();
     },
     packages:function(){
         this.pkgView = new PackageView();
         this.pkgView.render();
         console.log(this.pkgView.el);
         $('#right').html(this.pkgView.el);
+
     },
     promotions:function(){
         this.promoView = new PromotionView();

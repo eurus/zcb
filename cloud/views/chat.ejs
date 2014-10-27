@@ -353,7 +353,7 @@
     localStorage[myPeerId+'-avatar'] = myAvatarUrl;
     var watching = [];
     var toPeerId;
-    localStorage[unReadMsg] = [];
+    // localStorage[unReadMsg] = [];
 
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
@@ -646,6 +646,20 @@
             }
 
             console.log(JSON.stringify(send_msg));
+            // chat.getStatus(watching).then(function(onlinePeers){
+            //     if (onlinePeers.onlineSessionPeerIds.indexOf(toPeerId) == -1){
+            //         var query = new AV.Query("_Installation");
+            //         query.equalTo("peerID", toPeerId);
+            //         AV.Push.send({
+            //           where: query,
+            //           data: {
+            //              alert: "客服回复，请点击查看"
+            //          }
+            //      });
+
+            //     }
+            // });
+            
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
                 appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
