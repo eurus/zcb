@@ -1,44 +1,50 @@
 function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
     AV.Cloud.run("CsToPeerHistory", {cus:otherPeerId,
-                                peers:['service1','service2','service3','service4'],
-                                limit:limit,
-                                timestamp:timestamp,
-                                reverse:'yes'}, {
-         success: function(data){
+        peers:['service1','service2','service3','service4'],
+        limit:limit,
+        timestamp:timestamp,
+        reverse:'yes'}, {
+           success: function(data){
             _.each(data,function (his) {
+                var top_msg_timestamp = $('#'+otherPeerId+' li:first').data('timestamp');
+                console.log(top_msg_timestamp);
                 if(otherPeerId == his.from){
                     var data = {
                         msg:his.data,
                         fromPeerId:otherPeerId,
                         timestamp:his.timestamp
                     }
-                   prependRecvMsg(data);
-                }else{
+                    if(top_msg_timestamp !== his.timestamp){
+                     prependRecvMsg(data);
+                 }
+             }else{
+                if(top_msg_timestamp !== his.timestamp){
                     prependSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
                 }
-            })
-         }
+            }
+        })
+        }
     });
 }
 function addChatHis (myPeerId,otherPeerId) {
     AV.Cloud.run("GetChatHistory", {frompid:myPeerId,topid:otherPeerId}, {
-         success: function(data){
-            _.each(data,function (his) {
-                console.log(his);
-                console.log(myPeerId);
-                if (myPeerId == his.from){
-                  appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
-                }else{
-                    var data = {
-                        msg:his.data,
-                        fromPeerId:otherPeerId,
-                        timestamp:his.timestamp
-                    }
-                   appendRecvMsg(data);
-                }
-            })
-         }
-    });
+       success: function(data){
+        _.each(data,function (his) {
+            console.log(his);
+            console.log(myPeerId);
+            if (myPeerId == his.from){
+              appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
+          }else{
+            var data = {
+                msg:his.data,
+                fromPeerId:otherPeerId,
+                timestamp:his.timestamp
+            }
+            appendRecvMsg(data);
+        }
+    })
+    }
+});
 }
 //append msg for init msg
 function appendSendMsg(peerId, content,timestamp){
