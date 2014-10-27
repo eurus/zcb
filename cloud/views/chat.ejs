@@ -6,6 +6,7 @@
             <img class="img-circle pure-image own-avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
             <div id='user-title' class='title'>
                             <%-user.nickname %>
+
                 <div class="dropdown pull-right">
                   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"  style='background:transparent;border:transparent'>
                   <span class="caret"  style='color:white;'></span>
@@ -395,14 +396,16 @@
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
-                    $('#peer-' + peers[i]).removeClass('offline');
-                    $('#peer-' + peers[i]).addClass('online');
+                    console.log(peers[i]+ 'online');
+                    $('#user-' + peers[i]).removeClass('offline');
+                    $('#user-' + peers[i]).addClass('online');
                 }
             });
             chat.on('offline', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
-                    $('#peer-' + peers[i]).removeClass('online');
-                    $('#peer-' + peers[i]).addClass('offline');
+                    console.log(peers[i]+ 'offline');
+                    $('#user-' + peers[i]).removeClass('online');
+                    $('#user-' + peers[i]).addClass('offline');
                 }
             });
             openSocket();
