@@ -1,3 +1,10 @@
+if(localStorage.getItem('unReadMsg') === null){
+    localStorage['unReadMsg'] = JSON.stringify([]);
+}else{
+    console.log(localStorage['unReadMsg']);
+}
+
+
 function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
     AV.Cloud.run("CsToPeerHistory", {cus:otherPeerId,
         peers:['service1','service2','service3','service4'],
@@ -64,7 +71,6 @@ function appendSendMsg(peerId, content,timestamp){
 function appendRecvMsg(data, addCount){
     if (typeof addCount =='undefined')
         addCount = true;
-    console.log('HOLY CRAP');
     receive_msg = JSON.parse(data.msg);
 
 
@@ -91,6 +97,7 @@ function appendRecvMsg(data, addCount){
             timestamp: data.timestamp,
             klass:'to-me'
         });
+        
         var elem = $(str2);
         var audio = $("<audio src='"+receive_msg.Content+"' preload='auto'/>");
         audio.appendTo(elem);
@@ -109,16 +116,10 @@ function appendRecvMsg(data, addCount){
         $('#'+data.fromPeerId).append(str2);
         break;
     }    
-    console.log('play');
-    console.log(data);
-    // fbAudio.play(); 
-    
     if (addCount && data.fromPeerId!=toPeerId){
         var count = $('#user-'+data.fromPeerId+' .badge').html();
-        console.log('count = '+count);
         count = parseInt(count) || 0;
         count += 1;
-        console.log('count after = '+count);
         localStorage[data.fromPeerId+'-unread'] = count;
         $('#user-'+data.fromPeerId+' .badge').html(count); 
         var item = $('#user-'+data.fromPeerId)
@@ -127,6 +128,13 @@ function appendRecvMsg(data, addCount){
     }else{
         scrollToEnd(data.fromPeerId);
     }
+    $('p.play').click(function(){
+        var msg_id = $(this).parent().parent().parent().attr('id');
+        var un_read = JSON.parse(localStorage["unReadMsg"]);
+        un_read = _.without(un_read, msg_id);
+        localStorage['unReadMsg'] = JSON.stringify(un_read);
+        console.log(localStorage['unReadMsg']);
+    });
 
 }
 //prepend msg for load chat history
