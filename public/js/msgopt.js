@@ -110,7 +110,7 @@ function appendRecvMsg(data){
     console.log('play');
     console.log(data);
     // fbAudio.play(); 
-    playFB();
+    
 
     if (data.fromPeerId!=toPeerId){
         var count = $('#user-'+data.fromPeerId+' .badge').html();

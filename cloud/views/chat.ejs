@@ -375,6 +375,7 @@
             });
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
+                playFB();
                 if ($('#user-'+data.fromPeerId).length > 0){
                     if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
