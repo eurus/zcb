@@ -405,7 +405,7 @@
                     console.log(peers[i]+ ' online');
                     $('#user-' + peers[i]).removeClass('offline');
                     $('#user-' + peers[i]).addClass('online');
-                    $('#to-nickname').html( $('#to-nickname').html().replace('(离线)', ''));
+                    $('#to-nickname').html( $('#to-nickname').html().replace(' (离线)', ''));
                 }
             });
             chat.on('offline', function(peers) {
