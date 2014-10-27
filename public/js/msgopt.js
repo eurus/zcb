@@ -26,7 +26,7 @@ function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
         }
     });
 }
-function addChatHis (myPeerId,otherPeerId) {
+function addChatHis (otherPeerId) {
     AV.Cloud.run("GetChatHistory", {frompid:myPeerId,topid:otherPeerId}, {
        success: function(data){
         _.each(data,function (his) {
@@ -40,7 +40,7 @@ function addChatHis (myPeerId,otherPeerId) {
                 fromPeerId:otherPeerId,
                 timestamp:his.timestamp
             }
-            appendRecvMsg(data);
+            appendRecvMsg(data, false);
         }
     })
     }
@@ -61,7 +61,9 @@ function appendSendMsg(peerId, content,timestamp){
     scrollToEnd(peerId);
 }
 
-function appendRecvMsg(data){
+function appendRecvMsg(data, addCount){
+    if (typeof addCount =='undefined')
+        addCount = true;
     console.log('HOLY CRAP');
     receive_msg = JSON.parse(data.msg);
 
@@ -111,14 +113,17 @@ function appendRecvMsg(data){
     console.log(data);
     // fbAudio.play(); 
     
-
-    if (data.fromPeerId!=toPeerId){
+    if (addCount && data.fromPeerId!=toPeerId){
         var count = $('#user-'+data.fromPeerId+' .badge').html();
         console.log('count = '+count);
         count = parseInt(count) || 0;
         count += 1;
         console.log('count after = '+count);
+        localStorage[data.fromPeerId+'-unread'] = count;
         $('#user-'+data.fromPeerId+' .badge').html(count); 
+        var item = $('#user-'+data.fromPeerId)
+        item.detach();
+        item.prependTo('#user-list');
     }else{
         scrollToEnd(data.fromPeerId);
     }
