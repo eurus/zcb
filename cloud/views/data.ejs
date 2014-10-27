@@ -1,0 +1,437 @@
+<style type="text/css">
+#layout{
+    height:90%;
+}
+    .mid-wrapper{
+        display:table;
+        height:50px;
+    }
+    li.new-order{
+        background:#fff100;
+    }
+    li.new-order i{
+        color:#fff100;
+    }
+    li.selected{
+        background:#eee;
+    }
+    li.selected i{
+        color:#eee;
+    }
+    .mid-cell{
+        display:table-cell;
+        vertical-align: middle;
+        text-align: right;
+    }
+    .btn-cancel i{
+        color:white;
+    }
+    .show-order i{
+        margin:auto auto;
+        font-size:16px;
+        color:white;
+    }
+    .order-item:hover{
+        background:#9e9896;
+        cursor:pointer;
+    }
+    .order-item:hover p, .order-item:hover b, .order-item:hover i{
+        color:white;
+    }
+    .order-item p{
+        margin-bottom:0;
+    }
+    #order-list .order-item{
+        padding-left:20px;
+        padding-right:20px;
+    }
+    #order-detail p{
+        text-align:left;
+        padding-left:40px;
+    }
+</style>
+<div id='layout'>
+    <div class='col-md-3 full-height'>
+        <div class='full-height full-width'>
+            <div class='title'>
+            <span id='list-title' style='font-size:14px; padding:10px; font-weight: bold; color:white;'></span>  
+        </div>
+
+        <div class='pure-form pure-form-aligned full-height'>
+            <div id='order-list' class='scrollable full-height'>
+            <div><a href='#packages'>套餐管理</a></div>
+            <div><a href='#promotions'>活动管理</a></div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id='right'></div>
+</div>
+
+<!-- Template -->
+
+<script type="text/template" id="order-item-tpl">
+    <div class='order-item pure-control-group pure-g full-height' data-order-id='{=objectId}' >
+        <div class='pure-u-1-2' style='text-align:left;'>
+            <b>订单号: {=flowNo}</b>
+            <p> 服务时间: {=moment(serviceTime).format('YYYY-MM-DD hh:mm')}</p>
+        </div>
+        <div class='pure-u-1-4' style='text-align:left'>
+            <b class='status'>状态：{=status}</b>
+            <p>金额：{=total_price}</p>
+        </div>
+        <div class='mid-wrapper full-height pure-u-1-4 actions' >
+        <div class='mid-cell'>
+            <a class='show-order'>
+                <i class='fa fa-chevron-right'></i>
+            </a>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id='order-detail-tpl'>
+    
+
+    <div class='pure-u-1 banner'>地址时间</div>
+    <p>地址：{=address.detail}</p>
+    <p>时间：{=moment(serviceTime.iso).format('YYYY-MM-DD hh:mm')}
+    <p>联系人：{=address.contact} {=address.mobile}</p>
+    <p>固定电话：{=address.tel} </p>
+    
+    <div class='pure-u-1 banner'>套餐选择</div>
+    <p>套餐：{=pkg.title}</p>
+    <p>套餐价格：{=pkg.price}</p>
+    <div id='items'></div>
+
+    <div class='pure-u-1 banner'>其他信息</div>
+    <p>操作员：{=operator.nickname}</p>
+    <p>销售：{=salesman.nickname}</p>
+    <p>服务商：{=store.name}</p>
+    {if (status=='unconfirmed')}
+    <button class='btn-cancel btn-secondary btn'>
+    <i class='fa fa-remove' style='padding-right:10px;'></i>取消</button>
+</script>
+
+<script type="text/template" id='promotion-tpl'>
+    <div class="col-md-9 full-height">
+        <div class="full-height full-width">
+            <div class='title'>活动列表</div>
+            <div id='promotion-list' class='scrollable full-height'>
+            </div>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id='promotion-item-tpl'>
+    <div class='pure-control-group' id='item-{=objectId}'>
+    {=activity_pic}
+        <button class='btn btn-remove' data-item-id='item-{=objectId}'>x</button>
+    </div>
+</script>
+
+<script type="text/template" id='pkg-tpl'>
+    <div class="col-md-9 full-height">
+        <div class="full-height full-width">
+            <div class='title'> 套餐列表</div>
+            <div id='pkg-list' class='scrollable full-height'>
+            </div>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id='pkg-item-tpl'>
+    <div class='pure-control-group' id='item-{=objectId}'>
+        <label>名称</label>
+        <input type='text' name='title' value='{=title}'>
+        <label>金额</label>
+        <input type='number' name='price' value='{=price}'>
+        <button class='btn btn-remove' data-item-id='item-{=objectId}'>x</button>
+    </div>
+</script>
+
+<script>
+    function fillInDefaults(order){
+        var json = order.toJSON();
+        if (order.get('car'))
+            json.car = order.get('car').toJSON();
+        else
+            json.car = {}
+
+        if (order.get('address'))
+            json.address = order.get('address').toJSON();
+        else
+            json.address = {}
+
+        if (order.get('package'))
+            json.pkg = order.get('package').toJSON();
+        else
+            json.pkg = {}
+
+        if (order.get('user'))
+            json.user = order.get('user').toJSON();
+        if (order.get('operator'))
+            json.operator = order.get('operator').toJSON();
+        else
+            json.operator = {}
+
+        if (order.get('salesman'))
+            json.salesman = order.get('salesman').toJSON();
+        else
+            json.salesman = {}
+
+        if (order.get('store'))
+            json.store = order.get('store').toJSON();
+        else
+            json.store = {} 
+        return json;
+    }
+
+    $(function(){
+
+/**
+ * underscore template settings
+ */
+ _.templateSettings = {
+    evaluate    : /{([\s\S]+?)}/g,
+    interpolate : /{=([\s\S]+?)}/g,
+    escape      : /{-([\s\S]+?)}/g
+};
+    AV.$ = jQuery;
+    hintAudio = document.createElement('audio');
+    hintAudio.setAttribute('src', '/audio/hint.mp3');
+        //audioElement.load()
+    var appid ="za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34" ;
+    var appkey =  "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb";
+    AV.initialize( appid,appkey);
+
+
+    var curStatus = 'unconfirmed';
+    var curOrder = null;
+    var curOrderList = null;
+    var User = AV.Object.extend('_User', {
+        defaults:{
+            nickname:'',
+            username:'',
+            password:'',
+            peerId: '',
+            mobile:'',
+            mobileVerified: false
+        }
+    });
+    var Car = AV.Object.extend("Car", {
+        defaults:{
+            make:'',
+            series:'',
+            year:0,
+            plate:'',
+            model:'',
+            volume:''
+        }
+    });
+    var Address = AV.Object.extend("Address", {
+        defaults:{
+            contact:'',
+            detail:'',
+            mobile:'',
+        }
+    });
+
+    var Order = AV.Object.extend("Order",{
+        defaults:{
+            status:'incomplete',
+            cancelReason:'',
+            items:[],
+        // package: '',
+        flowNo: '',
+        car: new Car,
+        address: new Address,
+        serviceTime: new Date()
+        // user:new User
+    },initialize:function(){
+    }
+    });
+
+    var OrderList = AV.Collection.extend({ model: Order });
+
+    var OrderItemView = AV.View.extend({
+        tagName:  "li",
+        template: _.template($('#order-item-tpl').html()),
+        events: {
+            'click':'show'
+        },
+        initialize: function() {
+            _.bindAll(this, 'render',  'complete', 'show');
+        },
+        render:function(){
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+        complete: function() {
+            this.model.set('status', 'done')
+            this.model.save();
+            this.render();
+        },
+        show:function(){
+            if (this.model){
+                console.log(this.model.get('car'));
+                var detailView = new OrderDetailView({model: this.model});
+                $('#order-detail').html(detailView.render().el);
+            }
+            this.$el.removeClass('new-order');
+            $('#order-list li.selected').removeClass('selected');
+            this.$el.addClass('selected')
+        }
+    });
+
+var OrderDetailView = AV.View.extend({
+    el:'',
+    events:{
+        'click .btn-cancel':'cancel'
+    },
+    initialize:function(){
+        this.$el.html();
+    },
+    render:function(){
+        var json = fillInDefaults(this.model);
+        console.log(json);
+        console.log(json.car);
+        this.$el.html(_.template($('#order-detail-tpl').html())(json));
+        if (this.model.get('items')){
+            _.each(this.model.get('items'), function(item){
+                $('.items', this.$el).append($("<p>"+item.get('name')+' '+item.get('price')+"元</p>"))
+            });
+        }
+        return this;
+    },
+    cancel:function(){
+        this.model.set('status', 'cancel');
+        this.model.save();
+        $('.btn-cancel', this.$el).remove();
+        $('#order-list div[data-order-id='+this.model.id+'] b.status').text('状态：'+this.model.get('status'));
+    }
+})
+
+var Package = AV.Object.extend("Package", {defaults:{} });
+
+var PackageList = AV.Collection.extend({ model:Package })
+
+var PackageItemView = AV.View.extend({
+    el:'',
+    template: _.template($('#pkg-item-tpl').html()),
+    events:{},
+    initialize:function(options){
+        _.bindAll(this, 'render');
+        this.orders = options.orders;
+    },
+    render:function(){
+        this.$el.html(this.template(this.model.toJSON()));
+    }
+});
+
+var PackageView = AV.View.extend({
+    el:'',
+    template:_.template($('#pkg-tpl').html()),
+    events:{
+
+    },
+    initialize:function(argument) {
+        this.pkgList = new PackageList;
+        _.bindAll(this, 'reset');
+        this.pkgList.query = new AV.Query(Package);
+        this.pkgList.bind('reset', this.reset);
+    },
+    render:function(){
+        this.$el.html(this.template());
+        this.pkgList.fetch();
+        //this.delegateEvents();
+    },
+    reset:function(pkgs){
+        _.each(pkgs.models, this.append);
+        console.log(this.el);
+    },
+    append:function(pkg){
+        console.log(pkg);
+        var item = new PackageItemView({model: pkg});
+        item.render();
+        this.$('#pkg-list').append(item.el);
+    }
+});
+
+var Promotion = AV.Object.extend("Promotion", {defaults:{} });
+
+var PromotionList = AV.Collection.extend({ model:Promotion })
+
+var PromotionItemView = AV.View.extend({
+    el:'',
+    template: _.template($('#promotion-item-tpl').html()),
+    events:{},
+    initialize:function(options){
+        _.bindAll(this, 'render');
+    },
+    render:function(){
+        this.$el.html(this.template(this.model.toJSON()));
+    }
+});
+
+var PromotionView = AV.View.extend({
+    el:'',
+    template:_.template($('#promotion-tpl').html()),
+    events:{
+
+    },
+    initialize:function(argument) {
+        this.list = new PromotionList;
+        _.bindAll(this, 'reset');
+        this.list.query = new AV.Query(Promotion);
+        this.list.bind('reset', this.reset);
+    },
+    render:function(){
+        this.$el.html(this.template());
+        this.list.fetch();
+        //this.delegateEvents();
+    },
+    reset:function(promos){
+        _.each(promos.models, this.append);
+        console.log(this.el);
+    },
+    append:function(promo){
+        console.log(promo);
+        var item = new PromotionItemView({model: promo});
+        item.render();
+        this.$('#pkg-list').append(item.el);
+    }
+});
+
+
+    var DataRouter = AV.Router.extend({
+    routes:{
+        "packages":"packages",
+        "promotions":"promotions"
+    },
+    currentView:null,
+    initialize:function(el){
+        this.el = el;
+        this.packages();
+    },
+    packages:function(){
+        this.pkgView = new PackageView();
+        this.pkgView.render();
+        console.log(this.pkgView.el);
+        $('#right').html(this.pkgView.el);
+    },
+    promotions:function(){
+        this.promoView = new PromotionView();
+        this.promoView.render();
+        console.log(this.promoView.el);
+        $('#right').html(this.promoView.el);
+    }
+});
+
+var router= new DataRouter();
+AV.history.start();
+});
+</script>

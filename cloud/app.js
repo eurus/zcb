@@ -107,7 +107,12 @@ app.get('/chat', function(req, res) {
 
 app.get('/orders', function(req, res){
 	res.render('orders');
-})
+});
+
+app.get('/data', function(req, res){
+	res.render('data');
+});
+
 
 app.post('/login', userCon.login);
 app.get('/logout', function (req, res) {
