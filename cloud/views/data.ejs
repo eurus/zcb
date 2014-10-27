@@ -66,7 +66,7 @@
     </div>
     </div>
 
-    <div id='right'></div>
+    <div id='right' class='full-height'></div>
 </div>
 
 <!-- Template -->
@@ -320,7 +320,9 @@ var Package = AV.Object.extend("Package", {defaults:{} });
 var PackageList = AV.Collection.extend({ model:Package })
 
 var PackageItemView = AV.View.extend({
-    el:'',
+    el:'<div class="full-height"></div>',
+    tagName:'',
+    className:'full-height',
     template: _.template($('#pkg-item-tpl').html()),
     events:{},
     initialize:function(options){
