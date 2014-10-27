@@ -207,6 +207,7 @@
     min-height: 40px;
     margin-top:5px;
     padding:4px;
+    padding-top:0px;
 }
 .msg.to-me{
     padding-left:60px;
@@ -218,7 +219,7 @@
 }
 .msg .avatar{
     position: absolute;
-    top:0px;
+    top:17px;
     width:40px;
     height:40px;
     border-radius: 20px;
@@ -232,7 +233,7 @@
 .msg.from-me div.arrow{
     position: absolute;
     right: -11px;
-    top: 11px;
+    top: 28px;
     width: 13px;
     height: 24px;
     background: url(../img/right-green-arrow.png) no-repeat;
@@ -242,7 +243,7 @@
 .msg.to-me div.arrow{
     position: absolute;
     left: -7px;
-    top: 11px;
+    top: 28px;
     width: 13px;
     height: 24px;
     background: url(../img/left-gray-arrow.png) no-repeat;
@@ -283,6 +284,10 @@
 }
 .msg .msg-content{
     position: relative;
+}
+.msg .msg-content .time{
+    color:#999;
+    margin-bottom:2px;
 }
 .msg.from-me span{
     border-top: 1px solid #DCE6C8;
