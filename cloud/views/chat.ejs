@@ -419,13 +419,58 @@
                 if(localStorage.getItem(myPeerId) === null){
                    localStorage[myPeerId] = JSON.stringify(watching);
                }else{
-                _.each(JSON.parse(localStorage[myPeerId]), function(v) {
-                    console.log(v);
-                    addWatch(v);
-                    console.log("myPeerId"+myPeerId);
-                    console.log('otherPeerId'+v);
-                    addChatHis(myPeerId,v);
+                var watchPromises = _.map(JSON.parse(localStorage[myPeerId]), addWatch);
+                var chatHisPromises = _.map(JSON.parse(localStorage[myPeerId]), addChatHis);
+                AV.Promise.when(watchPromises).then(function(){
+                    AV.Promise.when(chatHisPromises).then(function(){
+                        console.log('init complete');
+                        var p = null;
+                        if (localStorage[myPeerId+'-selected']){
+                            p = switchChatTo(localStorage[myPeerId+'-selected']);
+                        }else if ($('#user-list .user-item').length > 0) {
+                            // setSendTo(data.peerId);
+                            p = switchChatTo($('#user-list .user-item:first').data('peer-id'));
+                        }
+
+                        p.then(function(){
+                           
+                           $('#user-list .user-item').each(function(){
+                                var peerId = $(this).data('peer-id');
+                                var count = localStorage[peerId+'-unread'];
+                                $('.badge', this).html(count);
+                           });
+
+                           var items = $('#user-list .user-item');
+                           items.sort(function(a,b){
+                            var countA = $('.badge', a).html();
+                            var peerA = $(a).data('peer-id');
+                            var peerB = $(b).data('peer-id');
+                            var countB = $('.badge', b).html();
+                            if (countA != '' || countB != ''){
+                                return countA > countB;
+                            }else{
+                                return peerA < peerB;
+                            }
+                        });
+                           items.each(function(){
+                            $(this).detach();
+                            $(this).prependTo('#user-list');
+                           });
+
+                           var selected = $('#user-list .user-item-selected');
+                           selected.detach();
+                           selected.prependTo('#user-list');
+
+                     });
+                    });
                 });
+                // _.each(JSON.parse(localStorage[myPeerId]), function(v) {
+                //     console.log(v);
+                //     addWatch(v);
+                //     console.log("myPeerId"+myPeerId);
+                //     console.log('otherPeerId'+v);
+                //     addChatHis(v);
+                // });
             }
         }, function(err) {
             alert('open failure');
@@ -493,7 +538,7 @@
             var userQuery = new AV.Query(User);
             userQuery.equalTo('peerId', peerId);
             console.log('customer peerId = '+peerId);
-            userQuery.first().then(function(user){
+            return userQuery.first().then(function(user){
                 customer = user;
                 $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
 
@@ -509,6 +554,9 @@
                     $('#'+peerId).removeClass('hide');
                 }
 
+                localStorage[myPeerId+'-selected'] = peerId;
+                localStorage.removeItem(peerId+'-unread');
+
                 orderRouter.list();
         });
         }
@@ -523,6 +571,7 @@
                 $('#peer-box').append(chatBox_div);
                 return AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
                     success: function(data){
+                        console.log('ADDING WATCHING PEER');
                         if (typeof data.nickname == 'undefined'){
                             data = {
                                 peerId: data.peerId,
@@ -532,10 +581,7 @@
                         var sidebar_li = _.template($('#user-tpl').html())(data);
                         $('#user-list').append(sidebar_li);
 
-                        if ($('#user-list .user-item-selected').length == 0) {
-                            // setSendTo(data.peerId);
-                            switchChatTo(data.peerId);
-                        }
+                        
                         if(typeof data != 'undefined'){
                             console.log('data ===== '+data);
 

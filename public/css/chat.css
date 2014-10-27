@@ -205,7 +205,7 @@
     width:100%;
     position: relative;
     min-height: 40px;
-    margin-top:5px;
+    margin-top:10px;
     padding:4px;
     padding-top:0px;
 }
@@ -288,6 +288,7 @@
 .msg .msg-content .time{
     color:#999;
     margin-bottom:2px;
+    font-size:12px;
 }
 .msg.from-me span{
     border-top: 1px solid #DCE6C8;
