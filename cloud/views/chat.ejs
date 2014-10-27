@@ -135,11 +135,11 @@
     <li class='msg msg-text {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
         <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
+            <div class="time">{=moment(timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
             <span class='msg-body'>
                 <span>{=content}</span>
             </span>
             <div class='arrow' > </div>
-            <div class="hidden">{=timestamp}</div>
         </div>
     </li>
 </script>
@@ -149,18 +149,18 @@
         <img src="{=avatar}" class='img-responsive avatar'></img>
         <div class='msg-content'>
         <div class='msg-body'>
+            <div class="time">{=moment(timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
                 <img class='img-responsive image' src="{=content}" alt="{=peerId}">
             </div>
             <div class='arrow'></div>
-            <div class="hidden">{=timestamp}</div>
         </div>
     </li>
 </script>
 
 <script  type='text/template' id="voice-tpl">
     <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
+     <div class="time">{=moment(timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
      <img src="{=avatar}" class='img-responsive avatar'></img>
-     <div class="hidden">{=timestamp}</div>
  </li>
 </script>
 
