@@ -91,7 +91,7 @@
 
 <div class="hide">
     <div id="user-tpl">
-      <div id='user-{=peerId}' class='user-item pure-g' data-peer-id='{=peerId}'>
+      <div id='user-{=peerId}' class='offline user-item pure-g' data-peer-id='{=peerId}'>
         <div class="item">
           <a href="#" class='switch-btn' id="peer-{=peerId}" onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
               <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'  onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
@@ -400,6 +400,7 @@
                     console.log(peers[i]+ ' online');
                     $('#user-' + peers[i]).removeClass('offline');
                     $('#user-' + peers[i]).addClass('online');
+                    $('#to-nickname').html( $('#to-nickname').html().replace('(离线)', ''));
                 }
             });
             chat.on('offline', function(peers) {
@@ -407,6 +408,7 @@
                     console.log(peers[i]+ ' offline');
                     $('#user-' + peers[i]).removeClass('online');
                     $('#user-' + peers[i]).addClass('offline');
+                    $('#to-nickname').html( $('#to-nickname').html()+' (离线)');
                 }
             });
             openSocket();
@@ -461,6 +463,8 @@
                            var selected = $('#user-list .user-item-selected');
                            selected.detach();
                            selected.prependTo('#user-list');
+
+                           checkStatus(JSON.parse(localStorage[myPeerId]));
 
                      });
                     });
@@ -541,7 +545,11 @@
             console.log('customer peerId = '+peerId);
             return userQuery.first().then(function(user){
                 customer = user;
-                $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
+                if ($('#user-'+peerId).hasClass('offline')){
+                    $('#to-nickname').text(localStorage[toPeerId+'-nickname']+' (离线)');
+                }else{
+                    $('#to-nickname').text(localStorage[toPeerId+'-nickname']);
+                }
 
                 // select user @ sidebar
                 $('.user-item-selected').removeClass('user-item-selected');
@@ -562,6 +570,19 @@
         });
         }
 
+        function checkStatus(peers){
+            console.log("CHECK STATUS");
+            console.log(peers);
+            chat.getStatus(peers).then(function(onlinePeers){
+                console.log("STATUS");
+                console.log(onlinePeers.onlineSessionPeerIds);
+                for (var i in onlinePeers.onlineSessionPeerIds){
+                    var peerId = onlinePeers.onlineSessionPeerIds[i];
+                    $('#user-'+peerId).removeClass('offline').addClass('online');
+                }
+            });
+        }
+
         function addWatchingPeer(peers) {
             for (var i = 0; i < peers.length; i++) {
                 if (!peers[i]) {
@@ -573,6 +594,7 @@
                 return AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
                     success: function(data){
                         console.log('ADDING WATCHING PEER');
+                        console.log(data);
                         if (typeof data.nickname == 'undefined'){
                             data = {
                                 peerId: data.peerId,
@@ -587,6 +609,7 @@
                             console.log('data ===== '+data);
 
                             $('#user-' + data.peerId +'> div > a > img').attr("src",data.avatarUrl); 
+
                             localStorage[data.peerId+'-avatar'] = data.avatarUrl;
                             localStorage[data.peerId+'-nickname'] = data.nickname;
                         }
