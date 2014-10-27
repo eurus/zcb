@@ -128,18 +128,6 @@ function appendRecvMsg(data, addCount){
         scrollToEnd(data.fromPeerId);
     }
 
-    // console.log("str2"+str2);
-    // $('#'+data.fromPeerId).append(str2);
-
-    // $('.msg.msg-voice > .audiojs').each(function(e){
-    //     $(this).replaceWith($('audio', $(this)));
-
-    // })
-    // audiojs.events.ready(function() {
-    //     var as = audiojs.createAll();
-    // });
-
-
 }
 //prepend msg for load chat history
 
@@ -212,15 +200,4 @@ function prependRecvMsg(data){
         $('#user-'+data.fromPeerId+' .badge').html(count); 
     }
 
-    // fbAudio.play(); 
-    // console.log("str2"+str2);
-    // $('#'+data.fromPeerId).prepend(str2);
-
-    // $('.msg.msg-voice > .audiojs').each(function(e){
-    //     $(this).replaceWith($('audio', $(this)));
-
-    // })
-    // audiojs.events.ready(function() {
-    //     var as = audiojs.createAll();
-    // });
 }
