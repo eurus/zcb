@@ -40,7 +40,7 @@ app.get('/man',function(req,res) {
 		if (userCon.isLogin()){
 		userCon.findUserById(AV.User.current().id).then(function(user){
 			console.log(user);
-			res.render('manpage', {user: user});
+			res.render('mancheck', {user: user});
 		}, function(){
 			res.redirect('/man');
 		})
