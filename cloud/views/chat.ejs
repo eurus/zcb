@@ -159,10 +159,10 @@
 </script>
 
 <script  type='text/template' id="voice-tpl">
-    <li class='msg msg-voice {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
-     <div class="time">{=moment(timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
-     <img src="{=avatar}" class='img-responsive avatar'></img>
- </li>
+    <li id= "{=peerId}-{=timestamp}"class='msg msg-voice {=klass}' data-peer-id='{=peerId}' data-timestamp='{=timestamp}'>
+       <div class="time">{=moment(timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
+       <img src="{=avatar}" class='img-responsive avatar'></img>
+   </li>
 </script>
 
     <div id='user-info-tpl'>
@@ -353,6 +353,7 @@
     localStorage[myPeerId+'-avatar'] = myAvatarUrl;
     var watching = [];
     var toPeerId;
+    localStorage[unReadMsg] = [];
 
 
         // var watchingPeer = $('#watchingPeer').val().split(',');
@@ -396,14 +397,14 @@
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
-                    console.log(peers[i]+ 'online');
+                    console.log(peers[i]+ ' online');
                     $('#user-' + peers[i]).removeClass('offline');
                     $('#user-' + peers[i]).addClass('online');
                 }
             });
             chat.on('offline', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
-                    console.log(peers[i]+ 'offline');
+                    console.log(peers[i]+ ' offline');
                     $('#user-' + peers[i]).removeClass('online');
                     $('#user-' + peers[i]).addClass('offline');
                 }
