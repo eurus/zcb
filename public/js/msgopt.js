@@ -69,6 +69,7 @@ function appendRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });
+        $('#'+data.fromPeerId).append(str2);
 
         break;
 
@@ -81,6 +82,11 @@ function appendRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });
+        var elem = $(str2);
+        var audio = $("<audio src='"+receive_msg.Content+"' preload='auto'/>");
+        audio.appendTo(elem);
+        elem.appendTo($('#'+data.fromPeerId));
+        audiojs.create(audio, {});
         break;
 
         case "TEXT":
@@ -92,6 +98,8 @@ function appendRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });                   
+        $('#'+data.fromPeerId).append(str2);
+
         break;
     }             
     if (data.fromPeerId!=toPeerId){
@@ -101,19 +109,20 @@ function appendRecvMsg(data){
         count += 1;
         console.log('count after = '+count);
         $('#user-'+data.fromPeerId+' .badge').html(count); 
+    }else{
+        scrollToEnd(data.fromPeerId);
     }
     // console.log("str2"+str2);
-    $('#'+data.fromPeerId).append(str2);
+    // $('#'+data.fromPeerId).append(str2);
 
-    $('.msg.msg-voice > .audiojs').each(function(e){
-        $(this).replaceWith($('audio', $(this)));
+    // $('.msg.msg-voice > .audiojs').each(function(e){
+    //     $(this).replaceWith($('audio', $(this)));
 
-    })
-    audiojs.events.ready(function() {
-        var as = audiojs.createAll();
-    });
+    // })
+    // audiojs.events.ready(function() {
+    //     var as = audiojs.createAll();
+    // });
 
-    scrollToEnd(data.fromPeerId);
 
 }
 //prepend msg for load chat history
@@ -144,6 +153,7 @@ function prependRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });
+        $('#'+data.fromPeerId).prepend(str2);
 
         break;
 
@@ -156,6 +166,13 @@ function prependRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });
+        
+        var elem = $(str2);
+        var audio = $("<audio src='"+receive_msg.Content+"' preload='auto'/>");
+        audio.appendTo(elem);
+        elem.appendTo($('#'+data.fromPeerId));
+        audiojs.create(audio, {});
+
         break;
 
         case "TEXT":
@@ -167,6 +184,7 @@ function prependRecvMsg(data){
             timestamp: data.timestamp,
             klass:'to-me'
         });                   
+        $('#'+data.fromPeerId).prepend(str2);
         break;
     }             
     if (data.fromPeerId!=toPeerId){
