@@ -17,14 +17,21 @@
  	var UserList = AV.Collection.extend({
  		model: User
  	});
+
+    var Item = AV.Object.extend('Item',{
+        defaults:{
+            name:'',
+            checked:false
+        }
+    })
  	var CheckView = AV.View.extend({
  		tagName: "div",
  		template: _.template($('#checklist-tpl').html()),
  		events: {
-            "click .add": "addOne"
+            "click .add": "addOne"       
  		},
  		initialize: function(options) {
- 			_.bindAll(this, 'render','addOne');
+ 			_.bindAll(this, 'render','addOne','remove');
             this.items = options.model.get('items');
         },
         render: function() {
@@ -43,7 +50,7 @@
         tagName: "div",
         template: _.template($('#item-tpl').html()),
         events: {
-
+            "click .btn-remove":'remove'
         },
         initialize: function(options) {
             _.bindAll(this, 'render');
@@ -55,6 +62,10 @@
                 checked: this.model[1]
             }));
             return this;
+        },
+        remove: function() {
+            console.log(this);
+
         }
     });
 
