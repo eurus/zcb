@@ -26,7 +26,13 @@
             <div class='title'>              
                 体检单
             </div>
-            <div id='order' class='scrollable' >
+            <div id='checklist' class='scrollable' >
+              <div class="pure-form">
+                <fieldset id = 'checkitem'>
+                  
+                </fieldset>
+              </div>
+            
             </div>
         </div>
     </div>
@@ -43,8 +49,12 @@
 </script>
 
 <script type="text/template" id="checklist-tpl">
-<div class="checklist">
-hi
-
-</div>
+  <button class="add"><i class="fa fa-plus">Add Item</i></button>
+</script>
+<script type="text/template" id="item-tpl">
+  <label>名称</label>
+  <input type='text' name='name' value='{=name}'>
+  <label>状态</label>
+  <input type='text' name='status' value='{=checked}'>
+  <button class='btn btn-remove'>x</button>
 </script>
