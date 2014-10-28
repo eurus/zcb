@@ -28,10 +28,11 @@
  		tagName: "div",
  		template: _.template($('#checklist-tpl').html()),
  		events: {
-            "click .add": "addOne"       
+            "click .add": "addOne",
+            "click .upd": "updateItem"
  		},
  		initialize: function(options) {
- 			_.bindAll(this, 'render','addOne','remove');
+ 			_.bindAll(this, 'render','addOne','remove',"updateItem");
             this.items = options.model.get('items');
         },
         render: function() {
@@ -43,6 +44,9 @@
         addOne:function(item){
             var itemview = new CheckItemView({data: item});
             this.$el.append(itemview.render().el);
+        },
+        updateItem: function() {
+            
         }
     });
 
