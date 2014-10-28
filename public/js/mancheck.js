@@ -21,7 +21,7 @@
     var Item = AV.Object.extend('Item',{
         defaults:{
             name:'',
-            checked:false
+            checked: false
         }
     })
  	var CheckView = AV.View.extend({
@@ -53,20 +53,19 @@
             "click .btn-remove":'remove'
         },
         initialize: function(options) {
-            _.bindAll(this, 'render');
+            _.bindAll(this, 'render','remove');
             this.model = options.data;
+            this.item = new Item();
+            this.item.set("name",this.model[0]);
+            console.log(this.item.get("name"));
+            this.item.set("checked",this.model[1]);
+            console.log(this.item.get("checked"));
+            this.item.bind('destroy', this.remove);
         },
         render:function(){
-            this.$el.html(this.template({
-                name: this.model[0],
-                checked: this.model[1]
-            }));
+            this.$el.html(this.template(this.item.toJSON()));
             return this;
-        },
-        remove: function() {
-            console.log(this);
-
-        }
+        }    
     });
 
     var UserItemView = AV.View.extend({
