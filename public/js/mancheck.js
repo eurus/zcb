@@ -52,6 +52,9 @@
 
     var CheckItemView = AV.View.extend({
         tagName: "div",
+        attributes: {
+            class: "it"
+        },
         template: _.template($('#item-tpl').html()),
         events: {
             "click .btn-remove":'remove'
@@ -141,6 +144,4 @@
 
  var userListView = new UserListView();
  userListView.render();
-
-
 });
