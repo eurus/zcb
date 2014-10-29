@@ -3,6 +3,11 @@
  	interpolate : /{=([\s\S]+?)}/g,
  	escape      : /{-([\s\S]+?)}/g
  };
+$.fn.bootstrapSwitch.defaults.size = 'mini';
+$.fn.bootstrapSwitch.defaults.offText = '未检';
+$.fn.bootstrapSwitch.defaults.onText = '已检';
+
+
  $(function() {
  	AV.$ = jQuery;
  	AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
@@ -39,11 +44,14 @@
             this.$el.html(this.template(this.model.toJSON));
             _.each(this.items, this.addOne);
             $('#checkitem').html(this.el);
+            $("[name='status']").bootstrapSwitch();
+
             return this;
         },
         addOne:function(item){
             var itemview = new CheckItemView({data: item});
             this.$el.append(itemview.render().el);
+            $("[name='status']").bootstrapSwitch();
         },
         updateItem: function() {
             var itms = $('#checkitem > div > .it');
