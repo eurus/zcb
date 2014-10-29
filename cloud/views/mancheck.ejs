@@ -49,13 +49,13 @@
 </script>
 
 <script type="text/template" id="checklist-tpl">
-  <button class="add"><i class="fa fa-plus">Add Item</i></button>
-  <button class="upd"><i class="fa fa-floppy-o">Update Item</i></button>
+  <button class="add"><i class="fa fa-plus">增加项目</i></button>
+  <button class="upd"><i class="fa fa-floppy-o">更新体检单</i></button>
 </script>
 <script type="text/template" id="item-tpl">
   <label>名称</label>
   <input type='text' name='name' value='{=name || "null"}'>
   <label>状态</label>
-  <input type='text' name='status' value='{=checked || "false"}'>
-  <button class='btn btn-remove'>x</button>
+  <input type='check' name='status' value='{=checked || "false"}'>
+  <button class='btn btn-remove'><i class="fa fa-trash"></i></button>
 </script>
