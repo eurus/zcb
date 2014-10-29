@@ -374,3 +374,31 @@ input.form-control:focus, .pure-form input[type=text]:focus, .pure-form input[ty
 @keyframes yellow-fade{
     5%{ background-color:#ff8; }
 }
+
+
+.menu-item {
+    padding: 12px;
+    font-size:18px;
+    padding-right:0;
+    padding-left:0;
+    border-bottom: 1px solid #ddd;
+    border-left: 6px solid transparent;
+
+}
+.menu-item a{
+	font-size:16px;
+}
+
+.menu-item a:hover{
+	text-decoration: none;
+}
+
+.menu-item:hover a, .menu-item:hover i{
+	color:#f4a62a;
+	font-size:bold;
+}
+
+.menu-item.selected, .menu-item.selected i, .menu-item.selected a{
+	background:#f0ad4e;
+	color:white;
+}

@@ -31,6 +31,9 @@
         font-size:16px;
         color:white;
     }
+    #pkg-list{
+        padding:0;
+    }
     #pkg-list, #promotion-list{
         padding-top:20px;
         padding-bottom:20px;
@@ -46,9 +49,12 @@
     input[name=title]{
         width:200px;
     }
+    #upload-wrapper input{
+        display:inline-block;
+    }
 </style>
 <div id='layout'>
-    <div class='col-md-3 full-height'>
+    <div class='col-md-2 col-md-offset-1 full-height'>
         <div class='full-height full-width'>
             <div class='title'>
             <span id='list-title' style='font-size:14px; padding:10px; font-weight: bold; color:white;'></span>  
@@ -56,11 +62,30 @@
 
         <div class='pure-form pure-form-aligned full-height'>
             <div id='order-list' class='scrollable full-height'>
-            <div><a href='#packages'>套餐管理</a></div>
-            <div><a href='#promotions'>活动管理</a></div>
+             <div class='menu-item'>
+                <i class='fa fa-car'>
+                    <a href='/orders' target='_blank'>订单管理</a>
+                </i>
+            </div> 
+            <div id='packages-item' class='menu-item '>
+                <i class='fa fa-database'>
+                    <a href='#packages'>套餐管理</a>
+                </i>
             </div>
+            <div id='promotions-item' class='menu-item'>
+                <i class='fa fa-camera-retro'>
+                    <a href='#promotions'>活动图片</a>
+                </i>
+            </div>
+            <div class='menu-item'>
+                <i class='fa fa-check-square-o'>
+                    <a href='/man'>体检单管理</a>
+                </i>
+            </div>
+
         </div>
     </div>
+</div>
     </div>
 
     <div id='right' class='full-height'></div>
@@ -68,9 +93,9 @@
 
 <!-- Template -->
 <script type="text/template" id='promotion-tpl'>
-    <div class="col-md-9 full-height">
+    <div class="col-md-8 full-height">
         <div class="full-height full-width">
-            <div class='title'>活动列表
+            <div class='title'>活动图片
             <i class='fa fa-plus btn-new pull-right white'></i></div>
             <div id='promotion-list' class='scrollable full-height'>
             </div>
@@ -82,17 +107,17 @@
 <script type="text/template" id='promotion-item-tpl'>
     <div class='pure-control-group' >
     <img src='{=activity_pic.url}' class='pure-image promo'/>
-    <button class='btn btn-remove' >删除</button>
+    <button class='btn btn-default btn-remove' >删除</button>
     </div>
 </script>
 
 <script type="text/template" id='pkg-tpl'>
-    <div class="col-md-9 full-height">
+    <div class="col-md-8 full-height">
         <div class="full-height full-width">
-            <div class='title'> 套餐列表
+            <div class='title'> 套餐管理
             <i class='pull-right fa fa-plus btn-new white'></i>
             </div>
-            <div id='pkg-list' class='scrollable full-height'>
+            <div id='pkg-list' class='scrollable full-height' style='text-align:left;padding:0'>
             </div>
 
         </div>
@@ -100,31 +125,33 @@
 </script>
 
 <script type="text/template" id='pkg-item-tpl'>
-    <div class='pure-control-group'>
+    <div class='pure-control-group user-item' style='padding-left:30px;padding-right:30px;'>
         <label>名称</label>
         <input type='text' name='title' value='{=title}'>
-        <label>金额</label>
+        <label style='margin-left:20px;'>金额</label>
         <input type='number' name='price' value='{=price}'>
-        <button class='btn btn-save'>保存</button>
+        <button class='btn btn-warning btn-save  pull-right'>保存</button>
     </div>
 </script>
 
 <script type="text/template" id='pkg-item-show-tpl'>
-    <div class='pure-control-group'>
+    <div class='pure-control-group user-item' style='padding-left:30px;padding-right:30px;'>
         <span>{=title}</span> 
         <span> ({=price} 元)</span> 
-        <button class='btn btn-edit'>编辑</button>
+        <button class='btn btn-default btn-edit pull-right'>编辑</button>
         {if (!deleted) }
-        <button class='btn btn-remove'>删除</button>
+        <button class='btn btn-default btn-remove pull-right'>删除</button>
+        <div class='clearfix'></div>
 
         {if (deleted)}
-        <button class='btn btn-restore'>恢复</button>
+        <button class='btn btn-default btn-restore pull-right'>恢复</button>
+        <div class='clearfix'></div>
     </div>
 </script>
 
 <script type="text/template" id='promotion-new-tpl'>
 <div id='upload-wrapper'>
-    <input type="file" id="fileUpload"><button class='btn btn-save'>Save</button>
+    <input type="file" id="fileUpload"><button class='btn btn-warning btn-save'>保存</button>
     </div>
 </script>
 
@@ -361,6 +388,8 @@ var PromotionView = AV.View.extend({
         this.pkgView.render();
         console.log(this.pkgView.el);
         $('#right').html(this.pkgView.el);
+        $('.menu-item.selected').removeClass('selected');
+        $('#packages-item').addClass('selected');
 
     },
     promotions:function(){
@@ -368,6 +397,8 @@ var PromotionView = AV.View.extend({
         this.promoView.render();
         console.log(this.promoView.el);
         $('#right').html(this.promoView.el);
+        $('.menu-item.selected').removeClass('selected');
+        $('#promotions-item').addClass('selected');
     }
 });
 
