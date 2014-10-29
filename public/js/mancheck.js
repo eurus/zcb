@@ -30,7 +30,8 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
         }
     })
  	var CheckView = AV.View.extend({
- 		tagName: "div",
+        el:"<div class='full-height full-width'></div>",
+ 		// tagName: "div",
  		template: _.template($('#checklist-tpl').html()),
  		events: {
             "click .add": "addOne",
@@ -43,18 +44,20 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
         render: function() {
             this.$el.html(this.template(this.model.toJSON));
             _.each(this.items, this.addOne);
-            $('#checkitem').html(this.el);
+            // $('#user-list .item').first().trigger('click');
+            $('#order-panel').html(this.el);
             $("[name='status']").bootstrapSwitch();
 
+            $('#check-title').html(this.model.get('user').get("nickname")+" 的体检单"+'<i class="fa fa-plus add pull-right white"></i>');
             return this;
         },
         addOne:function(item){
             var itemview = new CheckItemView({data: item});
-            this.$el.append(itemview.render().el);
+            this.$('#checkitem').append(itemview.render().el);
             $("[name='status']").bootstrapSwitch();
         },
         updateItem: function() {
-            var itms = $('#checkitem > div > .it');
+            var itms = $('#checkitem .it');
             var result_itms = [];
             _.each(itms, function(itm) {
                 var a_0 = $('input[name="name"]',itm).val();
@@ -69,7 +72,8 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     });
 
     var CheckItemView = AV.View.extend({
-        tagName: "div",
+        el:'<div class="user-item" style="text-align:center"></div>',
+        // tagName: "div",
         attributes: {
             class: "it"
         },
@@ -105,17 +109,19 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     },
     render:function(){
         this.$el.html(this.template(this.model.toJSON()));
+        this.$el.attr('id', 'user-'+this.model.get('peerId'));
+        this.$el.data('peer-id', this.model.get('peerId'));
         return this;
     },
     showCheckList: function() {
         $('.user-item').removeClass('user-item-selected');
         this.$el.addClass("user-item user-item-selected");
         console.log(this.model.nickname);
-        $('#check-title').html(this.model.get("nickname")+" 的体检单");
         var user = new User();
         user.id = this.model.id;
         var query = new AV.Query(Check);
         query.equalTo('user', user);
+        query.include('user');
         query.first({
             success: function(checkList) {
                 if(typeof(checkList) !== 'undefined'){
@@ -161,7 +167,7 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     },
     addAll: function(people) {
         people.each(this.addOne);
-        $('#user-list').html(this.el);
+        $('#user-list').html(this.$el);
     }
 });
 
