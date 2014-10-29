@@ -94,7 +94,8 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     });
 
     var UserItemView = AV.View.extend({
-       tagName:  "div",
+        el: "<div class = 'user-item'></div>",
+       
        template: _.template($('#user-tpl').html()),
        events: {
         'click .item': 'showCheckList'
@@ -107,6 +108,8 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
         return this;
     },
     showCheckList: function() {
+        $('.user-item').removeClass('user-item-selected');
+        this.$el.addClass("user-item user-item-selected");
         var user = new User();
         user.id = this.model.id;
         var query = new AV.Query(Check);
