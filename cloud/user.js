@@ -5,7 +5,11 @@ function login(req, res, next) {
   var user = req.body.user;
   AV.User.logIn(user.username, user.password).then(function() {
         console.log('signed in successfully: %j', AV.User.current());
-        res.redirect('/chat');
+        console.log(req.param('url'));
+        if (req.param('url'))
+          res.redirect(req.param('url'))
+        else
+          res.redirect('/chat');
       },function(error) {
         //登录失败，跳转到登录页面
         res.redirect('/');

@@ -29,7 +29,8 @@ app.use(avosExpressCookieSession({ cookie: { maxAge: 3600000 }}));
 
 // 使用 Express 路由 API 服务 /hello 的 HTTP GET 请求
 app.get('/operator', function(req, res) {
-	res.render('operator');
+	url = req.param('url') || ''
+	res.render('operator', {url: url});
 });
 
 app.get('/', function(req, res) {
@@ -45,7 +46,7 @@ app.get('/man',function(req,res) {
 			res.redirect('/man');
 		})
 	}else{
-		res.redirect('/operator');
+		res.redirect('/operator?url=/man');
 	}
 });
 
@@ -106,11 +107,19 @@ app.get('/chat', function(req, res) {
 });
 
 app.get('/orders', function(req, res){
-	res.render('orders');
+	if (userCon.isLogin()){
+		res.render('orders', {user:AV.User.current()});
+	}else{
+		res.redirect('/operator?url=/orders');
+	}
 });
 
 app.get('/data', function(req, res){
-	res.render('data');
+	if (userCon.isLogin()){
+		res.render('data', {user:AV.User.current()});
+	}else{
+		res.redirect('/operator?url=/data');
+	}
 });
 
 
