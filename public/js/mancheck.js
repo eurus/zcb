@@ -110,6 +110,8 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     showCheckList: function() {
         $('.user-item').removeClass('user-item-selected');
         this.$el.addClass("user-item user-item-selected");
+        console.log(this.model.nickname);
+        $('#check-title').html(this.model.get("nickname")+" 的体检单");
         var user = new User();
         user.id = this.model.id;
         var query = new AV.Query(Check);
