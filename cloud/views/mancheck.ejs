@@ -56,6 +56,8 @@
   <label>名称</label>
   <input type='text' name='name' value='{=name || "null"}'>
   <label>状态</label>
-  <input type='check' name='status' value='{=checked || "false"}'>
+  
+  <input type="checkbox" name="status" value="{=checked}" {=checked ? "checked" : ""} >
+  
   <button class='btn btn-remove'><i class="fa fa-trash"></i></button>
 </script>

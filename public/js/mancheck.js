@@ -50,7 +50,7 @@
             var result_itms = [];
             _.each(itms, function(itm) {
                 var a_0 = $('input[name="name"]',itm).val();
-                var a_1 = $('input[name="status"]',itm).val();
+                var a_1 = $('input[name="status"]',itm).is(":checked");
                 result_itms.push([a_0,a_1]);
             });
             console.log("result_itms");
