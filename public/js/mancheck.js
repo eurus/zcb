@@ -21,7 +21,7 @@
     var Item = AV.Object.extend('Item',{
         defaults:{
             name:'',
-            checked: false
+            checked: "false"
         }
     })
  	var CheckView = AV.View.extend({
@@ -47,7 +47,6 @@
         },
         updateItem: function() {
             var itms = $('#checkitem > div > .it');
-            console.log(itms);
             var result_itms = [];
             _.each(itms, function(itm) {
                 var a_0 = $('input[name="name"]',itm).val();
@@ -56,7 +55,7 @@
             });
             console.log("result_itms");
             console.log(result_itms);
-            this.model.set("items",result_itms)
+            this.model.set("items",result_itms);
             this.model.save();
         }
     });
