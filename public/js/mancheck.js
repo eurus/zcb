@@ -72,7 +72,7 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     });
 
     var CheckItemView = AV.View.extend({
-        el:'<div class="user-item" style="text-align:center"></div>',
+        el:'<div class="user-item it" style="text-align:center"></div>',
         // tagName: "div",
         attributes: {
             class: "it"
