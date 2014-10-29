@@ -46,7 +46,18 @@
             this.$el.append(itemview.render().el);
         },
         updateItem: function() {
-            
+            var itms = $('#checkitem > div > .it');
+            console.log(itms);
+            var result_itms = [];
+            _.each(itms, function(itm) {
+                var a_0 = $('input[name="name"]',itm).val();
+                var a_1 = $('input[name="status"]',itm).val();
+                result_itms.push([a_0,a_1]);
+            });
+            console.log("result_itms");
+            console.log(result_itms);
+            this.model.set("items",result_itms)
+            this.model.save();
         }
     });
 
@@ -97,12 +108,12 @@
             success: function(checkList) {
                 if(typeof(checkList) !== 'undefined'){
                     console.log("has cheklist");
-                    // console.log(checkList.get("items"));
                     var checkView = new CheckView({model: checkList});   
                 }else{
                     console.log("has not checklist");
                     checkList = new Check();
-                    // console.log(checkList.get("items"));
+                    checkList.set("user",user);
+                    checkList.save();
                     var checkView = new CheckView({model: checkList});   
                 }
                 checkView.render();

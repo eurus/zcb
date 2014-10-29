@@ -54,8 +54,8 @@
 </script>
 <script type="text/template" id="item-tpl">
   <label>名称</label>
-  <input type='text' name='name' value='{=name}'>
+  <input type='text' name='name' value='{=name || "null"}'>
   <label>状态</label>
-  <input type='text' name='status' value='{=checked}'>
+  <input type='text' name='status' value='{=checked || false}'>
   <button class='btn btn-remove'>x</button>
 </script>
