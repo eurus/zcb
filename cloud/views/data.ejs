@@ -70,7 +70,8 @@
 <script type="text/template" id='promotion-tpl'>
     <div class="col-md-9 full-height">
         <div class="full-height full-width">
-            <div class='title'>活动列表</div>
+            <div class='title'>活动列表
+            <i class='fa fa-plus btn-new pull-right white'></i></div>
             <div id='promotion-list' class='scrollable full-height'>
             </div>
 
@@ -81,21 +82,16 @@
 <script type="text/template" id='promotion-item-tpl'>
     <div class='pure-control-group' >
     <img src='{=activity_pic.url}' class='pure-image promo'/>
-    {if (!deleted) }
-        <button class='btn btn-remove' >删除</button>
-
-    {if (deleted)}
-        <button class='btn btn-restore' >恢复</button>
-
+    <button class='btn btn-remove' >删除</button>
     </div>
-    }
 </script>
 
 <script type="text/template" id='pkg-tpl'>
     <div class="col-md-9 full-height">
         <div class="full-height full-width">
             <div class='title'> 套餐列表
-            <i class='pull-right fa fa-plus btn-new' style='color:white'></i></div>
+            <i class='pull-right fa fa-plus btn-new white'></i>
+            </div>
             <div id='pkg-list' class='scrollable full-height'>
             </div>
 
@@ -109,11 +105,26 @@
         <input type='text' name='title' value='{=title}'>
         <label>金额</label>
         <input type='number' name='price' value='{=price}'>
+        <button class='btn btn-save'>保存</button>
+    </div>
+</script>
+
+<script type="text/template" id='pkg-item-show-tpl'>
+    <div class='pure-control-group'>
+        <span>{=title}</span> 
+        <span> ({=price} 元)</span> 
+        <button class='btn btn-edit'>编辑</button>
         {if (!deleted) }
         <button class='btn btn-remove'>删除</button>
 
-    {if (deleted)}
+        {if (deleted)}
         <button class='btn btn-restore'>恢复</button>
+    </div>
+</script>
+
+<script type="text/template" id='promotion-new-tpl'>
+<div id='upload-wrapper'>
+    <input type="file" id="fileUpload"><button class='btn btn-save'>Save</button>
     </div>
 </script>
 
@@ -172,16 +183,23 @@
     var appkey =  "0efztvcng6f5klnksu9syv4o55py3z9pypppjzxuzuwwqmtb";
     AV.initialize( appid,appkey);
 
-var Package = AV.Object.extend("Package", {defaults:{} });
+var Package = AV.Object.extend("Package", {defaults:{
+    title:'',
+    price: 0,
+    deleted:false
+} });
 
 var PackageList = AV.Collection.extend({ model:Package })
 
 var PackageItemView = AV.View.extend({
     el:'<div class="pure-form"></div>',
-    template: _.template($('#pkg-item-tpl').html()),
+    template: _.template($('#pkg-item-show-tpl').html()),
+    editTemplate: _.template($('#pkg-item-tpl').html()),
     events:{
+        'click .btn-save':'save',
         'click .btn-remove':'remove',
-        'click .btn-restore':'restore'
+        'click .btn-restore':'restore',
+        'click .btn-edit':'edit'
     },
     initialize:function(options){
         _.bindAll(this, 'render');
@@ -190,6 +208,15 @@ var PackageItemView = AV.View.extend({
         this.model.set('deleted', true);
         this.model.save();
         this.render();
+    },
+    save:function(){
+        this.model.set('title', this.$('input[name=title]').val());
+        this.model.set('price', parseFloat(this.$('input[name=price]').val()));
+        this.model.save();
+        this.render();
+    },
+    edit:function(){
+        this.$el.html(this.editTemplate(this.model.toJSON()));
     },
     restore:function(elem){
         this.model.set('deleted',false);
@@ -208,14 +235,9 @@ var PackageView = AV.View.extend({
         'click .btn-new':'newPackage'
     },
     newPackage:function(){
-        alert('pkg');
-        var pkg = new Package({
-            title: '',
-            price:0,
-            deleted:false
-        });
+        var pkg = new Package();
         var item = new PackageItemView({model: pkg})
-        item.render();
+        item.edit();
         this.$('#pkg-list').prepend(item.el);
     },
     initialize:function(argument) {
@@ -257,8 +279,9 @@ var PromotionItemView = AV.View.extend({
         _.bindAll(this, 'render');
     },
     remove:function(elem){
-        this.model.set('deleted',true);
-        this.model.save();
+        // this.model.get('activity_pic').destroy();
+        this.model.destroy();
+        this.$el.html('');
     },
     render:function(){
         this.$el.html(this.template(this.model.toJSON()));
@@ -269,12 +292,18 @@ var PromotionView = AV.View.extend({
     el:'<div class="full-height"></div>',
     template:_.template($('#promotion-tpl').html()),
     events:{
-
+        'click .btn-new':'new',
+        'click .btn-save':'create'
+    },
+    new:function(){
+        var newTpl = _.template($('#promotion-new-tpl').html());
+        this.$('#promotion-list').prepend(newTpl());
     },
     initialize:function(argument) {
         this.list = new PromotionList;
         _.bindAll(this, 'reset');
         this.list.query = new AV.Query(Promotion);
+        this.list.query.descending('updatedAt');
         this.list.bind('reset', this.reset);
     },
     render:function(){
@@ -287,6 +316,26 @@ var PromotionView = AV.View.extend({
         this.$el.html();
         _.each(promos.models, this.append);
         console.log(this.el);
+    },
+    create:function(){
+        var control = $('#fileUpload')[0];
+        if (control.files.length > 0){
+            var file = control.files[0];
+            var name = file.name;
+
+            var avFile = new AV.File(name, file);
+            var pro = new Promotion({
+                activity_pic: avFile
+            });
+            $('#upload-wrapper').html('<img src="/img/waiting.gif" class="pure-image" style="width:50px;"/> uploading ...');
+            pro.save().then(function(promo){
+                $('#upload-wrapper').remove();
+                console.log('upload success');
+                var item = new PromotionItemView({model: promo});
+                item.render();
+                $('#promotion-list').prepend(item.el);
+            });
+        }
     },
     append:function(promo){
         console.log(promo);
