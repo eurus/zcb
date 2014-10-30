@@ -133,14 +133,18 @@
             return this;
         },
         signup: function(){
+            var username = $('input[name="uname"]',this.$el).val();
+            var nickname = $('input[name="nname"]',this.$el).val();
+            var password = $('input[name="pword"]',this.$el).val();
             var user = new AV.User();
-            user.set("username", "");
-            user.set("password", "");
-            user.set("nickname", "");
-            user.set("peerId", "");
-
+            user.set("username", username);
+            user.set("password", password);
+            user.set("nickname", nickname);
+            user.set("peerId", username);
+            console.log(user.toJSON());
             user.signUp(null, {
               success: function(user) {
+                alert('成功创建用户！');
                 UserView.render();
               },
               error: function(user, error) {
