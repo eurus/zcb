@@ -31,7 +31,25 @@
       return p;
     });
   }
-
+  AV.Cloud.define("updateUser", function(req,res) {
+    var username = req.params.username;
+    var nickname = req.params.nickname;
+    var softdestroy = req.params.softdestroy;
+    var User =  AV.Object.extend("_User");
+    var user = new User();
+    var query = new AV.Query(User);
+    query.equalTo("username", username);
+    query.first({
+        success: function(user) {
+          user.set("username",username);
+          user.set("nickname",nickname);
+          user.set("softdestroy",softdestroy);
+          console.log(user);
+          user.save();
+          res.success(user);
+      }
+    });
+  });
 
   AV.Cloud.define('findUserById', function(req, res){
     var id = req.params.uid || '';

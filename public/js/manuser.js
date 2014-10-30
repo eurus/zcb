@@ -30,6 +30,7 @@
             this.$el.html(tpl());
             this.people = new UserCollection;
             this.people.query = new AV.Query(User);
+            this.people.query.notEqualTo("softdestroy","true");
             this.people.bind('add', this.addOne);
             this.people.bind('reset',this.addAll);
         },
@@ -65,7 +66,7 @@
         },
         template: _.template(($('#user-item-tpl').html())),
         events: {
-            "click .btn-rm": "softDestroy",
+            "click .rm": "softDestroy",
             "click .upd": "updateUser"
         },
         initialize: function() {
@@ -80,16 +81,54 @@
         updateUser: function(){
             var username = $('input[name="uname"]',this.$el).val();
             var nickname = $('input[name="nname"]',this.$el).val();
-            
-            this.model.set('username',username);
-            this.model.set('nickname',nickname);
-            console.log(this.model.toJSON());
-            this.model.save();
+            user = {
+                username: username,
+                nickname: nickname,
+                softdestroy: "false"
+            };
+            AV.Cloud.run('updateUser', user, {
+              success: function(result) {
+                UserView.render();
+              },
+              error: function(error) {
+                console.log('oops, there is something wrong.');
+              }
+            });
         },
         softDestroy: function() {
-            
+            var username = $('input[name="uname"]',this.$el).val();
+            var nickname = $('input[name="nname"]',this.$el).val();
+            user = {
+                username: username,
+                nickname: nickname,
+                softdestroy: "true"
+            };
+            AV.Cloud.run('updateUser', user, {
+              success: function(result) {
+                UserView.render();
+              },
+              error: function(error) {
+                console.log('oops, there is something wrong.');
+              }
+            });
         }
 
+    });
+    var UserSignUpView = AV.View.extend({
+        tagName: 'div',
+        attributes: {
+            class: ""
+        },
+        template: _.template(($('#user-signup-tpl').html())),
+        events: {
+            
+        },
+        initialize: function() {
+            _.bindAll(this,'render','remove');
+        },
+        render: function() {
+            
+        }
     });
  var UserView = new UserManView();
     UserView.render();
