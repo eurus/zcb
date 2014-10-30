@@ -118,19 +118,24 @@
     var UserSignUpView = AV.View.extend({
         tagName: 'div',
         attributes: {
-            class: "pure-control-group"
+            class: ""
         },
         template: _.template(($('#user-signup-tpl').html())),
         events: {
-            "click .cancel":"cancel"
+            "click .cancel":"cancel",
+            "click .signup": "signup"
         },
         initialize: function() {
-            _.bindAll(this,'render','cancel');
+            _.bindAll(this,'render','cancel',"signup");
         },
         render: function() {
             this.$el.html(this.template());  
             return this;
         },
+        signup: function(){
+
+        },
+
         cancel:function() {
             UserView.render();
         }
