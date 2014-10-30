@@ -1,0 +1,119 @@
+<style>
+body,div,pre,h1,h2,h3,h4,h5,h6{
+	font-family: "微软雅黑","Microsoft YaHei", sans-serif, serif;
+	color:white;
+}
+body{
+  overflow-y:scroll;
+}
+h5{
+	font-size:20px;
+}
+#bar{
+	margin-top:1%;
+}
+#btns{
+	margin-top:2%;
+}
+#logo{
+	margin-top:6%;
+}
+#btns .btn{
+	background:#1c1311;
+	font-size:18px;
+	margin:0 30px 0 30px;
+	padding:5px 30px 5px 30px;
+	border-radius:50px;
+	border:10px solid rgba(100,100,100,0.3);
+     -webkit-background-clip: padding-box; /* for Safari */
+    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+}
+#btns .btn:hover{
+    color:#999;
+}
+
+#btns .btn b, #btns .btn i{
+    font-size:17px;
+	vertical-align: middle;
+    color:#544343;
+	height: 50px;
+	line-height: 50px;
+}
+#btns .btn i.fa{
+	font-size:50px;
+	margin-right:20px;
+}
+#btns .btn.active:hover{
+    color:#544343;
+}
+#btns .btn.active{
+	background:#fff100;
+	border:10px solid rgba(100,100,100,0.3);
+     -webkit-background-clip: padding-box; /* for Safari */
+    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+}
+
+#btns .btn.active i, #btns .btn.active b{
+    color:#1c1311;
+}
+
+
+@media screen and (max-width:767px){
+    #btns .btn i.fa{
+        font-size:40px;
+        margin-right:20px;
+    }
+    #btns .btn{
+        display:block;
+        margin:20px auto;
+    }
+    #logo{
+        margin-top:30px;
+    }
+    #btns{
+        margin-top:20px;
+    }
+    #bar{
+        margin-top:20px;
+    }
+    h5{
+        margin:10px;
+    }
+
+}
+
+@media screen and (min-width:768px) {
+    h5{
+        margin:20px;
+    }
+    #btns{
+        margin-top:30px;
+    }
+    .btn{
+        margin:0 5px 0 5px;
+    }
+    #logo{
+        margin-top:7%;
+    }
+}
+
+</style>
+<div id='bar' class='pure-u-1 center hidden-xs' style='margin-top:5%;'>
+ <h5>扫一扫，关注微信公众号</h5>
+ <img id=codedown src='/img/weixin.png' class='img-rounded pure-image pure-u-13-24 pure-u-md-7-24 pure-u-lg-5-24' style='border-radius:8px; margin-top:10px;'>
+</div>
+
+<div id='logo' class="pure-u-1 center">
+   <img src="/img/service-logo.png" class='pure-image pure-u-20-24 pure-u-md-10-24 pure-u-lg-7-24'>
+</div>
+
+<script>
+$( "#android" ).click(function() {
+    window.location.href='/app/download/android';
+
+  });
+$( "#apple" ).click(function() {
+    window.location.href='/app/download/ios';
+  });
+</script>
+

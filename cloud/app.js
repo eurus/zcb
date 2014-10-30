@@ -34,7 +34,8 @@ app.get('/operator', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-	res.render('index', {layout:'index-layout'});
+	res.render('weixin', {layout:'index-layout'});
+	// res.render('index', {layout:'index-layout'});
 });
 
 app.get('/man',function(req,res) {
