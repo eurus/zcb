@@ -41,8 +41,9 @@
                
         },
         newUser:function(){
-            person = new User;
-            this.addOne(person);
+            var view = new UserSignUpView();
+            $('#user-list').html(view.render().el);
+
         },
         addOne: function(person) {
             console.log('add one');
@@ -117,20 +118,24 @@
     var UserSignUpView = AV.View.extend({
         tagName: 'div',
         attributes: {
-            class: ""
+            class: "pure-control-group"
         },
         template: _.template(($('#user-signup-tpl').html())),
         events: {
-            
+            "click .cancel":"cancel"
         },
         initialize: function() {
-            _.bindAll(this,'render','remove');
+            _.bindAll(this,'render','cancel');
         },
         render: function() {
-            
+            this.$el.html(this.template());  
+            return this;
+        },
+        cancel:function() {
+            UserView.render();
         }
     });
  var UserView = new UserManView();
-    UserView.render();
+ UserView.render();
 
 });
