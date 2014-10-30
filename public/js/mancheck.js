@@ -158,7 +158,7 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     render:function(){
         this.$el.html("");
         this.people.fetch();
-        this.delegateEvents();    	
+        this.delegateEvents();      
 
     },
     addOne: function(person) {
