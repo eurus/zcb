@@ -133,7 +133,20 @@
             return this;
         },
         signup: function(){
+            var user = new AV.User();
+            user.set("username", "");
+            user.set("password", "");
+            user.set("nickname", "");
+            user.set("peerId", "");
 
+            user.signUp(null, {
+              success: function(user) {
+                UserView.render();
+              },
+              error: function(user, error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+            });
         },
 
         cancel:function() {
