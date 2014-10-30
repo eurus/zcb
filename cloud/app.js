@@ -123,6 +123,14 @@ app.get('/data', function(req, res){
 	}
 });
 
+app.get('/users', function(req,res) {
+	if (userCon.isLogin()){
+		res.render('manuser', {user:AV.User.current()});
+	}else{
+		res.redirect('/operator?url=/data');
+	}
+});
+
 
 app.post('/login', userCon.login);
 app.get('/logout', function (req, res) {

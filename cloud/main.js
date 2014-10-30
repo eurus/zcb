@@ -99,7 +99,6 @@
     });
 
      chat.open().then(function(data){
-      // peerId_namelist = _.pluck(namelist,'peerId');
       chat.getStatus(namelist.toString().split(',')).then(function(data) {
         console.log( data);
         name =data.onlineSessionPeerIds[Math.floor(Math.random()*data.onlineSessionPeerIds.length)]
