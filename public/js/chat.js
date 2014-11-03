@@ -132,7 +132,7 @@ var OrderList = AV.Collection.extend({ model: Order });
 				var mobile = $('#user-form input[name=mobile]').val();
 				var user = new User;
 				var userForm = {
-					'mobile': mobile, 
+					'mobilePhoneNumber': mobile, 
 					'nickname':mobile,
 					'username':mobile,
 					'password':mobile,
