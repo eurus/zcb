@@ -38,6 +38,10 @@ app.get('/', function(req, res) {
 	// res.render('index', {layout:'index-layout'});
 });
 
+app.get('/index', function(req,res){
+	res.render('index', {layout:'index-layout'});
+});
+
 app.get('/man',function(req,res) {
 		if (userCon.isLogin()){
 		userCon.findUserById(AV.User.current().id).then(function(user){
