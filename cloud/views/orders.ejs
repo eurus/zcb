@@ -143,6 +143,11 @@
         else
             json.car = {}
 
+        if (order.get('items'))
+            json.items = order.get('items');
+        else
+            json.items = [];
+
         if (order.get('address'))
             json.address = order.get('address').toJSON();
         else
@@ -340,9 +345,15 @@ var OrderDetailView = AV.View.extend({
         console.log(json);
         console.log(json.car);
         this.$el.html(_.template($('#order-detail-tpl').html())(json));
+        console.log(this.model);
         if (this.model.get('items')){
+            console.log(this.model.get('items'));
             _.each(this.model.get('items'), function(item){
-                $('.items', this.$el).append($("<p>"+item.get('name')+' '+item.get('price')+"元</p>"))
+                console.log('item');
+                console.log(item);
+                if (item){
+                    $('.items', this.$el).append($("<p>"+item['name']+' '+item['price']+"元</p>"))
+                }
             });
         }
         return this;
