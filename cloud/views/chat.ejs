@@ -1,9 +1,10 @@
 <script src="js/chat.js"></script>
 <script src="js/msgopt.js"></script>
+
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            <img class="img-circle pure-image own-avatar" height="50" width="50" src='<%-user.avatarUrl %>'>
+            
             <div id='user-title' class='title'>
                             <%-user.nickname %>
 
@@ -124,6 +125,7 @@
         <div class='pure-u-1-4' style='text-align:left'>
             <b>状态：{=status}</b>
             <p>金额：{=total_price}</p>
+            { if (status != 'cancel') }
             <button class="pull-right order-destroy" style='font-size:12px;' data-order-id='{=objectId}'><b class='fa fa-remove'></b></button>
             { if (status == 'incomplete' || status == 'unconfirmed') }
             <button class="pull-right order-edit" style='font-size:12px; margin-top:30px;' data-order-id='{=objectId}'><b class='fa fa-edit'></b></button>
@@ -370,9 +372,10 @@
                 peerId: myPeerId
             });
             chat.on('close', function() {
-                alert('connection closed')
+                alert('connection closed');
                 $('#connect-status').text('not connected');
                 $('.online').removeClass('online').addClass('offline');
+                setTimeout(openSocket, 5000);
             });
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
@@ -534,7 +537,17 @@
         }
         $('#addwatch').click(       
             function() {
-                addWatch($('#watchingPeer').val());
+                var name = $('#watchingPeer').val();
+                AV.Cloud.run("findUserByName", {username: name}, {
+                    success: function(data){
+                        addWatch(data.peerId);
+                    },
+                    error:function(){
+                        addWatch(name);
+                    }
+                });
+
+                // addWatch($('#watchingPeer').val());
             });
 
         function scrollToEnd(peerId){

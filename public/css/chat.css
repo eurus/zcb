@@ -1,3 +1,4 @@
+
 #layout{
     margin:0 auto;
     width:95%;
@@ -91,7 +92,6 @@
 
 /* User Item Styles */
 .user-title{
-   background:; 
 }
 .user-profile{
     position: relative;
@@ -171,7 +171,8 @@
 }
 
 #user-title{
-    padding-left:50px;
+    padding-left:0;
+    text-align: center;
 }
 #user-title.title{
     padding-right:0;

@@ -592,7 +592,7 @@ var OrderItemView = AV.View.extend({
 	tagName:  "li",
 	template: _.template($('#order-item-tpl').html()),
 	events: {
-		 "click .order-destroy"   : "clear",
+		 "click .order-destroy"   : "cancel",
 		 "click .order-edit": "edit"
 	},
 	initialize: function() {
@@ -614,8 +614,10 @@ var OrderItemView = AV.View.extend({
 		$('#order').html(homeView.$el);
 		location.hash='';
 	},
-	clear: function() {
-		this.model.destroy();
+	cancel: function() {
+		this.model.set('status', 'cancel');
+		this.model.save();
+		this.render();
 	}
 
 })
