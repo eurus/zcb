@@ -130,9 +130,12 @@
     <p>操作员：{=operator.nickname}</p>
     <p>销售：{=salesman.nickname}</p>
     <p>服务商：{=store.name}</p>
+
+    {if (status == 'paid' || status == 'processing') }
+    <button class='btn-done btn-secondary btn'><i class='fa fa-check white' style='padding-right:10px;'></i>完成</button>
+    <button class='btn-cancel btn-third btn'><i class='fa fa-remove' style='padding-right:10px;color:#999'></i>取消</button>
     {if (status=='unconfirmed')}
-    <button class='btn-cancel btn-secondary btn'>
-    <i class='fa fa-remove' style='padding-right:10px;'></i>取消</button>
+    <button class='btn-cancel btn-third btn'><i class='fa fa-remove' style='padding-right:10px;color:#999'></i>取消</button>
 </script>
 
 <script>
@@ -335,7 +338,8 @@
 var OrderDetailView = AV.View.extend({
     el:'',
     events:{
-        'click .btn-cancel':'cancel'
+        'click .btn-cancel':'cancel',
+        'click .btn-done':'done'
     },
     initialize:function(){
         this.$el.html();
@@ -362,6 +366,12 @@ var OrderDetailView = AV.View.extend({
         this.model.set('status', 'cancel');
         this.model.save();
         $('.btn-cancel', this.$el).remove();
+        $('#order-list div[data-order-id='+this.model.id+'] b.status').text('状态：'+this.model.get('status'));
+    },
+    done:function(){
+        this.model.set('status', 'done');
+        this.model.save();
+        $('.btn-done', this.$el).remove();
         $('#order-list div[data-order-id='+this.model.id+'] b.status').text('状态：'+this.model.get('status'));
     }
 })
