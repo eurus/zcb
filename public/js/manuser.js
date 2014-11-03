@@ -41,8 +41,9 @@
                
         },
         newUser:function(){
-            person = new User;
-            this.addOne(person);
+            var view = new UserSignUpView();
+            $('#user-list').html(view.render().el);
+
         },
         addOne: function(person) {
             console.log('add one');
@@ -121,16 +122,42 @@
         },
         template: _.template(($('#user-signup-tpl').html())),
         events: {
-            
+            "click .cancel":"cancel",
+            "click .signup": "signup"
         },
         initialize: function() {
-            _.bindAll(this,'render','remove');
+            _.bindAll(this,'render','cancel',"signup");
         },
         render: function() {
-            
+            this.$el.html(this.template());  
+            return this;
+        },
+        signup: function(){
+            var username = $('input[name="uname"]',this.$el).val();
+            var nickname = $('input[name="nname"]',this.$el).val();
+            var password = $('input[name="pword"]',this.$el).val();
+            var user = new AV.User();
+            user.set("username", username);
+            user.set("password", password);
+            user.set("nickname", nickname);
+            user.set("peerId", username);
+            console.log(user.toJSON());
+            user.signUp(null, {
+              success: function(user) {
+                alert('成功创建用户！');
+                UserView.render();
+              },
+              error: function(user, error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+            });
+        },
+
+        cancel:function() {
+            UserView.render();
         }
     });
  var UserView = new UserManView();
-    UserView.render();
+ UserView.render();
 
 });

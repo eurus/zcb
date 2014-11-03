@@ -35,11 +35,25 @@
 	<label for="nickname">昵称</label>
 	<input name="nname" id="nickname" type="text" placeholder="Nick Name" value="{=nickname}">
 	
-	<button class= 'btn btn-primary upd'>更新</button>
-	<button class= 'btn btn-primary rm'>删除</button>
+	<button class= 'btn btn-default upd'>更新</button>
+	<button class= 'btn btn-default rm'>删除</button>
 
 </script>
 
 <script type="text/template" id="user-signup-tpl">
-
+	<div class="pure-control-group">
+		
+		<label for="username">用户名</label>
+		<input name="uname" id="username" type="text" placeholder="User Name" required>
+		<label for="nickname">昵称</label>
+		<input name="nname" id="nickname" type="text" placeholder="Nick Name" required>
+		<label for="password">密码</label>
+		<input name="pword" id="password" type="text" placeholder="Password" required>
+		
+	</div>
+	<div class="pure-controls">
+		<button class= 'btn btn-default signup'>新增</button>
+		<button class= 'btn btn-default cancel'>取消</button>
+	</div>
+	
 </script>
