@@ -661,22 +661,18 @@
                 "Content": origin_msg,
                 "InfoType":"TEXT"
             }
-
+            //产看peer是否在线 
+            //如果不在线就是发送离线消息，推送
+            //get status then
+            //如果 在线不需要操作
             console.log(JSON.stringify(send_msg));
-            // chat.getStatus(watching).then(function(onlinePeers){
-            //     if (onlinePeers.onlineSessionPeerIds.indexOf(toPeerId) == -1){
-            //         var query = new AV.Query("_Installation");
-            //         query.equalTo("peerID", toPeerId);
-            //         AV.Push.send({
-            //           where: query,
-            //           data: {
-            //              alert: "客服回复，请点击查看"
-            //          }
-            //      });
-
-            //     }
-            // });
+            console.log("get status");
             
+            // chat.getStatus(toPeerId).then(function(data) {
+            //     console.log( data);
+            // });
+
+
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
                 appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
