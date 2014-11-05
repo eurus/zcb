@@ -679,7 +679,7 @@
                     if (data.onlineSessionPeerIds.length == 0) {
                         console.log("are you there"+toPeerId);
                         var query = new AV.Query("_Installation");
-                        query.equalTo("peerId",toPeerId);
+                        query.equalTo("peerID",toPeerId);
                         query.equalTo("deviceType","ios");
                         AV.Push.send({
                           where: query,
