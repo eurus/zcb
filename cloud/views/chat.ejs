@@ -4,7 +4,7 @@
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-
+            
             <div id='user-title' class='title'>
                             <%-user.nickname %>
 
@@ -21,7 +21,7 @@
             <div id='user-list' class='scrollable' >
             </div>
         </div>
-    </div>
+    </div>   
 
     <div class='col-md-6 full-height'>
         <div class='full-height full-width'>
@@ -37,7 +37,7 @@
                         var timestamp = $('#'+peerId+' li:first').data('timestamp');
 
                         console.log(peerId);
-
+                        
                         loadChatHis(myPeerId,peerId,30,timestamp);
 
 
@@ -58,7 +58,7 @@
 
     <div id='order-panel' class='col-md-4 full-height'>
         <div class='full-height full-width'>
-            <div class='title'>
+            <div class='title'>              
                 订单
             </div>
             <div id='order' class='scrollable' >
@@ -105,8 +105,8 @@
 </div>
 
 <div id="msg-tpl">
-    <ul id='{=peerId}' style='overflow-y:scroll' class='hide'>
-    </ul>
+    <ul id='{=peerId}' style='overflow-y:scroll' class='hide'>                     
+    </ul>   
 </div>
 
 <script type="text/template" id="order-list-tpl">
@@ -201,7 +201,7 @@
             <b class='banner pure-u-1'>车辆信息</b>
                 <select id="car-ids" class='selectpicker'>
                     <option value=''>新增车辆…</option>
-                </select>
+                </select> 
             <div id='car-info'>
             </div>
         </div>
@@ -324,7 +324,7 @@
             <!-- cars -->
             <b class='banner pure-u-1'>套餐信息</b>
             <select id="pkg-ids" class='selectpicker'>
-            </select>
+            </select> 
         </div>
     </div>
 
@@ -361,7 +361,7 @@
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
-
+           
 
 
             if($('#watchingPeer').val()!=""){
@@ -384,33 +384,31 @@
                 var msg_id = data.fromPeerId +"-" +data.timestamp;
                 un_read.push(msg_id);
                 localStorage["unReadMsg"] = JSON.stringify(un_read);
-
+        
                 if ($('#user-'+data.fromPeerId).length > 0){
                     if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                     }
-                    appendRecvMsg(data);
+                    appendRecvMsg(data); 
                 }else{
                     addWatch(data.fromPeerId).then(function(){
                         if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                     }
-                    appendRecvMsg(data);
+                    appendRecvMsg(data); 
                 });
                 }
+                
 
-
-
-
+                
+                
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
                     console.log(peers[i]+ ' online');
                     $('#user-' + peers[i]).removeClass('offline');
                     $('#user-' + peers[i]).addClass('online');
-                    if (peers[i] == toPeerId){
-                        $('#to-nickname').html( $('#to-nickname').text().replace(/ \(离线\)/, ''));
-                    }
+                    $('#to-nickname').html( $('#to-nickname').html().replace(' (离线)', ''));
                 }
             });
             chat.on('offline', function(peers) {
@@ -418,9 +416,7 @@
                     console.log(peers[i]+ ' offline');
                     $('#user-' + peers[i]).removeClass('online');
                     $('#user-' + peers[i]).addClass('offline');
-                    if (peers[i] == toPeerId){
-                        $('#to-nickname').html( $('#to-nickname').text()+' (离线)');
-                    }
+                    $('#to-nickname').html( $('#to-nickname').html()+' (离线)');
                 }
             });
             openSocket();
@@ -447,7 +443,7 @@
                         }
 
                         p.then(function(){
-
+                           
                            $('#user-list .user-item').each(function(){
                                 var peerId = $(this).data('peer-id');
                                 var count = localStorage[peerId+'-unread'];
@@ -493,7 +489,7 @@
             console.log(err)
         });
         }
-
+        
         function closeSocket() {
             chat.close().then(function() {
                 $('#connect-status').text('not connected');
@@ -539,7 +535,7 @@
                 $('#user-'+peerId).addClass('user-item-selected');
             }
         }
-        $('#addwatch').click(
+        $('#addwatch').click(       
             function() {
                 var name = $('#watchingPeer').val();
                 AV.Cloud.run("findUserByName", {username: name}, {
@@ -601,12 +597,6 @@
                     var peerId = onlinePeers.onlineSessionPeerIds[i];
                     $('#user-'+peerId).removeClass('offline').addClass('online');
                 }
-
-                console.log('S!!!!!!!!!!!!!!!!!!!');
-                if ($('.user-item-selected.online').length == 1){
-                    var peerId = $('.user-item-selected.online').data('peer-id');
-                    $('#to-nickname').html($('#to-nickname').text().replace(/ \(离线\)/g, ''))
-                }
             });
         }
 
@@ -626,16 +616,16 @@
                             data = {
                                 peerId: data.peerId,
                                 nickname: data.peerId
-                            }
+                            } 
                         }
                         var sidebar_li = _.template($('#user-tpl').html())(data);
                         $('#user-list').append(sidebar_li);
 
-
+                        
                         if(typeof data != 'undefined'){
                             console.log('data ===== '+data);
 
-                            $('#user-' + data.peerId +'> div > a > img').attr("src",data.avatarUrl);
+                            $('#user-' + data.peerId +'> div > a > img').attr("src",data.avatarUrl); 
 
                             localStorage[data.peerId+'-avatar'] = data.avatarUrl;
                             localStorage[data.peerId+'-nickname'] = data.nickname;
@@ -646,8 +636,8 @@
                         console.log('oops, there is something wrong.');
                     }
                 });
-
-
+                
+                
             }
         }
         function removeWatchingPeer(peers) {
@@ -662,7 +652,7 @@
             }
         }
 
-
+        
         function sendReply(){
             origin_msg = $('#msg').val();
             if (origin_msg.trim()=='')
@@ -671,25 +661,11 @@
                 "Content": origin_msg,
                 "InfoType":"TEXT"
             }
-            //产看peer是否在线
+            //产看peer是否在线 
             //如果不在线就是发送离线消息，推送
             //get status then
             //如果 在线不需要操作
             console.log(JSON.stringify(send_msg));
-            // chat.getStatus(watching).then(function(onlinePeers){
-            //     if (onlinePeers.onlineSessionPeerIds.indexOf(toPeerId) == -1){
-            //         var query = new AV.Query("_Installation");
-            //         query.equalTo("peerID", toPeerId);
-            //         AV.Push.send({
-            //           where: query,
-            //           data: {
-            //              alert: "客服回复，请点击查看"
-            //          }
-            //      });
-
-            //     }
-            // });
-
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
                 appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
@@ -700,6 +676,7 @@
                         console.log("are you there"+toPeerId);
                         var query = new AV.Query("_Installation");
                         query.equalTo("peerId",toPeerId);
+                        query.equalTo("deviceType","ios");
                         AV.Push.send({
                           where: query,
                           data: {
