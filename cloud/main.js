@@ -407,3 +407,4 @@
   });
   }
   AV.Cloud.afterUpdate("Order", updateTotalPrice);
+

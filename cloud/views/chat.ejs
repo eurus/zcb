@@ -666,16 +666,24 @@
             //get status then
             //如果 在线不需要操作
             console.log(JSON.stringify(send_msg));
-            console.log("get status");
-            
-            // chat.getStatus(toPeerId).then(function(data) {
-            //     console.log( data);
-            // });
-
-
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
                 appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
+
+                chat.getStatus(toPeerId).then(function(data) {
+                    console.log( "online is "+data.onlineSessionPeerIds.length);
+                    if (data.onlineSessionPeerIds.length == 0) {
+                        console.log("are you there"+toPeerId);
+                        var query = new AV.Query("_Installation");
+                        query.equalTo("peerId",toPeerId);
+                        AV.Push.send({
+                          where: query,
+                          data: {
+                            alert: origin_msg
+                         }
+                     });
+                    }
+                });
 
             }, function(err) {
                 console.log(err)
