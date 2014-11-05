@@ -6,7 +6,6 @@ var userCon = require('cloud/user.js');
 var expressLayouts = require('express-ejs-layouts');
 var avosExpressCookieSession = require('avos-express-cookie-session');
 
-
 // App全局配置
 if (__production)
 	app.set('views', 'cloud/views');
