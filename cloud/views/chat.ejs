@@ -680,11 +680,11 @@
                         console.log("are you there"+toPeerId);
                         var query = new AV.Query("_Installation");
                         query.equalTo("peerID",toPeerId);
-                        query.equalTo("deviceType","ios");
+                        
                         AV.Push.send({
                           where: query,
                           data: {
-                            alert: origin_msg,
+                            alert: "您有一条新消息",
                             badge: "Increment"
                          }
                      });
