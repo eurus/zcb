@@ -419,6 +419,7 @@
                     $('#user-' + peers[i]).removeClass('online');
                     $('#user-' + peers[i]).addClass('offline');
                     if (peers[i] == toPeerId){
+                        $('#to-nickname').html( $('#to-nickname').text().replace(/ \(离线\)/, ''));
                         $('#to-nickname').html( $('#to-nickname').text()+' (离线)');
                     }
                 }
