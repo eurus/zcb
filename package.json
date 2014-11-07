@@ -12,6 +12,7 @@
     "express-ejs-layouts":"*",
     "express-partials":"*",
     "lean-cloud-chat": "*",
-    "unirest" :"*"
+    "unirest" :"*",
+    "connect-coffee-script":"*"
   }
 }
