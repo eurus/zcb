@@ -378,17 +378,19 @@
             // --------------- chat 相关监听 ---------------
             chat.on('message', function(data) {
                 playFB();
+                console.log('message');
                 var un_read = _.uniq(JSON.parse(localStorage["unReadMsg"]));
                 var msg_id = data.fromPeerId +"-" +data.timestamp;
                 un_read.push(msg_id);
                 localStorage["unReadMsg"] = JSON.stringify(un_read);
-
+                $('#user-'+data.fromPeerId).removeClass('offline').addClass('online');
                 if ($('#user-'+data.fromPeerId).length > 0){
-                    if ($('to-nickname').text() == ''){
+                    // if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
-                    }
+                    // }
                     appendRecvMsg(data);
                 }else{
+                    console.log('add watch');
                     addWatch(data.fromPeerId).then(function(){
                         if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
@@ -425,6 +427,7 @@
         function openSocket(){
             $('#user-list').empty();
             addWatchingPeer($('#watchingPeer').val().split(','));
+            console.log('socket open');
             chat.open().then(function() {
                 $('#connect-status').text('connected');
                 if(localStorage.getItem(myPeerId) === null){
@@ -432,7 +435,9 @@
                }else{
                 var watchPromises = _.map(JSON.parse(localStorage[myPeerId]), addWatch);
                 var chatHisPromises = _.map(JSON.parse(localStorage[myPeerId]), addChatHis);
+                console.log('watching promises');
                 AV.Promise.when(watchPromises).then(function(){
+                    console.log('chat his promises');
                     AV.Promise.when(chatHisPromises).then(function(){
                         var p = null;
                         if (localStorage[myPeerId+'-selected']){
@@ -441,6 +446,7 @@
                             p = switchChatTo($('#user-list .user-item:first').data('peer-id'));
                         }
 
+                        console.log('promise');
                         p.then(function(){
 
                            $('#user-list .user-item').each(function(){
@@ -487,6 +493,7 @@
         }
 
         function closeSocket() {
+            console.log('socket close');
             chat.close().then(function() {
                 $('#connect-status').text('not connected');
                 $('.online').removeClass('online').addClass('offline');
@@ -501,11 +508,14 @@
                 watching.push(peerId);
                 localStorage[myPeerId] = JSON.stringify(nlist);
 
+                console.log('add watch');
                 chat.watch(peerId.split(',')).then(function() {
                 }, function() {
                     alert('watch failure')
                 });
                 return addWatchingPeer(peerId.split(','));
+            }else{
+                return new AV.Promise();
             }
         }
         function removeWatch(target){
@@ -551,6 +561,7 @@
             toPeerId = peerId;
             var userQuery = new AV.Query(User);
             userQuery.equalTo('peerId', peerId);
+            console.log('switch chat to');
             return userQuery.first().then(function(user){
                 customer = user;
                 if ($('#user-'+peerId).hasClass('offline')){
@@ -590,6 +601,7 @@
         return diff;
     }
         function checkStatus(peers){
+            console.log('get status');
             chat.getStatus(peers).then(function(onlinePeers){
                 for (var i in onlinePeers.onlineSessionPeerIds){
                     var peerId = onlinePeers.onlineSessionPeerIds[i];
@@ -665,10 +677,12 @@
             //如果不在线就是发送离线消息，推送
             //get status then
             //如果 在线不需要操作
+            console.log('send');
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
                 appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
 
+                console.log('get status');
                 chat.getStatus(toPeerId).then(function(data) {
                     if (data.onlineSessionPeerIds.length == 0) {
                         var query = new AV.Query("_Installation");
@@ -685,8 +699,8 @@
                 });
 
             }, function(err) {
-                console.log(err)
-                alert("send failure!!!")
+                console.log(err);
+                alert("send failure!!!");
             });
         }
         $('#sendbtn').click(sendReply);
