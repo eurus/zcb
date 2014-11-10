@@ -64,8 +64,6 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
                 var a_1 = $('input[name="status"]',itm).is(":checked");
                 result_itms.push([a_0,a_1]);
             });
-            console.log("result_itms");
-            console.log(result_itms);
             this.model.set("items",result_itms);
             this.model.save();
         }
@@ -86,20 +84,18 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
             this.model = options.data;
             this.item = new Item();
             this.item.set("name",this.model[0]);
-            console.log(this.item.get("name"));
             this.item.set("checked",this.model[1]);
-            console.log(this.item.get("checked"));
             this.item.bind('destroy', this.remove);
         },
         render:function(){
             this.$el.html(this.template(this.item.toJSON()));
             return this;
-        }    
+        }
     });
 
     var UserItemView = AV.View.extend({
         el: "<div class = 'user-item'></div>",
-       
+
        template: _.template($('#user-tpl').html()),
        events: {
         'click .item': 'showCheckList'
@@ -116,7 +112,6 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     showCheckList: function() {
         $('.user-item').removeClass('user-item-selected');
         this.$el.addClass("user-item user-item-selected");
-        console.log(this.model.nickname);
         var user = new User();
         user.id = this.model.id;
         var query = new AV.Query(Check);
@@ -125,22 +120,19 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
         query.first({
             success: function(checkList) {
                 if(typeof(checkList) !== 'undefined'){
-                    console.log("has cheklist");
-                    var checkView = new CheckView({model: checkList});   
+                    var checkView = new CheckView({model: checkList});
                 }else{
-                    console.log("has not checklist");
                     checkList = new Check();
                     checkList.set("user",user);
                     checkList.save();
-                    var checkView = new CheckView({model: checkList});   
+                    var checkView = new CheckView({model: checkList});
                 }
                 checkView.render();
             },
             error: function(error) {
-                console.log("Error: " + error.code + " " + error.message);
-            }
+                }
         });
-        
+
     }
 });
  var UserListView = AV.View.extend({
@@ -158,7 +150,7 @@ $.fn.bootstrapSwitch.defaults.onText = '已检';
     render:function(){
         this.$el.html("");
         this.people.fetch();
-        this.delegateEvents();      
+        this.delegateEvents();
 
     },
     addOne: function(person) {

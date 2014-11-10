@@ -3478,8 +3478,7 @@
    *      results[0].set("foo", "bar");
    *      return results[0].saveAsync();
    *    }).then(function(result) {
-   *      console.log("Updated " + result.id);
-   *    });
+   *      *    });
    * </pre></p>
    *
    * @see AV.Promise.prototype.next
@@ -9184,8 +9183,8 @@
    * Count unread statuses in someone's inbox.For example:<br/>
    * <p><pre>
    *  AV.Status.countUnreadStatuses(AV.User.current()).then(function(response){
-   *    console.log(response.unread); //unread statuses number.
-   *    console.log(response.total);  //total statuses number.
+   *    //unread statuses number.
+   *    //total statuses number.
    *  });
    * </pre></p>
    * @since 0.3.0

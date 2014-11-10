@@ -1,8 +1,7 @@
 if(localStorage.getItem('unReadMsg') === null){
     localStorage['unReadMsg'] = JSON.stringify([]);
 }else{
-    console.log(localStorage['unReadMsg']);
-}
+    }
 
 
 function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
@@ -14,7 +13,6 @@ function loadChatHis (myPeerId,otherPeerId,limit,timestamp) {
            success: function(data){
             _.each(data,function (his) {
                 var top_msg_timestamp = $('#'+otherPeerId+' li:first').data('timestamp');
-                console.log(top_msg_timestamp);
                 if(otherPeerId == his.from){
                     var data = {
                         msg:his.data,
@@ -37,8 +35,6 @@ function addChatHis (otherPeerId) {
     AV.Cloud.run("GetChatHistory", {frompid:myPeerId,topid:otherPeerId}, {
        success: function(data){
         _.each(data,function (his) {
-            console.log(his);
-            console.log(myPeerId);
             if (myPeerId == his.from){
               appendSendMsg(otherPeerId, JSON.parse(his.data).Content,his.timestamp);
           }else{
@@ -97,7 +93,7 @@ function appendRecvMsg(data, addCount){
             timestamp: data.timestamp,
             klass:'to-me'
         });
-        
+
         var elem = $(str2);
         var audio = $("<audio src='"+receive_msg.Content+"' preload='auto'/>");
         audio.appendTo(elem);
@@ -107,13 +103,9 @@ function appendRecvMsg(data, addCount){
         unreadAudios = JSON.parse(localStorage['unReadMsg']);
 
         var li_id = data.fromPeerId+'-'+data.timestamp;
-        console.log('li id = '+li_id);
-        console.log('unread audio');
-        console.log(unreadAudios);
         if (_.contains(unreadAudios, li_id)){
             $('#'+li_id).addClass('unread');
-            console.log($('#'+li_id));
-        }
+            }
         break;
 
         case "TEXT":
@@ -123,16 +115,16 @@ function appendRecvMsg(data, addCount){
             avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
             timestamp: data.timestamp,
             klass:'to-me'
-        });                   
+        });
         $('#'+data.fromPeerId).append(str2);
         break;
-    }    
+    }
     if (addCount && data.fromPeerId!=toPeerId){
         var count = $('#user-'+data.fromPeerId+' .badge').html();
         count = parseInt(count) || 0;
         count += 1;
         localStorage[data.fromPeerId+'-unread'] = count;
-        $('#user-'+data.fromPeerId+' .badge').html(count); 
+        $('#user-'+data.fromPeerId+' .badge').html(count);
         var item = $('#user-'+data.fromPeerId)
         item.detach();
         item.prependTo('#user-list');
@@ -145,8 +137,7 @@ function appendRecvMsg(data, addCount){
         $('#'+msg_id).removeClass('unread');
         un_read = _.without(un_read, msg_id);
         localStorage['unReadMsg'] = JSON.stringify(un_read);
-        console.log(localStorage['unReadMsg']);
-    });
+        });
 
 }
 //prepend msg for load chat history
@@ -207,17 +198,15 @@ function prependRecvMsg(data){
             avatar: localStorage[from_avatar] == 'undefined' ? 'img/user1.png' : localStorage[from_avatar],
             timestamp: data.timestamp,
             klass:'to-me'
-        });                   
+        });
         $('#'+data.fromPeerId).prepend(str2);
         break;
-    }             
+    }
     if (data.fromPeerId!=toPeerId){
         var count = $('#user-'+data.fromPeerId+' .badge').html();
-        console.log('count = '+count);
         count = parseInt(count) || 0;
         count += 1;
-        console.log('count after = '+count);
-        $('#user-'+data.fromPeerId+' .badge').html(count); 
+        $('#user-'+data.fromPeerId+' .badge').html(count);
     }
 
 }

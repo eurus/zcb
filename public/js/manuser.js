@@ -3,7 +3,7 @@
  	interpolate : /{=([\s\S]+?)}/g,
  	escape      : /{-([\s\S]+?)}/g
  };
- 
+
  $(function() {
  	AV.$ = jQuery;
  	AV.initialize( "za9bsa07s9lwzxl6t1sp9ft3fi5ypo0d47ylo1f5bnze0m34",
@@ -37,8 +37,8 @@
         render: function() {
             this.people.fetch();
             $("#content").html(this.el);
-            this.delegateEvents();  
-               
+            this.delegateEvents();
+
         },
         newUser:function(){
             var view = new UserSignUpView();
@@ -46,12 +46,10 @@
 
         },
         addOne: function(person) {
-            console.log('add one');
             var view = new UserItemView({model: person});
             $('#user-list').prepend(view.render().el);
         },
         addAll: function(people) {
-            console.log("add all");
             this.$("#user-list").html("");
             people.each(this.addOne);
         }
@@ -76,7 +74,7 @@
             this.model.bind('destroy', this.remove);
         },
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));  
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
         updateUser: function(){
@@ -92,8 +90,7 @@
                 UserView.render();
               },
               error: function(error) {
-                console.log('oops, there is something wrong.');
-              }
+                }
             });
         },
         softDestroy: function() {
@@ -109,8 +106,7 @@
                 UserView.render();
               },
               error: function(error) {
-                console.log('oops, there is something wrong.');
-              }
+                }
             });
         }
 
@@ -129,7 +125,7 @@
             _.bindAll(this,'render','cancel',"signup");
         },
         render: function() {
-            this.$el.html(this.template());  
+            this.$el.html(this.template());
             return this;
         },
         signup: function(){
@@ -141,7 +137,6 @@
             user.set("password", password);
             user.set("nickname", nickname);
             user.set("peerId", username);
-            console.log(user.toJSON());
             user.signUp(null, {
               success: function(user) {
                 alert('成功创建用户！');

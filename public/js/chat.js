@@ -7,22 +7,21 @@
  	escape      : /{-([\s\S]+?)}/g
  };
 
- $.fn.serializeObject = function()    
- {    
- 	var o = {};    
- 	var a = this.serializeArray();    
- 	console.log(a);
- 	$.each(a, function() {    
- 		if (o[this.name]) {    
- 			if (!o[this.name].push) {    
- 				o[this.name] = [o[this.name]];    
- 			}    
- 			o[this.name].push(this.value || '');    
- 		} else {    
- 			o[this.name] = this.value || '';    
- 		}    
- 	});    
- 	return o;    
+ $.fn.serializeObject = function()
+ {
+ 	var o = {};
+ 	var a = this.serializeArray();
+ 	$.each(a, function() {
+ 		if (o[this.name]) {
+ 			if (!o[this.name].push) {
+ 				o[this.name] = [o[this.name]];
+ 			}
+ 			o[this.name].push(this.value || '');
+ 		} else {
+ 			o[this.name] = this.value || '';
+ 		}
+ 	});
+ 	return o;
  };
 
  function getMS(){
@@ -120,8 +119,7 @@ var OrderList = AV.Collection.extend({ model: Order });
 			},
 
 			initialize:function(options){
-				console.log('init user view');
-			},
+				},
 
 			render:function(){
 				this.$el.html(this.template());
@@ -132,16 +130,14 @@ var OrderList = AV.Collection.extend({ model: Order });
 				var mobile = $('#user-form input[name=mobile]').val();
 				var user = new User;
 				var userForm = {
-					'mobilePhoneNumber': mobile, 
+					'mobilePhoneNumber': mobile,
 					'nickname':mobile,
 					'username':mobile,
 					'password':mobile,
 					'peerId':toPeerId
 				};
-				console.log(userForm);
 				user.save(userForm, {
 					success:function(user){
-						console.log(user);
 						customer = user;
 						orderRouter.home();
 					}
@@ -163,22 +159,20 @@ var OrderList = AV.Collection.extend({ model: Order });
 		var CarView = AV.View.extend({
 			template:_.template($('#car-tpl').html()),
 			events:{
-				"change #car-ids":"change", 
+				"change #car-ids":"change",
 				"click .btn-save":"save",
 				"click .btn-cancel":"render"
 			},
 
 			initialize:function(options){
-				console.log('init car view');
 				_.bindAll(this, 'change', 'reset');
 				this.order = options.order;
 
 				this.cars = new CarList;
-				
+
 			},
 
 			render:function(){
-				console.log('render car view for '+customer.get('username'));
 				this.cars.query = new AV.Query(Car);
 				this.cars.query.equalTo('user', customer);
 
@@ -205,8 +199,6 @@ var OrderList = AV.Collection.extend({ model: Order });
 					$('#car-ids', this.$el).empty();
 					$('#car-ids', this.$el).append('<option value="">新增车辆…</option>')
 					$('#car-ids', this.$el).prepend(carOptions);
-					console.log('car ---');
-					console.log(this.order.get('car'));
 					if (this.order.get('car')){
 						$('#car-ids').val(this.order.get('car').id);
 					}else{
@@ -223,7 +215,7 @@ var OrderList = AV.Collection.extend({ model: Order });
 				var car = this.cars.filter(function(c){
 					if (c.id == carId) {
 						return c;
-					} 
+					}
 					return null;
 				})[0];
 
@@ -280,7 +272,7 @@ var ItemView = AV.View.extend({
 			if (item){
 				item.id = getMS();
 				var infoTpl = _.template($('#item-info-tpl').html());
-				$('#item-info', this.$el).prepend(infoTpl(item)); 	
+				$('#item-info', this.$el).prepend(infoTpl(item));
 			}
 		}
 	},
@@ -322,9 +314,7 @@ var ItemView = AV.View.extend({
  		this.order.set('items', items);
  		this.order.save();
 
- 		console.log(items);
-
- 	}
+ 		}
  })
 
 
@@ -335,7 +325,7 @@ ADDRESS
 var AddressView = AV.View.extend({
 	template:_.template($('#addr-tpl').html()),
 	events:{
-		"change #addr-ids":"change", 
+		"change #addr-ids":"change",
 		"click .btn-save":"save",
 		"click .btn-cancel":"render"
 	},
@@ -389,7 +379,7 @@ var AddressView = AV.View.extend({
  		var addr = this.addrs.filter(function(c){
  			if (c.id == addrId) {
  				return c;
- 			} 
+ 			}
  			return null;
  		})[0];
 
@@ -430,7 +420,6 @@ var PackageView = AV.View.extend({
 			},
 
 			initialize:function(options){
-				console.log('init pkg view');
 				_.bindAll(this, 'reset');
 				this.order = options.order;
 				this.pkgs = new PackageList;
@@ -459,7 +448,7 @@ var PackageView = AV.View.extend({
 				var pkg = this.pkgs.filter(function(c){
 					if (c.id == pkgId) {
 						return c;
-					} 
+					}
 					return null;
 				})[0];
 				if (pkg){
@@ -475,18 +464,16 @@ var OrderView = AV.View.extend({
  		"click #other-info .btn-save":"commit"
  	},
  	initialize: function(options) {
- 		console.log('init order view');
  		_.bindAll(this, 'reset', "commit");
  	},
  	render:function(){
- 		console.log('render order view');
  		if (customer && customer.get('username') && customer.get('username').length > 0){
  			this.car = this.model.get('car');
  		this.model.set('user', customer);
  		this.carView = new CarView({
  			model: this.car,
  			order: this.model
- 		});	
+ 		});
 
  		this.addr = this.model.get('address');
  		this.addrView = new AddressView({
@@ -502,7 +489,7 @@ var OrderView = AV.View.extend({
 
  		this.itemView = new ItemView({
  			order: this.model
- 		});	
+ 		});
 
  		this.carView.render();
  		this.addrView.render();
@@ -533,8 +520,6 @@ var OrderView = AV.View.extend({
  		}
  	},
  	reset:function(orders){
- 		console.log('reset order view');
- 		console.log('orders length = '+orders.length);
  		if (orders.length > 0) {
  			this.order = orders.last();
  		}else{
@@ -545,7 +530,7 @@ var OrderView = AV.View.extend({
  		this.carView = new CarView({
  			model: this.car,
  			order: this.order
- 		});	
+ 		});
 
  		this.addr = this.order.get('address');
  		this.addrView = new AddressView({
@@ -555,7 +540,7 @@ var OrderView = AV.View.extend({
 
  		this.itemView = new ItemView({
  			order: this.order
- 		});	
+ 		});
 
  		this.carView.render();
  		this.addrView.render();
@@ -578,9 +563,6 @@ var OrderView = AV.View.extend({
  		this.model.set('serviceTime', time);
  		this.model.set('status', 'unconfirmed');
  		this.model.set('user', customer);
- 		console.log('commit');
- 		console.log(this.model);
- 		console.log(JSON.stringify(this.model));
  		this.model.save({
  			success:function(){
 		 		orderRouter.list();
@@ -628,8 +610,7 @@ var OrderListView = AV.View.extend({
 		var self = this;
 		this.$el.html(_.template($("#order-list-tpl").html()));
 		this.orders = options.orders;
-		console.log('order count' + this.orders.length);
-	},
+		},
 
 	render: function(){
 		if (customer && customer.get('username') && customer.get('username').length > 0){
@@ -649,9 +630,7 @@ var OrderListView = AV.View.extend({
 	addOne: function(order){
 		var view = new OrderItemView({model: order});
 		this.$("#order-list").append(view.render().el);
-		console.log('add one');
-		console.log(view.render().el);
-	}
+		}
 });
 
 
@@ -667,12 +646,10 @@ var OrderRouter = AV.Router.extend({
 		this.homeView = new OrderView();
 	},
 	switchView: function(view) {
-		console.log('switchView');
 		if (this.currentView) {
 			this.currentView.remove();
 		}
-		
-		console.log('SWITCH TO VIEW RENDER');
+
 		view.render();
 		if (!customer){
 			customer = new User;
@@ -724,12 +701,10 @@ var OrderRouter = AV.Router.extend({
 		query.include('car');
 		query.include('address');
 		query.include('items');
-		
+
 		query.equalTo('user', customer);
 		query.find({
 			success:function(orders){
-				console.log('load success');
-				console.log(orders);
 				var listView = new OrderListView({orders: orders});
 				listView.render();
 				$('#order').html(listView.$el);

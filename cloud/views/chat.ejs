@@ -4,7 +4,7 @@
 <div id='layout' >
     <div class='col-md-2 full-height'>
         <div class='full-height full-width'>
-            
+
             <div id='user-title' class='title'>
                             <%-user.nickname %>
 
@@ -21,7 +21,7 @@
             <div id='user-list' class='scrollable' >
             </div>
         </div>
-    </div>   
+    </div>
 
     <div class='col-md-6 full-height'>
         <div class='full-height full-width'>
@@ -36,8 +36,6 @@
                         var ulist = $(this).parent().parent();
                         var timestamp = $('#'+peerId+' li:first').data('timestamp');
 
-                        console.log(peerId);
-                        
                         loadChatHis(myPeerId,peerId,30,timestamp);
 
 
@@ -58,7 +56,7 @@
 
     <div id='order-panel' class='col-md-4 full-height'>
         <div class='full-height full-width'>
-            <div class='title'>              
+            <div class='title'>
                 订单
             </div>
             <div id='order' class='scrollable' >
@@ -92,7 +90,7 @@
 
 <div class="hide">
     <div id="user-tpl">
-      <div id='user-{=peerId}' class='offline user-item pure-g' data-peer-id='{=peerId}'>
+      <div id='user-{=peerId}' class='user-item pure-g' data-peer-id='{=peerId}'>
         <div class="item">
           <a href="#" class='switch-btn' id="peer-{=peerId}" onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
               <img class="img-circle avatar"  height="40" width="40" src='img/user1.png'  onclick="addWatch('{=peerId}');switchChatTo('{=peerId}');">
@@ -105,8 +103,8 @@
 </div>
 
 <div id="msg-tpl">
-    <ul id='{=peerId}' style='overflow-y:scroll' class='hide'>                     
-    </ul>   
+    <ul id='{=peerId}' style='overflow-y:scroll' class='hide'>
+    </ul>
 </div>
 
 <script type="text/template" id="order-list-tpl">
@@ -201,7 +199,7 @@
             <b class='banner pure-u-1'>车辆信息</b>
                 <select id="car-ids" class='selectpicker'>
                     <option value=''>新增车辆…</option>
-                </select> 
+                </select>
             <div id='car-info'>
             </div>
         </div>
@@ -324,7 +322,7 @@
             <!-- cars -->
             <b class='banner pure-u-1'>套餐信息</b>
             <select id="pkg-ids" class='selectpicker'>
-            </select> 
+            </select>
         </div>
     </div>
 
@@ -361,7 +359,7 @@
         var chat;
         // ---------------- 基本初始化 打开关闭 ----------------
         $(function() {
-           
+
 
 
             if($('#watchingPeer').val()!=""){
@@ -384,28 +382,27 @@
                 var msg_id = data.fromPeerId +"-" +data.timestamp;
                 un_read.push(msg_id);
                 localStorage["unReadMsg"] = JSON.stringify(un_read);
-        
+
                 if ($('#user-'+data.fromPeerId).length > 0){
                     if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                     }
-                    appendRecvMsg(data); 
+                    appendRecvMsg(data);
                 }else{
                     addWatch(data.fromPeerId).then(function(){
                         if ($('to-nickname').text() == ''){
                         $('to-nickname').text(localStorage[data.fromPeerId+'-nickname']);
                     }
-                    appendRecvMsg(data); 
+                    appendRecvMsg(data);
                 });
                 }
-                
 
-                
-                
+
+
+
             });
             chat.on('online', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
-                    console.log(peers[i]+ ' online');
                     $('#user-' + peers[i]).removeClass('offline');
                     $('#user-' + peers[i]).addClass('online');
                     $('#to-nickname').html( $('#to-nickname').html().replace(' (离线)', ''));
@@ -413,7 +410,6 @@
             });
             chat.on('offline', function(peers) {
                 for (var i = 0; i < peers.length; i++) {
-                    console.log(peers[i]+ ' offline');
                     $('#user-' + peers[i]).removeClass('online');
                     $('#user-' + peers[i]).addClass('offline');
 
@@ -438,7 +434,6 @@
                 var chatHisPromises = _.map(JSON.parse(localStorage[myPeerId]), addChatHis);
                 AV.Promise.when(watchPromises).then(function(){
                     AV.Promise.when(chatHisPromises).then(function(){
-                        console.log('init complete');
                         var p = null;
                         if (localStorage[myPeerId+'-selected']){
                             p = switchChatTo(localStorage[myPeerId+'-selected']);
@@ -447,7 +442,7 @@
                         }
 
                         p.then(function(){
-                           
+
                            $('#user-list .user-item').each(function(){
                                 var peerId = $(this).data('peer-id');
                                 var count = localStorage[peerId+'-unread'];
@@ -481,11 +476,8 @@
                     });
                 });
                 // _.each(JSON.parse(localStorage[myPeerId]), function(v) {
-                //     console.log(v);
-                //     addWatch(v);
-                //     console.log("myPeerId"+myPeerId);
-                //     console.log('otherPeerId'+v);
-                //     addChatHis(v);
+                //     //     addWatch(v);
+                //     //     //     addChatHis(v);
                 // });
             }
         }, function(err) {
@@ -493,7 +485,7 @@
             console.log(err)
         });
         }
-        
+
         function closeSocket() {
             chat.close().then(function() {
                 $('#connect-status').text('not connected');
@@ -503,7 +495,6 @@
         //---------------- 1 v 1 聊天相关 ----------------
         function addWatch(peerId){
             if (!_.contains(watching, peerId)){
-                console.log(peerId);
                 list  = JSON.parse(localStorage[myPeerId]);
                 nlist=list.concat(peerId.split(','));
                 nlist = _.uniq(nlist);
@@ -523,11 +514,9 @@
             list  = JSON.parse(localStorage[myPeerId]);
             nlist = _.without(list,opeerId+"");
             localStorage[myPeerId] = JSON.stringify(nlist);
-            console.log(nlist);
             removeWatchingPeer(peerId);
             chat.unwatch(peerId);
             watching = _.without(watching,peerId+"");
-            console.log(watching);
             $('#user-'+peerId).remove();
             $('#'+peerId).remove();
             $('#to-nickname').empty();
@@ -539,7 +528,7 @@
                 $('#user-'+peerId).addClass('user-item-selected');
             }
         }
-        $('#addwatch').click(       
+        $('#addwatch').click(
             function() {
                 var name = $('#watchingPeer').val();
                 AV.Cloud.run("findUserByName", {username: name}, {
@@ -556,14 +545,12 @@
 
         function scrollToEnd(peerId){
             var chatBox = $('#'+peerId);
-            console.log(chatBox.prop('scrollHeight'));
             $('#peer-box').scrollTop(chatBox.prop('scrollHeight'));
         }
         function switchChatTo(peerId){
             toPeerId = peerId;
             var userQuery = new AV.Query(User);
             userQuery.equalTo('peerId', peerId);
-            console.log('customer peerId = '+peerId);
             return userQuery.first().then(function(user){
                 customer = user;
                 if ($('#user-'+peerId).hasClass('offline')){
@@ -590,17 +577,31 @@
                 orderRouter.list();
         });
         }
-
+        function arr_diff(a1, a2)
+        {
+          var a=[], diff=[];
+          for(var i=0;i<a1.length;i++)
+            a[a1[i]]=true;
+        for(var i=0;i<a2.length;i++)
+            if(a[a2[i]]) delete a[a2[i]];
+        else a[a2[i]]=true;
+        for(var k in a)
+            diff.push(k);
+        return diff;
+    }
         function checkStatus(peers){
-            console.log("CHECK STATUS");
-            console.log(peers);
             chat.getStatus(peers).then(function(onlinePeers){
-                console.log("STATUS");
-                console.log(onlinePeers.onlineSessionPeerIds);
                 for (var i in onlinePeers.onlineSessionPeerIds){
                     var peerId = onlinePeers.onlineSessionPeerIds[i];
                     $('#user-'+peerId).removeClass('offline').addClass('online');
                 }
+                var offlinePeerIds = arr_diff(peers, onlinePeers.onlineSessionPeerIds);
+                for (var i in offlinePeerIds){
+                    var peerId = offlinePeerIds[i];
+                    $('#user-'+peerId).removeClass('online').addClass('offline');
+
+                }
+
             });
         }
 
@@ -614,22 +615,18 @@
                 $('#peer-box').append(chatBox_div);
                 return AV.Cloud.run("findUserByPeerId", {peerId: peers[i]}, {
                     success: function(data){
-                        console.log('ADDING WATCHING PEER');
-                        console.log(data);
                         if (typeof data.nickname == 'undefined'){
                             data = {
                                 peerId: data.peerId,
                                 nickname: data.peerId
-                            } 
+                            }
                         }
                         var sidebar_li = _.template($('#user-tpl').html())(data);
                         $('#user-list').append(sidebar_li);
 
-                        
-                        if(typeof data != 'undefined'){
-                            console.log('data ===== '+data);
 
-                            $('#user-' + data.peerId +'> div > a > img').attr("src",data.avatarUrl); 
+                        if(typeof data != 'undefined'){
+                            $('#user-' + data.peerId +'> div > a > img').attr("src",data.avatarUrl);
 
                             localStorage[data.peerId+'-avatar'] = data.avatarUrl;
                             localStorage[data.peerId+'-nickname'] = data.nickname;
@@ -637,11 +634,10 @@
                         return AV.Promise();
                     },
                     error: function(err){
-                        console.log('oops, there is something wrong.');
-                    }
+                        }
                 });
-                
-                
+
+
             }
         }
         function removeWatchingPeer(peers) {
@@ -656,7 +652,7 @@
             }
         }
 
-        
+
         function sendReply(){
             origin_msg = $('#msg').val();
             if (origin_msg.trim()=='')
@@ -665,22 +661,19 @@
                 "Content": origin_msg,
                 "InfoType":"TEXT"
             }
-            //产看peer是否在线 
+            //产看peer是否在线
             //如果不在线就是发送离线消息，推送
             //get status then
             //如果 在线不需要操作
-            console.log(JSON.stringify(send_msg));
             chat.send(  JSON.stringify(send_msg), toPeerId, false).then(function(data) {
                 appendSendMsg(toPeerId, origin_msg,moment().utc().valueOf());
                 $('#msg').val('');
 
                 chat.getStatus(toPeerId).then(function(data) {
-                    console.log( "online is "+data.onlineSessionPeerIds.length);
                     if (data.onlineSessionPeerIds.length == 0) {
-                        console.log("are you there"+toPeerId);
                         var query = new AV.Query("_Installation");
                         query.equalTo("peerID",toPeerId);
-                        
+
                         AV.Push.send({
                           where: query,
                           data: {
