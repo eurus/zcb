@@ -22,7 +22,7 @@ app.use(function(req, res, next){
 });
 
 //启用cookie
-app.use(express.cookieParser('zhai che bao bei'));  
+app.use(express.cookieParser('zhai che bao bei'));
 //使用avos-express-cookie-session记录登录信息到cookie。
 app.use(avosExpressCookieSession({ cookie: { maxAge: 3600000 }}));
 
@@ -77,7 +77,7 @@ app.get('/app/download/android', function(req, res){
 				alert("Error: " + error.code + " " + error.message);
 			}
 		});
-		
+
 	}
 });
 
