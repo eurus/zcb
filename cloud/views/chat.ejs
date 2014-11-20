@@ -683,20 +683,20 @@
                 $('#msg').val('');
 
                 console.log('get status');
-                chat.getStatus(toPeerId).then(function(data) {
-                    if (data.onlineSessionPeerIds.length == 0) {
-                        var query = new AV.Query("_Installation");
-                        query.equalTo("peerID",toPeerId);
+                // chat.getStatus(toPeerId).then(function(data) {
+                //     if (data.onlineSessionPeerIds.length == 0) {
+                //         var query = new AV.Query("_Installation");
+                //         query.equalTo("peerID",toPeerId);
 
-                        AV.Push.send({
-                          where: query,
-                          data: {
-                            alert: "您有一条新消息",
-                            badge: "Increment"
-                         }
-                     });
-                    }
-                });
+                //         AV.Push.send({
+                //           where: query,
+                //           data: {
+                //             alert: "您有一条新消息",
+                //             badge: "Increment"
+                //          }
+                //      });
+                //     }
+                // });
 
             }, function(err) {
                 console.log(err);
