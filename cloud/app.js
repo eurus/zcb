@@ -31,7 +31,6 @@ app.get('/operator', function(req, res) {
 	url = req.param('url') || ''
 	res.render('operator', {url: url});
 });
-
 app.get('/', function(req, res) {
 	res.render('weixin', {layout:'index-layout'});
 	// res.render('index', {layout:'index-layout'});
